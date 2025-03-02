@@ -109,6 +109,7 @@ Giảng viên nhận thông báo khi sinh viên tham gia nhóm học thuật.
 Sinh viên nhận cảnh báo về sự kiện, hạn chót và tin nhắn.
 
 # Yêu cầu phi chức năng
-Mở rộng & Hiệu suất: Hỗ trợ số lượng người dùng lớn, tốc độ phản hồi nhanh.
+*Mở rộng & Hiệu suất:*
+Hỗ trợ số lượng người dùng lớn, tốc độ phản hồi nhanh.
 Trải nghiệm người dùng: Giao diện thân thiện, tối ưu cho cả máy tính và di động.
 Bảo mật & Tin cậy: Lưu trữ dữ liệu an toàn, xác thực hai lớp, phân quyền truy cập.

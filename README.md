@@ -1,6 +1,6 @@
 # UTH Team Matching – Nền tảng kết nối đội nhóm cho sinh viên UTH-ers
 # Giới thiệu
-UTH Team Matching là một nền tảng giúp sinh viên UTHU tìm kiếm đội nhóm và cộng tác viên cho các dự án học thuật hoặc cá nhân. Hệ thống hỗ trợ cả nhóm học thuật (cho các dự án cuối kỳ) và nhóm bên ngoài (cho các dự án cá nhân, do giảng viên hướng dẫn hoặc hoạt động ngoại khóa). Mục tiêu của hệ thống là đơn giản hóa quá trình hình thành đội nhóm và thúc đẩy sự hợp tác bằng cách kết nối sinh viên với các dự án phù hợp dựa trên kỹ năng và sở thích của họ.
+UTH Team Matching là một nền tảng giúp sinh viên UTH-ers tìm kiếm đội nhóm và cộng tác viên cho các dự án học thuật hoặc cá nhân. Hệ thống hỗ trợ cả nhóm học thuật (cho các dự án cuối kỳ) và nhóm bên ngoài (cho các dự án cá nhân, do giảng viên hướng dẫn hoặc hoạt động ngoại khóa). Mục tiêu của hệ thống là đơn giản hóa quá trình hình thành đội nhóm và thúc đẩy sự hợp tác bằng cách kết nối sinh viên với các dự án phù hợp dựa trên kỹ năng và sở thích của họ.
 
 # Các tính năng chính
 Quản lý hồ sơ sinh viên: Tạo hồ sơ chi tiết với kỹ năng, sở thích và thành tích.

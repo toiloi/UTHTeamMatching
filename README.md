@@ -49,7 +49,7 @@ Nhóm bên ngoài: Có thể mời sinh viên từ các kỳ và khoa khác nhau
 Giảng viên đánh giá nhóm học thuật dựa trên báo cáo, đóng góp cá nhân và chất lượng dự án.
 Thành viên nhóm có thể đánh giá nhau vào cuối dự án, phản hồi về sự đóng góp và hợp tác.
 
-**2. Quản lý mạng xã hội**
+**2. Quản lý mạng xã hội:**
 Quản lý hồ sơ (Sinh viên & Giảng viên)
 Sinh viên và giảng viên có thể tạo hồ sơ với nền tảng học vấn, kỹ năng, sở thích và kinh nghiệm dự án.
 Giảng viên có thể chia sẻ thông tin về nghiên cứu, dự án và hợp tác bên ngoài.

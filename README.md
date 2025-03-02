@@ -18,7 +18,7 @@ Hệ thống đề xuất AI hỗ trợ tìm kiếm đồng đội phù hợp d�
 Sinh viên có thể tự do tạo hoặc tham gia đội nhóm, trò chuyện nhóm, và theo dõi các buổi hội thảo hoặc tiến trình dự án, đảm bảo trải nghiệm xây dựng nhóm hiệu quả và suôn sẻ.
 
 # YÊU CẦU CHỨC NĂNG
-**1. Quản lý đội nhóm**
+**1. Quản lý đội nhóm:**
 Tạo và quản lý nhóm (Sinh viên & Giảng viên)
 Sinh viên có thể tự do tạo nhóm mà không cần sự phê duyệt từ Admin hoặc Giảng viên.
 Nhóm có thể được tạo cho mục đích học thuật (Kỳ 7, 8, 9) hoặc dự án bên ngoài (dự án cá nhân, nghiên cứu, dự án của giảng viên).
@@ -48,6 +48,7 @@ Nhóm bên ngoài: Có thể mời sinh viên từ các kỳ và khoa khác nhau
 Đánh giá nhóm (Sinh viên & Giảng viên)
 Giảng viên đánh giá nhóm học thuật dựa trên báo cáo, đóng góp cá nhân và chất lượng dự án.
 Thành viên nhóm có thể đánh giá nhau vào cuối dự án, phản hồi về sự đóng góp và hợp tác.
+
 **2. Quản lý mạng xã hội**
 Quản lý hồ sơ (Sinh viên & Giảng viên)
 Sinh viên và giảng viên có thể tạo hồ sơ với nền tảng học vấn, kỹ năng, sở thích và kinh nghiệm dự án.

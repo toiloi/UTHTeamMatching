@@ -158,4 +158,39 @@
     });
 
 })(jQuery);
+function switchTab(tab) {
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const tabs = document.querySelectorAll('.auth-tab');
+    
+    if (tab === 'login') {
+        registerForm.style.opacity = 0;
+        setTimeout(() => {
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+            setTimeout(() => {
+                loginForm.style.opacity = 1;
+            }, 50);
+        }, 200);
+        tabs[0].classList.add('active');
+        tabs[1].classList.remove('active');
+    } else {
+        loginForm.style.opacity = 0;
+        setTimeout(() => {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            setTimeout(() => {
+                registerForm.style.opacity = 1;
+            }, 50);
+        }, 200);
+        tabs[0].classList.remove('active');
+        tabs[1].classList.add('active');
+    }
+}
 
+// Add loading animation
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        document.getElementById('spinner').classList.remove('show');
+    }, 1000);
+});

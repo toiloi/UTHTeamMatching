@@ -2,11 +2,15 @@ package org.example.uthteammatching.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.Objects;
 
+@Getter
+@Setter
 @Embeddable
 public class ThanhvienProjectId implements java.io.Serializable {
     private static final long serialVersionUID = -9093897019423483989L;
@@ -17,22 +21,6 @@ public class ThanhvienProjectId implements java.io.Serializable {
     @Nationalized
     @Column(name = "projectMaSo", nullable = false, length = 50)
     private String projectMaSo;
-
-    public String getUserMaSo() {
-        return userMaSo;
-    }
-
-    public void setUserMaSo(String userMaSo) {
-        this.userMaSo = userMaSo;
-    }
-
-    public String getProjectMaSo() {
-        return projectMaSo;
-    }
-
-    public void setProjectMaSo(String projectMaSo) {
-        this.projectMaSo = projectMaSo;
-    }
 
     @Override
     public boolean equals(Object o) {

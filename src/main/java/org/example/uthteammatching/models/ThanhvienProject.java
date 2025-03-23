@@ -1,10 +1,14 @@
 package org.example.uthteammatching.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+@Getter
+@Setter
 @Entity
 public class ThanhvienProject {
     @EmbeddedId
@@ -14,7 +18,7 @@ public class ThanhvienProject {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "userMaSo", nullable = false)
-    private org.example.uthteammatching.models.U userMaSo;
+    private org.example.uthteammatching.models.UthUser userMaSo;
 
     @MapsId("projectMaSo")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -25,37 +29,5 @@ public class ThanhvienProject {
     @Nationalized
     @Column(name = "vaiTro", length = 50)
     private String vaiTro;
-
-    public ThanhvienProjectId getId() {
-        return id;
-    }
-
-    public void setId(ThanhvienProjectId id) {
-        this.id = id;
-    }
-
-    public org.example.uthteammatching.models.U getUserMaSo() {
-        return userMaSo;
-    }
-
-    public void setUserMaSo(org.example.uthteammatching.models.U userMaSo) {
-        this.userMaSo = userMaSo;
-    }
-
-    public Project getProjectMaSo() {
-        return projectMaSo;
-    }
-
-    public void setProjectMaSo(Project projectMaSo) {
-        this.projectMaSo = projectMaSo;
-    }
-
-    public String getVaiTro() {
-        return vaiTro;
-    }
-
-    public void setVaiTro(String vaiTro) {
-        this.vaiTro = vaiTro;
-    }
 
 }

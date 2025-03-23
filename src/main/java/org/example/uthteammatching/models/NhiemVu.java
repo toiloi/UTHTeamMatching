@@ -1,6 +1,8 @@
 package org.example.uthteammatching.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
@@ -8,6 +10,8 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
+@Getter
+@Setter
 @Entity
 public class NhiemVu {
     @Id
@@ -33,53 +37,5 @@ public class NhiemVu {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private org.example.uthteammatching.models.ThanhvienProject thanhvienProject;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Instant getDeadline() {
-        return deadline;
-    }
-
-    public void setDeadline(Instant deadline) {
-        this.deadline = deadline;
-    }
-
-    public String getNoiDung() {
-        return noiDung;
-    }
-
-    public void setNoiDung(String noiDung) {
-        this.noiDung = noiDung;
-    }
-
-    public Boolean getTinhTrang() {
-        return tinhTrang;
-    }
-
-    public void setTinhTrang(Boolean tinhTrang) {
-        this.tinhTrang = tinhTrang;
-    }
-
-    public org.example.uthteammatching.models.Project getProjectMaSo() {
-        return projectMaSo;
-    }
-
-    public void setProjectMaSo(org.example.uthteammatching.models.Project projectMaSo) {
-        this.projectMaSo = projectMaSo;
-    }
-
-    public org.example.uthteammatching.models.ThanhvienProject getThanhvienProject() {
-        return thanhvienProject;
-    }
-
-    public void setThanhvienProject(org.example.uthteammatching.models.ThanhvienProject thanhvienProject) {
-        this.thanhvienProject = thanhvienProject;
-    }
 
 }

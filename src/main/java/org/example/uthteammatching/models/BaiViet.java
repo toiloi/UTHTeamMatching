@@ -27,7 +27,7 @@ public class BaiViet {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "userMaSo", nullable = false)
-    private org.example.uthteammatching.models.U userMaSo;
+    private org.example.uthteammatching.models.UthUser userMaSo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -58,11 +58,11 @@ public class BaiViet {
         this.ngayDang = ngayDang;
     }
 
-    public org.example.uthteammatching.models.U getUserMaSo() {
+    public org.example.uthteammatching.models.UthUser getUserMaSo() {
         return userMaSo;
     }
 
-    public void setUserMaSo(org.example.uthteammatching.models.U userMaSo) {
+    public void setUserMaSo(org.example.uthteammatching.models.UthUser userMaSo) {
         this.userMaSo = userMaSo;
     }
 

@@ -16,7 +16,7 @@ public class SinhVien {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "maSo", nullable = false)
-    private org.example.uthteammatching.models.U us;
+    private org.example.uthteammatching.models.UthUser uthUser;
 
     @Column(name = "mucDoUyTin")
     private Integer mucDoUyTin;
@@ -40,12 +40,12 @@ public class SinhVien {
         this.maSo = maSo;
     }
 
-    public org.example.uthteammatching.models.U getUs() {
-        return us;
+    public org.example.uthteammatching.models.UthUser getUthUser() {
+        return uthUser;
     }
 
-    public void setUs(org.example.uthteammatching.models.U us) {
-        this.us = us;
+    public void setUthUser(org.example.uthteammatching.models.UthUser uthUser) {
+        this.uthUser = uthUser;
     }
 
     public Integer getMucDoUyTin() {

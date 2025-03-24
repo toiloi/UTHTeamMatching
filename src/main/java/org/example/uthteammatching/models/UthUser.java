@@ -7,8 +7,8 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.Nationalized;
 
 @Entity
-@Table(name = "us")
-public class U {
+@Table(name = "uthUser")
+public class UthUser {
     @Id
     @Nationalized
     @Column(name = "maSo", nullable = false, length = 50)
@@ -34,8 +34,20 @@ public class U {
     private String chuyenNganh;
 
     @Nationalized
+    @Column(name = "email", length = 100)
+    private String email;
+
+    @Nationalized
     @Column(name = "sdt", length = 15)
     private String sdt;
+
+    @Nationalized
+    @Column(name = "username", length = 20)
+    private String username;
+
+    @Nationalized
+    @Column(name = "pass", length = 20)
+    private String pass;
 
     public String getMaSo() {
         return maSo;
@@ -85,12 +97,36 @@ public class U {
         this.chuyenNganh = chuyenNganh;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getSdt() {
         return sdt;
     }
 
     public void setSdt(String sdt) {
         this.sdt = sdt;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 
 }

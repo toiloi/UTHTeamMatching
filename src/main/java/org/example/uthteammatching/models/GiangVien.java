@@ -14,7 +14,7 @@ public class GiangVien {
     @Id
     @Nationalized
     @Column(name = "maSo", nullable = false, length = 50)
-    private String maSo;
+    private Long maSo;
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY, optional = false)

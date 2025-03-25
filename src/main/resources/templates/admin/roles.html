@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTH Team Matching - Phân quyền & vai trò</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background: #2c3e50;
+            color: white;
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,.75);
+            padding: .8rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: rgba(255,255,255,1);
+            background: rgba(255,255,255,.1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background: #3498db;
+        }
+        .sidebar .nav-link i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .permission-group {
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .permission-group h6 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Include leftnavbar fragment -->
+            <div th:replace="admin/fragments/leftnavbar :: leftnavbar"></div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <!-- Top Navigation -->
+                <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+                    <div class="container-fluid">
+                        <h4 class="mb-0">Phân quyền & vai trò</h4>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+                            <i class="fas fa-plus"></i> Thêm vai trò mới
+                        </button>
+                    </div>
+                </nav>
+
+                <!-- Role Management Content -->
+                <div class="row">
+                    <!-- Role List -->
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Danh sách vai trò</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action active" onclick="showRolePermissions('admin')">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">Quản trị viên</h6>
+                                            <small>3 người dùng</small>
+                                        </div>
+                                        <small>Quyền quản trị toàn hệ thống</small>
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action" onclick="showRolePermissions('teacher')">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">Giảng viên</h6>
+                                            <small>25 người dùng</small>
+                                        </div>
+                                        <small>Quản lý khóa học và nội dung</small>
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action" onclick="showRolePermissions('student')">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">Học viên</h6>
+                                            <small>150 người dùng</small>
+                                        </div>
+                                        <small>Tham gia học tập</small>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Assignment -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Người dùng trong vai trò</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" placeholder="Tìm kiếm người dùng...">
+                                </div>
+                                <div class="list-group">
+                                    <div class="list-group-item">
+                                        <div class="d-flex w-100 justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="mb-1">Nguyễn Văn A</h6>
+                                                <small>admin@example.com</small>
+                                            </div>
+                                            <button class="btn btn-sm btn-danger" onclick="removeUserFromRole(1)">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- More users... -->
+                                </div>
+                                <button class="btn btn-outline-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#addUserToRoleModal">
+                                    <i class="fas fa-plus"></i> Thêm người dùng
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Permission Settings -->
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Cài đặt quyền - <span id="currentRole">Quản trị viên</span></h5>
+                                <button class="btn btn-success" onclick="savePermissions()">
+                                    <i class="fas fa-save"></i> Lưu thay đổi
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <!-- User Management Permissions -->
+                                <div class="permission-group">
+                                    <h6><i class="fas fa-users"></i> Quản lý người dùng</h6>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" data-permission="user.view">
+                                        <label class="form-check-label">Xem danh sách người dùng</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" data-permission="user.create">
+                                        <label class="form-check-label">Thêm người dùng mới</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" data-permission="user.edit">
+                                        <label class="form-check-label">Chỉnh sửa thông tin người dùng</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" data-permission="user.delete">
+                                        <label class="form-check-label">Xóa người dùng</label>
+                                    </div>
+                                </div>
+
+                                <!-- Course Management Permissions -->
+                                <div class="permission-group">
+                                    <h6><i class="fas fa-graduation-cap"></i> Quản lý khóa học</h6>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" data-permission="course.view">
+                                        <label class="form-check-label">Xem danh sách khóa học</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" data-permission="course.create">
+                                        <label class="form-check-label">Tạo khóa học mới</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" data-permission="course.edit">
+                                        <label class="form-check-label">Chỉnh sửa khóa học</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" data-permission="course.delete">
+                                        <label class="form-check-label">Xóa khóa học</label>
+                                    </div>
+                                </div>
+
+                                <!-- Content Management Permissions -->
+                                <div class="permission-group">
+                                    <h6><i class="fas fa-book-reader"></i> Quản lý nội dung</h6>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" data-permission="content.view">
+                                        <label class="form-check-label">Xem nội dung khóa học</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" data-permission="content.edit">
+                                        <label class="form-check-label">Thêm/sửa bài học</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" data-permission="content.assignment">
+                                        <label class="form-check-label">Quản lý bài tập/kiểm tra</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" data-permission="content.grade">
+                                        <label class="form-check-label">Chấm điểm và đánh giá</label>
+                                    </div>
+                                </div>
+
+                                <!-- System Management Permissions -->
+                                <div class="permission-group">
+                                    <h6><i class="fas fa-cogs"></i> Quản lý hệ thống</h6>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" data-permission="system.config">
+                                        <label class="form-check-label">Cấu hình hệ thống</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" data-permission="system.roles">
+                                        <label class="form-check-label">Quản lý phân quyền</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" data-permission="system.reports">
+                                        <label class="form-check-label">Xem báo cáo & thống kê</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" data-permission="system.backup">
+                                        <label class="form-check-label">Sao lưu & phục hồi</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Role Modal -->
+    <div class="modal fade" id="addRoleModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm vai trò mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addRoleForm">
+                        <div class="mb-3">
+                            <label class="form-label">Tên vai trò</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sao chép quyền từ vai trò</label>
+                            <select class="form-select">
+                                <option value="">Chọn vai trò</option>
+                                <option value="admin">Quản trị viên</option>
+                                <option value="teacher">Giảng viên</option>
+                                <option value="student">Học viên</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="addRole()">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User to Role Modal -->
+    <div class="modal fade" id="addUserToRoleModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm người dùng vào vai trò</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Tìm kiếm người dùng...">
+                    </div>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox">
+                                <label class="form-check-label">
+                                    <div>
+                                        <h6 class="mb-1">Nguyễn Văn B</h6>
+                                        <small>userb@example.com</small>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <!-- More users... -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="addUsersToRole()">Thêm người dùng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Show Role Permissions
+        function showRolePermissions(roleId) {
+            // Update current role name
+            const roleNames = {
+                'admin': 'Quản trị viên',
+                'teacher': 'Giảng viên',
+                'student': 'Học viên'
+            };
+            $('#currentRole').text(roleNames[roleId]);
+
+            // TODO: Load and display role permissions
+            // Update checkboxes based on role permissions
+        }
+
+        // Add Role
+        function addRole() {
+            const form = document.getElementById('addRoleForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // TODO: Implement API call to add role
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: 'Đã thêm vai trò mới.',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                $('#addRoleModal').modal('hide');
+                // Reload role list
+            });
+        }
+
+        // Save Permissions
+        function savePermissions() {
+            // TODO: Implement API call to save permissions
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: 'Đã lưu thay đổi quyền.',
+                confirmButtonText: 'OK'
+            });
+        }
+
+        // Add Users to Role
+        function addUsersToRole() {
+            // TODO: Implement API call to add users to role
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: 'Đã thêm người dùng vào vai trò.',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                $('#addUserToRoleModal').modal('hide');
+                // Reload user list
+            });
+        }
+
+        // Remove User from Role
+        function removeUserFromRole(userId) {
+            Swal.fire({
+                title: 'Xác nhận xóa?',
+                text: 'Bạn có chắc chắn muốn xóa người dùng này khỏi vai trò?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // TODO: Implement API call to remove user from role
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công!',
+                        text: 'Đã xóa người dùng khỏi vai trò.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+    </script>
+
+    <!-- Add script reference before closing body tag -->
+    <script src="/js/admin/roles.js"></script>
+</body>
+</html> 

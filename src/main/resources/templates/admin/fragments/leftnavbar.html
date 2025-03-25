@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="leftnavbar" class="col-md-3 col-lg-2 px-0 sidebar">
+        <div class="p-3">
+            <h4>UTH Team Matching</h4>
+            <small>Admin Panel</small>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin' ? 'active' : ''}" href="/admin">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+
+            <!-- Quản lý người dùng -->
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#userManagement">
+                    <i class="fas fa-users"></i> Quản lý người dùng
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <div class="collapse" id="userManagement">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/students' ? 'active' : ''}" href="/admin/students">
+                                <i class="fas fa-user-graduate"></i> Quản lý học viên
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/teachers' ? 'active' : ''}" href="/admin/teachers">
+                                <i class="fas fa-chalkboard-teacher"></i> Quản lý giảng viên
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/roles' ? 'active' : ''}" href="/admin/roles">
+                                <i class="fas fa-user-shield"></i> Phân quyền & vai trò
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Quản lý khóa học -->
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#courseManagement">
+                    <i class="fas fa-graduation-cap"></i> Quản lý khóa học
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <div class="collapse" id="courseManagement">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/courses' ? 'active' : ''}" href="/admin/courses">
+                                <i class="fas fa-book"></i> Danh sách khóa học
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/categories' ? 'active' : ''}" href="/admin/categories">
+                                <i class="fas fa-folder"></i> Danh mục khóa học
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/content-review' ? 'active' : ''}" href="/admin/content-review">
+                                <i class="fas fa-check-circle"></i> Duyệt nội dung
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/materials' ? 'active' : ''}" href="/admin/materials">
+                                <i class="fas fa-file-video"></i> Tài liệu & video
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Quản lý nội dung học tập -->
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#contentManagement">
+                    <i class="fas fa-book-reader"></i> Nội dung học tập
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <div class="collapse" id="contentManagement">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/lessons' ? 'active' : ''}" href="/admin/lessons">
+                                <i class="fas fa-tasks"></i> Quản lý bài học
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/assignments' ? 'active' : ''}" href="/admin/assignments">
+                                <i class="fas fa-pencil-alt"></i> Bài tập & kiểm tra
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/grading' ? 'active' : ''}" href="/admin/grading">
+                                <i class="fas fa-star"></i> Chấm điểm
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Quản lý giao dịch -->
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#transactionManagement">
+                    <i class="fas fa-money-bill-wave"></i> Giao dịch & thanh toán
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <div class="collapse" id="transactionManagement">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/payments' ? 'active' : ''}" href="/admin/payments">
+                                <i class="fas fa-history"></i> Lịch sử thanh toán
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/refunds' ? 'active' : ''}" href="/admin/refunds">
+                                <i class="fas fa-undo"></i> Xử lý hoàn tiền
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/pricing' ? 'active' : ''}" href="/admin/pricing">
+                                <i class="fas fa-tags"></i> Cấu hình giá & mã giảm
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Thống kê & báo cáo -->
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#reportManagement">
+                    <i class="fas fa-chart-bar"></i> Thống kê & báo cáo
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <div class="collapse" id="reportManagement">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/statistics' ? 'active' : ''}" href="/admin/statistics">
+                                <i class="fas fa-chart-line"></i> Thống kê chung
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/revenue' ? 'active' : ''}" href="/admin/revenue">
+                                <i class="fas fa-dollar-sign"></i> Doanh thu
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/progress' ? 'active' : ''}" href="/admin/progress">
+                                <i class="fas fa-chart-pie"></i> Tiến độ học tập
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Thông báo & hỗ trợ -->
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#supportManagement">
+                    <i class="fas fa-headset"></i> Thông báo & hỗ trợ
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <div class="collapse" id="supportManagement">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/notifications' ? 'active' : ''}" href="/admin/notifications">
+                                <i class="fas fa-bell"></i> Quản lý thông báo
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/support' ? 'active' : ''}" href="/admin/support">
+                                <i class="fas fa-ticket-alt"></i> Ticket hỗ trợ
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/chat' ? 'active' : ''}" href="/admin/chat">
+                                <i class="fas fa-comments"></i> Chat hỗ trợ
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Cấu hình hệ thống -->
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#systemManagement">
+                    <i class="fas fa-cogs"></i> Cấu hình hệ thống
+                    <i class="fas fa-chevron-down float-end"></i>
+                </a>
+                <div class="collapse" id="systemManagement">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/settings' ? 'active' : ''}" href="/admin/settings">
+                                <i class="fas fa-wrench"></i> Cài đặt chung
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/security' ? 'active' : ''}" href="/admin/security">
+                                <i class="fas fa-shield-alt"></i> Bảo mật
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/backup' ? 'active' : ''}" href="/admin/backup">
+                                <i class="fas fa-database"></i> Sao lưu & phục hồi
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html> 

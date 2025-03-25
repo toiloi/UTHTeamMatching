@@ -1,12 +1,11 @@
 package org.example.uthteammatching.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,8 +14,9 @@ import org.hibernate.annotations.Nationalized;
 public class UthUser {
     @Id
     @Nationalized
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "maSo", nullable = false, length = 50)
-    private String maSo;
+    private Long maSo;
 
     @Nationalized
     @Column(name = "ten", length = 50)
@@ -25,9 +25,6 @@ public class UthUser {
     @Nationalized
     @Column(name = "ho", length = 50)
     private String ho;
-
-    @Column(name = "roleId", columnDefinition = "tinyint")
-    private Short roleId;
 
     @Nationalized
     @Column(name = "gioiTinh", length = 10)
@@ -50,7 +47,119 @@ public class UthUser {
     private String username;
 
     @Nationalized
-    @Column(name = "pass", length = 20)
+    @Column(name = "pass", length = 100)
     private String pass;
 
+    @Nationalized
+    @Column(name = "enabled")
+    private Boolean enabled;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<UserRole> userRoles;
+    public UthUser() {
+
+    }
+
+    public UthUser(Long maSo, String ten, String ho, String gioiTinh, String chuyenNganh, String email, String sdt, String username, String pass, Boolean enabled, Set<UserRole> userRoles) {
+        this.maSo = maSo;
+        this.ten = ten;
+        this.ho = ho;
+        this.gioiTinh = gioiTinh;
+        this.chuyenNganh = chuyenNganh;
+        this.email = email;
+        this.sdt = sdt;
+        this.username = username;
+        this.pass = pass;
+        this.enabled = enabled;
+        this.userRoles = userRoles;
+    }
+
+    public Long getMaSo() {
+        return maSo;
+    }
+
+    public void setMaSo(Long maSo) {
+        this.maSo = maSo;
+    }
+
+    public String getTen() {
+        return ten;
+    }
+
+    public void setTen(String ten) {
+        this.ten = ten;
+    }
+
+    public String getHo() {
+        return ho;
+    }
+
+    public void setHo(String ho) {
+        this.ho = ho;
+    }
+
+
+    public String getGioiTinh() {
+        return gioiTinh;
+    }
+
+    public void setGioiTinh(String gioiTinh) {
+        this.gioiTinh = gioiTinh;
+    }
+
+    public String getChuyenNganh() {
+        return chuyenNganh;
+    }
+
+    public void setChuyenNganh(String chuyenNganh) {
+        this.chuyenNganh = chuyenNganh;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSdt() {
+        return sdt;
+    }
+
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Set<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<UserRole> userRoles) {
+        this.userRoles = userRoles;
+    }
 }

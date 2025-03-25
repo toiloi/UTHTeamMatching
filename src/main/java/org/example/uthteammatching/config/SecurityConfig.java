@@ -1,53 +1,56 @@
 package org.example.uthteammatching.config;
 
-import lombok.RequiredArgsConstructor;
-import org.example.uthteammatching.services.UserService;
+import org.example.uthteammatching.repositories.UserRepository;
+import org.example.uthteammatching.services.CustomUserDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
-    private final UserService userService;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/js/**", "/img/**", "/lib/**").permitAll()
-                .requestMatchers("/", "/home", "/account", "/register").permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/account")
-                .loginProcessingUrl("/account")
-                .defaultSuccessUrl("/home")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutSuccessUrl("/account")
-                .permitAll()
-            )
-            .rememberMe(remember -> remember
-                .key("uniqueAndSecret")
-                .tokenValiditySeconds(86400) // 1 day
-            )
-            .userDetailsService(userService);
-        
-        // Tạm thời disable CSRF để test
-        http.csrf(csrf -> csrf.disable());
-        
-        return http.build();
-    }
+    @Autowired
+    private CustomUserDetailService customUserDetailService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-       return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
-} 
+
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests((auth) -> auth
+                .requestMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/static/**").permitAll()
+                .requestMatchers("/", "/home", "/login", "/register", "/account").permitAll()
+                .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                .anyRequest().authenticated())
+            .formLogin(login -> login
+                .loginPage("/login")
+                .loginProcessingUrl("/admin")
+                .usernameParameter("username")
+                .passwordParameter("pass")
+                .defaultSuccessUrl("/admin", true)
+                .failureUrl("/login?error=true")
+                .permitAll())
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout=true")
+                .permitAll());
+        return httpSecurity.build();
+    }
+
+    @Bean
+    WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/static/**");
+    }
+}

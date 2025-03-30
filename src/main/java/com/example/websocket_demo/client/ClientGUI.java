@@ -9,16 +9,17 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class ClientGUI extends JFrame {
+public class ClientGUI extends JFrame implements MessageListener{
     private JPanel connectedUsersPanel,messagePanel;
     private MyStompClient myStompClient;
     private String username;
     public ClientGUI(String username) throws ExecutionException, InterruptedException {
         super("User " + username);
         this.username = username;
-        myStompClient = new MyStompClient(username);
+        myStompClient = new MyStompClient(this,username);
 
         setSize(1218, 685);
         setLocationRelativeTo(null);
@@ -86,9 +87,7 @@ public class ClientGUI extends JFrame {
 
                     inputField.setText("");
 
-                    messagePanel.add(createChatMessageComponent(new Message("BangXauTrai",input)));
-                    repaint();
-                    revalidate();
+
 
                     myStompClient.sendMessage(new Message(username,input));
                 }
@@ -121,6 +120,37 @@ public class ClientGUI extends JFrame {
     messageLabel.setForeground(Utilities.TEXT_COLOR);
     chatMessage.add(messageLabel);
     return chatMessage;
+    }
+
+    @Override
+    public void onMessageRecieve(Message message) {
+        messagePanel.add(createChatMessageComponent(message));
+        revalidate();
+        repaint();
+    }
+
+    @Override
+    public void onActiveUsersUpdated(ArrayList<String> users) {
+
+        if(connectedUsersPanel.getComponents().length == 2){
+            connectedUsersPanel.remove(1);
+        }
+
+        JPanel userListPanel = new JPanel();
+        userListPanel.setBackground(Utilities.TRANSPARENT_COLOR);
+        userListPanel.setLayout(new BoxLayout(userListPanel, BoxLayout.Y_AXIS));
+
+        for(String user : users){
+            JLabel username = new JLabel();
+            username.setText(user);
+            username.setForeground(Utilities.TEXT_COLOR);
+            username.setFont(new Font("Inter", Font.BOLD, 16));
+            userListPanel.add(username);
+        }
+
+        connectedUsersPanel.add(userListPanel);
+        revalidate();
+        repaint();
     }
 }
 

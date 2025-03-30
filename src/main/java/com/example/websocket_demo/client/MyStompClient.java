@@ -16,7 +16,7 @@ public class MyStompClient {
     private StompSession session;
     private String username;
 
-    public MyStompClient( String username)  throws ExecutionException, InterruptedException {
+    public MyStompClient( MessageListener messageListener, String username)  throws ExecutionException, InterruptedException {
         this.username = username;
 
         List<Transport> transports = new ArrayList<>();
@@ -27,7 +27,7 @@ public class MyStompClient {
 
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
-        StompSessionHandler sessionHandler = new MyStompSessionHandler(username);
+        StompSessionHandler sessionHandler = new MyStompSessionHandler(messageListener, username);
         String url = "ws://localhost:8080/ws";
         session = stompClient.connectAsync(url, sessionHandler).get();
     }

@@ -10,7 +10,7 @@ public class App {
             public void run() {
                 ClientGUI clientGUI = null;
                 try {
-                    clientGUI = new ClientGUI("TapTap");
+                    clientGUI = new ClientGUI("DB");
                 } catch (ExecutionException e) {
                     throw new RuntimeException(e);
                 } catch (InterruptedException e) {

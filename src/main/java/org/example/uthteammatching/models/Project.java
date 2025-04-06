@@ -4,10 +4,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
 @Entity
 public class Project {
     @Id
@@ -33,53 +37,5 @@ public class Project {
     @Nationalized
     @Column(name = "trangThai", length = 20)
     private String trangThai;
-
-    public String getMaProject() {
-        return maProject;
-    }
-
-    public void setMaProject(String maProject) {
-        this.maProject = maProject;
-    }
-
-    public String getTenProject() {
-        return tenProject;
-    }
-
-    public void setTenProject(String tenProject) {
-        this.tenProject = tenProject;
-    }
-
-    public String getMoTa() {
-        return moTa;
-    }
-
-    public void setMoTa(String moTa) {
-        this.moTa = moTa;
-    }
-
-    public LocalDate getNgayBatDau() {
-        return ngayBatDau;
-    }
-
-    public void setNgayBatDau(LocalDate ngayBatDau) {
-        this.ngayBatDau = ngayBatDau;
-    }
-
-    public LocalDate getNgayKetThuc() {
-        return ngayKetThuc;
-    }
-
-    public void setNgayKetThuc(LocalDate ngayKetThuc) {
-        this.ngayKetThuc = ngayKetThuc;
-    }
-
-    public String getTrangThai() {
-        return trangThai;
-    }
-
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
-    }
 
 }

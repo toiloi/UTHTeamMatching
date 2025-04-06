@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>UTH-TEAM - Đăng nhập/Đăng ký</title>
@@ -55,51 +55,80 @@
                 </div>
 
                 <!-- Login Form -->
-                <div class="auth-form" id="loginForm">
-                    <form>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="loginEmail" placeholder="name@example.com">
-                            <label for="loginEmail">Email</label>
+                <form th:action="@{/account}" method="post" class="auth-form" id="loginForm">
+                    <div th:if="${param.error}" class="alert alert-danger mb-3">
+                        Tên đăng nhập hoặc mật khẩu không đúng
+                    </div>
+                    <div th:if="${param.logout}" class="alert alert-success mb-3">
+                        Bạn đã đăng xuất thành công
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Tên đăng nhập" required maxlength="20">
+                        <label for="username">Tên đăng nhập</label>
+                    </div>
+                    <div class="form-floating mb-4">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu" required maxlength="20">
+                        <label for="password">Mật khẩu</label>
+                    </div>
+                    <div class="auth-links">
+                        <div class="toggle-switch">
+                            <label class="switch">
+                                <input type="checkbox" id="remember-me" name="remember-me">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="toggle-label">Ghi nhớ đăng nhập</span>
                         </div>
-                        <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="loginPassword" placeholder="Password">
-                            <label for="loginPassword">Mật khẩu</label>
-                        </div>
-                        <div class="auth-links">
-                            <div class="toggle-switch">
-                                <label class="switch">
-                                    <input type="checkbox" id="rememberMe">
-                                    <span class="slider"></span>
-                                </label>
-                                <span class="toggle-label">Ghi nhớ đăng nhập</span>
-                            </div>
-                            <a href="#" class="forgot-password">Quên mật khẩu?</a>
-                        </div>
-                        <button type="submit" class="auth-btn">Đăng nhập</button>
-                    </form>
-                </div>
+                        <a href="#" class="forgot-password">Quên mật khẩu?</a>
+                    </div>
+                    <button type="submit" class="auth-btn">Đăng nhập</button>
+                </form>
 
                 <!-- Register Form -->
                 <div class="auth-form" id="registerForm" style="display: none;">
-                    <form>
+                    <div th:if="${error}" class="alert alert-danger mb-3" th:text="${error}"></div>
+                    <div th:if="${success}" class="alert alert-success mb-3" th:text="${success}"></div>
+                    <form th:action="@{/register}" method="post">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="registerName" placeholder="Họ và tên">
-                            <label for="registerName">Họ và tên</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Tên đăng nhập" required minlength="5" maxlength="20">
+                            <label for="username">Tên đăng nhập</label>
+                            <small class="form-text text-muted">Tên đăng nhập phải có độ dài từ 5 đến 20 ký tự</small>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="registerEmail" placeholder="name@example.com">
-                            <label for="registerEmail">Email</label>
+                            <input type="password" class="form-control" id="pass" name="pass" placeholder="Mật khẩu" required>
+                            <label for="pass">Mật khẩu</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="registerPassword" placeholder="Password">
-                            <label for="registerPassword">Mật khẩu</label>
+                            <input type="text" class="form-control" id="ho" name="ho" placeholder="Họ" required>
+                            <label for="ho">Họ và tên đệm</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="ten" name="ten" placeholder="Tên" required>
+                            <label for="ten">Tên</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="gioiTinh" name="gioiTinh" required>
+                                <option value="">Chọn giới tính</option>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                                <option value="Khác">Khác</option>
+                            </select>
+                            <label for="gioiTinh">Giới tính</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="chuyenNganh" name="chuyenNganh" placeholder="Chuyên ngành">
+                            <label for="chuyenNganh">Chuyên ngành</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                            <label for="email">Email</label>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
-                            <label for="confirmPassword">Xác nhận mật khẩu</label>
+                            <input type="tel" class="form-control" id="sdt" name="sdt" placeholder="Số điện thoại" pattern="[0-9]{10}">
+                            <label for="sdt">Số điện thoại</label>
+                            <small class="form-text text-muted">Nhập số điện thoại 10 chữ số</small>
                         </div>
-                        <div class="terms-check">
-                            <input type="checkbox" id="agreeTerms">
+                        <div class="terms-check mb-3">
+                            <input type="checkbox" id="agreeTerms" required>
                             <span class="checkmark"></span>
                             <label for="agreeTerms">
                                 Tôi đồng ý với <a href="#">điều khoản</a> và <a href="#">chính sách bảo mật</a>
@@ -116,7 +145,7 @@
                 </div>
 
                 <div class="auth-footer">
-                    <p>Quay lại <a href="home.html">Trang chủ</a></p>
+                    <p>Quay lại <a th:href="@{/}">Trang chủ</a></p>
                 </div>
             </div>
         </div>
@@ -134,44 +163,6 @@
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
 
-    <script>
-        function switchTab(tab) {
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            const tabs = document.querySelectorAll('.auth-tab');
-            
-            if (tab === 'login') {
-                registerForm.style.opacity = 0;
-                setTimeout(() => {
-                    loginForm.style.display = 'block';
-                    registerForm.style.display = 'none';
-                    setTimeout(() => {
-                        loginForm.style.opacity = 1;
-                    }, 50);
-                }, 200);
-                tabs[0].classList.add('active');
-                tabs[1].classList.remove('active');
-            } else {
-                loginForm.style.opacity = 0;
-                setTimeout(() => {
-                    loginForm.style.display = 'none';
-                    registerForm.style.display = 'block';
-                    setTimeout(() => {
-                        registerForm.style.opacity = 1;
-                    }, 50);
-                }, 200);
-                tabs[0].classList.remove('active');
-                tabs[1].classList.add('active');
-            }
-        }
-
-        // Add loading animation
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('spinner').classList.remove('show');
-            }, 1000);
-        });
-    </script>
 </body>
 
 </html> 

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - User Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+            color: white;
+        }
+        .nav-link {
+            color: rgba(255,255,255,.8);
+        }
+        .nav-link:hover {
+            color: white;
+        }
+        .nav-link.active {
+            background-color: rgba(255,255,255,.1);
+            color: white;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar p-3">
+                <h4 class="mb-4">Admin Panel</h4>
+                <div class="nav flex-column">
+                    <a class="nav-link" href="/admin">
+                        <i class="fas fa-users-cog me-2"></i>Quản lý vai trò
+                    </a>
+                    <a class="nav-link active" href="/admin/users">
+                        <i class="fas fa-user-shield me-2"></i>Quản lý người dùng
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <h2 class="mb-4">Quản lý người dùng</h2>
+                
+                <!-- User Management Section -->
+                <div class="row">
+                    <!-- Users List -->
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Danh sách người dùng</h5>
+                                <div>
+                                    <input type="text" class="form-control" id="searchUser" placeholder="Tìm kiếm người dùng...">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Mã số</th>
+                                                <th>Họ</th>
+                                                <th>Tên</th>
+                                                <th>Email</th>
+                                                <th>Số điện thoại</th>
+                                                <th>Chuyên ngành</th>
+                                                <th>Trạng thái</th>
+                                                <th>Vai trò</th>
+                                                <th>Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="usersList">
+                                            <!-- Users will be loaded here dynamically -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chỉnh sửa người dùng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm">
+                        <input type="hidden" id="editUserId">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editHo" class="form-label">Họ</label>
+                                <input type="text" class="form-control" id="editHo" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editTen" class="form-label">Tên</label>
+                                <input type="text" class="form-control" id="editTen" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="editEmail" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editSdt" class="form-label">Số điện thoại</label>
+                                <input type="text" class="form-control" id="editSdt" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editChuyenNganh" class="form-label">Chuyên ngành</label>
+                                <input type="text" class="form-control" id="editChuyenNganh" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editGioiTinh" class="form-label">Giới tính</label>
+                                <select class="form-select" id="editGioiTinh" required>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEnabled" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="editEnabled" required>
+                                <option value="true">Hoạt động</option>
+                                <option value="false">Khóa</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Vai trò</label>
+                            <div id="editRoles" class="border p-2 rounded">
+                                <!-- Roles will be loaded here dynamically -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="saveUserBtn">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/admin/users.js"></script>
+</body>
+</html> 

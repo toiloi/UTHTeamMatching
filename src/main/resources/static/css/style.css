@@ -83,8 +83,9 @@
     width: 250px;
     background: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 1001;
+    z-index: 900;
     transition: all 0.3s ease;
+    padding-top: 70px; /* Reduced from 75px to 70px to match navbar height exactly */
 }
 
 .sidebar.collapsed {
@@ -92,7 +93,7 @@
 }
 
 .sidebar .left {
-    padding: 20px;
+    padding: 15px; /* Reduced from 20px */
     border-bottom: 1px solid #eee;
 }
 
@@ -103,7 +104,7 @@
 }
 
 .sidebar .right {
-    padding: 20px;
+    padding: 15px; /* Reduced from 20px */
 }
 
 .sidebar h1 {
@@ -175,6 +176,7 @@
 @media (max-width: 768px) {
     .sidebar {
         transform: translateX(-100%);
+        padding-top: 75px;
     }
     
     .sidebar.show {
@@ -197,7 +199,7 @@
     position: fixed;
     top: 0;
     right: 0;
-    left: 250px;
+    left: 0;
     transition: all 0.3s ease;
     z-index: 1000;
     background: #FFFFFF;
@@ -213,12 +215,16 @@
         width: 100%;
     }
     
-    .content-wrapper {
-        margin-left: 0;
-        width: 100%;
+    .sidebar {
+        transform: translateX(-100%);
+        padding-top: 75px;
     }
     
-    .content-wrapper.sidebar-collapsed {
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    
+    .content-wrapper {
         margin-left: 0;
         width: 100%;
     }
@@ -1161,4 +1167,54 @@
 
 .terms-check label a:hover {
     color: #0e4166;
+}
+
+/* Custom Layout Styles */
+.main-container {
+    padding-top: 70px; /* Height of navbar */
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-left: 250px; /* Width of sidebar */
+    margin-right: 250px; /* Width of right sidebar */
+    padding: 20px;
+}
+
+.navbar {
+    z-index: 1000;
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 70px; /* Height of navbar */
+    bottom: 0;
+    width: 250px;
+    z-index: 900;
+}
+
+.right-sidebar {
+    position: fixed;
+    right: 0;
+    top: 70px; /* Height of navbar */
+    bottom: 0;
+    width: 250px;
+    z-index: 900;
+}
+
+@media (max-width: 992px) {
+    .content-container {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+    .sidebar, .right-sidebar {
+        display: none;
+    }
 }

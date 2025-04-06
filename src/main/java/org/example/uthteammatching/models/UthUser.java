@@ -1,18 +1,23 @@
 package org.example.uthteammatching.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.Set;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "uthUser")
 public class UthUser {
     @Id
     @Nationalized
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "maSo", nullable = false, length = 50)
-    private String maSo;
+    private Long maSo;
 
     @Nationalized
     @Column(name = "ten", length = 50)
@@ -21,9 +26,6 @@ public class UthUser {
     @Nationalized
     @Column(name = "ho", length = 50)
     private String ho;
-
-    @Column(name = "roleId", columnDefinition = "tinyint")
-    private Short roleId;
 
     @Nationalized
     @Column(name = "gioiTinh", length = 10)
@@ -46,14 +48,39 @@ public class UthUser {
     private String username;
 
     @Nationalized
-    @Column(name = "pass", length = 20)
+    @Column(name = "pass", length = 100)
     private String pass;
 
-    public String getMaSo() {
+    @Nationalized
+    @Column(name = "enabled")
+    private Boolean enabled;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<UserRole> userRoles;
+    public UthUser() {
+
+    }
+
+    public UthUser(Long maSo, String ten, String ho, String gioiTinh, String chuyenNganh, String email, String sdt, String username, String pass, Boolean enabled, Set<UserRole> userRoles) {
+        this.maSo = maSo;
+        this.ten = ten;
+        this.ho = ho;
+        this.gioiTinh = gioiTinh;
+        this.chuyenNganh = chuyenNganh;
+        this.email = email;
+        this.sdt = sdt;
+        this.username = username;
+        this.pass = pass;
+        this.enabled = enabled;
+        this.userRoles = userRoles;
+    }
+
+    public Long getMaSo() {
         return maSo;
     }
 
-    public void setMaSo(String maSo) {
+    public void setMaSo(Long maSo) {
         this.maSo = maSo;
     }
 
@@ -73,13 +100,6 @@ public class UthUser {
         this.ho = ho;
     }
 
-    public Short getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Short roleId) {
-        this.roleId = roleId;
-    }
 
     public String getGioiTinh() {
         return gioiTinh;
@@ -129,4 +149,19 @@ public class UthUser {
         this.pass = pass;
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Set<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<UserRole> userRoles) {
+        this.userRoles = userRoles;
+    }
 }

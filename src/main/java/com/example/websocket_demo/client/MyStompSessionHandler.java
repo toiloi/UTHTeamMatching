@@ -71,6 +71,7 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
         });
         System.out.println("Client Subscribed to /topic/users" );
 
+        session.send("app/connect", username);
         session.send("/app/request-users","");
     }
     @Override

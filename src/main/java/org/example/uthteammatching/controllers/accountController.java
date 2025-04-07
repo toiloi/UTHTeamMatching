@@ -99,9 +99,24 @@ public class accountController {
     public String loginUser(@RequestParam String username,
                           @RequestParam String password,
                           RedirectAttributes redirectAttributes) {
-        // Spring Security sẽ xử lý việc xác thực
-        // Nếu đăng nhập thất bại, Spring Security sẽ chuyển hướng về trang login với param error
-        return "redirect:/account";
+        try {
+            UthUser user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            
+            // Kiểm tra xem user có role ADMIN không
+            boolean isAdmin = user.getUserRoles().stream()
+                    .anyMatch(userRole -> userRole.getRole().getTen().equals("ADMIN"));
+            
+            if (isAdmin) {
+                redirectAttributes.addFlashAttribute("error", "Tài khoản admin không thể đăng nhập ở đây");
+                return "redirect:/account";
+            }
+            
+            return "redirect:/home";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Tên đăng nhập hoặc mật khẩu không đúng");
+            return "redirect:/account";
+        }
     }
 
     @GetMapping("/account/logout")
@@ -118,7 +133,7 @@ public class accountController {
             
             // Kiểm tra xem user có role ADMIN không
             boolean isAdmin = user.getUserRoles().stream()
-                    .anyMatch(userRole -> userRole.getRole().getTen().equals("ROLE_ADMIN"));
+                    .anyMatch(userRole -> userRole.getRole().getTen().equals("ADMIN"));
             
             if (isAdmin) {
                 return "redirect:/admin";

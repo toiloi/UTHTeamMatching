@@ -39,13 +39,24 @@ public class SecurityConfig {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                               Authentication authentication) throws IOException, ServletException {
-                // Kiểm tra vai trò của người dùng
-                boolean isAdmin = authentication.getAuthorities().stream()
-                        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+                // Log thông tin xác thực
+                System.out.println("Authentication successful for user: " + authentication.getName());
+                System.out.println("Authorities: " + authentication.getAuthorities());
                 
-                if (isAdmin) {
+                // Lấy URI của request
+                String requestURI = request.getRequestURI();
+                System.out.println("Request URI: " + requestURI);
+                
+                // Kiểm tra URI và điều hướng phù hợp
+                if (requestURI.equals("/account")) {
+                    System.out.println("Redirecting to /");
+                    response.sendRedirect("/");
+                } else if (requestURI.equals("/login")) {
+                    System.out.println("Redirecting to /admin");
                     response.sendRedirect("/admin");
                 } else {
+                    // Fallback cho các trường hợp khác
+                    System.out.println("Redirecting to /home");
                     response.sendRedirect("/home");
                 }
             }
@@ -58,12 +69,12 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/static/**").permitAll()
-                .requestMatchers("/", "/home", "/login", "/register", "/account").permitAll()
-                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/", "/home", "/register", "/account").permitAll()
+                .requestMatchers("/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated())
             .formLogin(login -> login
                 .loginPage("/login")
-                .loginProcessingUrl("/account/login")
+                .loginProcessingUrl("/admin/login")
                 .usernameParameter("username")
                 .passwordParameter("pass")
                 .successHandler(authenticationSuccessHandler())

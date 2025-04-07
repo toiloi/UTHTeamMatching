@@ -4,6 +4,7 @@ import org.example.uthteammatching.models.CustomUserDetail;
 import org.example.uthteammatching.models.UserRole;
 import org.example.uthteammatching.models.UthUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +20,9 @@ import java.util.Set;
 public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
+    @Lazy
     private UserService userService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UthUser user = userService.findByUsername(username);

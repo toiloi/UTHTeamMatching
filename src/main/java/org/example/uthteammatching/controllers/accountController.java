@@ -78,10 +78,10 @@ public class accountController {
         userRepository.save(user);
 
         // Tìm hoặc tạo role USER
-        Role userRole = roleRepository.findByTen("ROLE_USER")
+        Role userRole = roleRepository.findByTen("USER")
                 .orElseGet(() -> {
                     Role newRole = new Role();
-                    newRole.setTen("ROLE_USER");
+                    newRole.setTen("USER");
                     return roleRepository.save(newRole);
                 });
 
@@ -92,7 +92,7 @@ public class accountController {
         userRoleRepository.save(userRoleEntity);
 
         redirectAttributes.addFlashAttribute("success", "Đăng ký thành công!");
-        return "redirect:/home";
+        return "redirect:/account";
     }
 
     @PostMapping("/account/login")
@@ -121,7 +121,6 @@ public class accountController {
 
     @GetMapping("/account/logout")
     public String logout() {
-        // Spring Security sẽ xử lý việc đăng xuất
         return "redirect:/account?logout";
     }
 

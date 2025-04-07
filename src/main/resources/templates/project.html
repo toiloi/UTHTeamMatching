@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>UTH-TEAM - Dự án</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link th:href="@{/img/favicon.ico}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css}" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Main Container Start -->
+    <div class="main-container d-flex flex-column min-vh-100">
+        <!-- Navbar Start -->
+        <nav class="navbar navbar-expand-lg bg-white navbar-light shadow fixed-top p-0">
+            <a href="home.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+                <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>UTH-TEAM</h2>
+            </a>
+            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto p-4 p-lg-0">
+                    <a href="home.html" class="nav-item nav-link">Trang chủ</a>
+                    <a href="news.html" class="nav-item nav-link">Bảng tin</a>
+                    <a href="project.html" class="nav-item nav-link active">Dự án</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                        <div class="dropdown-menu fade-down m-0">
+                            <a href="team.html" class="dropdown-item">Our Team</a>
+                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                            <a href="404.html" class="dropdown-item">404 Page</a>
+                        </div>
+                    </div>
+                    <a href="contact.html" class="nav-item nav-link">Liên hệ</a>
+                </div>
+                <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Tham Gia<i class="fa fa-arrow-right ms-3"></i></a>
+            </div>
+        </nav>
+        <!-- Navbar End -->
+
+        <!-- Content Container Start -->
+        <div class="content-container flex-grow-1 mt-5 pt-4">
+            <!-- Right Sidebar Start -->
+            <div class="right-sidebar">
+                <div class="friends-header">
+                    <h3>Bạn bè</h3>
+                    <button class="btn btn-sm btn-primary">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <input type="text" class="search-friends" placeholder="Tìm kiếm bạn bè...">
+                <div class="friends-list">
+                    <!-- Friend items here -->
+                </div>
+            </div>
+            <!-- Right Sidebar End -->
+
+            <!-- Sidebar Start -->
+            <div class="sidebar">
+                <div class="left">
+                    <img src="img/user.jpg" alt="User Profile">
+                    <button id="toggle-sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <div class="right">
+                    <h1>UTH-TEAM</h1>
+                    <nav class="buttons">
+                        <button>
+                            <i class="fas fa-home"></i>
+                            <span><a th:href="@{/home}">Trang chủ</a></span>
+                        </button>
+                        <button>
+                            <i class="fas fa-newspaper"></i>
+                            <span><a th:href="@{/news}">Bảng tin</a></span>
+                        </button>
+                        <button>
+                            <i class="fas fa-project-diagram"></i>
+                            <span><a th:href="@{/project}">Dự án</a></span>
+                        </button>
+                        <button>
+                            <i class="fas fa-users"></i>
+                            <span>Học viên</span>
+                        </button>
+                        <button>
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Lịch học</span>
+                        </button>
+                    </nav>
+                    <h2>Thống kê</h2>
+                    <nav class="buttons">
+                        <button>
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Báo cáo</span>
+                        </button>
+                        <button>
+                            <i class="fas fa-cog"></i>
+                            <span>Cài đặt</span>
+                        </button>
+                        <button>
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span><a th:href="@{/logout}">Đăng xuất</a></span>
+                        </button>
+                    </nav>
+                </div>
+            </div>
+            <!-- Sidebar End -->
+
+            <!-- Project Content Start -->
+            <div class="project-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <!-- Project Feed -->
+                            <div class="project-feed">
+                                <!-- Create Project -->
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <div class="d-flex mb-3">
+                                            <img src="img/user.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                            <div class="flex-grow-1">
+                                                <textarea class="form-control" rows="3" placeholder="Tạo dự án mới..."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <button class="btn btn-outline-primary me-2">
+                                                    <i class="fas fa-image"></i> Ảnh
+                                                </button>
+                                                <button class="btn btn-outline-primary">
+                                                    <i class="fas fa-file"></i> Tài liệu
+                                                </button>
+                                            </div>
+                                            <button class="btn btn-primary">Tạo dự án</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Project List -->
+                                <div class="project-list">
+                                    <!-- Project Item -->
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h5 class="card-title mb-0">Dự án 1</h5>
+                                                <span class="badge bg-primary">Đang thực hiện</span>
+                                            </div>
+                                            <p class="card-text">Mô tả ngắn về dự án và các mục tiêu cần đạt được.</p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="img/user-1.jpg" class="rounded-circle me-2" style="width: 30px; height: 30px;">
+                                                    <small class="text-muted">Người quản lý: Nguyễn Văn A</small>
+                                                </div>
+                                                <button class="btn btn-outline-primary btn-sm">Xem chi tiết</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Project Item -->
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h5 class="card-title mb-0">Dự án 2</h5>
+                                                <span class="badge bg-success">Hoàn thành</span>
+                                            </div>
+                                            <p class="card-text">Mô tả ngắn về dự án và các mục tiêu cần đạt được.</p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="img/user-2.jpg" class="rounded-circle me-2" style="width: 30px; height: 30px;">
+                                                    <small class="text-muted">Người quản lý: Trần Thị B</small>
+                                                </div>
+                                                <button class="btn btn-outline-primary btn-sm">Xem chi tiết</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Sidebar -->
+                        <div class="col-lg-4">
+                            <!-- Project Stats -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Thống kê dự án</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span>Tổng số dự án</span>
+                                        <span class="badge bg-primary">12</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span>Đang thực hiện</span>
+                                        <span class="badge bg-warning">5</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Hoàn thành</span>
+                                        <span class="badge bg-success">7</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Team Members -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Thành viên dự án</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="team-member d-flex align-items-center mb-3">
+                                        <img src="img/user-1.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                        <div>
+                                            <h6 class="mb-0">Nguyễn Văn A</h6>
+                                            <small class="text-muted">Quản lý dự án</small>
+                                        </div>
+                                    </div>
+                                    <div class="team-member d-flex align-items-center mb-3">
+                                        <img src="img/user-2.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                        <div>
+                                            <h6 class="mb-0">Trần Thị B</h6>
+                                            <small class="text-muted">Developer</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Project Content End -->
+        </div>
+        <!-- Content Container End -->
+    </div>
+    <!-- Main Container End -->
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/lib/wow/wow.min.js}"></script>
+    <script th:src="@{/lib/easing/easing.min.js}"></script>
+    <script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+    <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+
+</html> 

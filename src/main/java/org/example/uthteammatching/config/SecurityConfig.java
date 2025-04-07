@@ -43,21 +43,14 @@ public class SecurityConfig {
                 System.out.println("Authentication successful for user: " + authentication.getName());
                 System.out.println("Authorities: " + authentication.getAuthorities());
                 
-                // Lấy URI của request
-                String requestURI = request.getRequestURI();
-                System.out.println("Request URI: " + requestURI);
+                // Kiểm tra role và điều hướng phù hợp
+                boolean isAdmin = authentication.getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("ADMIN"));
                 
-                // Kiểm tra URI và điều hướng phù hợp
-                if (requestURI.equals("/account")) {
-                    System.out.println("Redirecting to /");
-                    response.sendRedirect("/");
-                } else if (requestURI.equals("/login")) {
-                    System.out.println("Redirecting to /admin");
+                if (isAdmin) {
                     response.sendRedirect("/admin");
                 } else {
-                    // Fallback cho các trường hợp khác
-                    System.out.println("Redirecting to /home");
-                    response.sendRedirect("/home");
+                    response.sendRedirect("/");
                 }
             }
         };
@@ -73,15 +66,15 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated())
             .formLogin(login -> login
-                .loginPage("/login")
-                .loginProcessingUrl("/admin/login")
+                .loginPage("/account")
+                .loginProcessingUrl("/account")
                 .usernameParameter("username")
-                .passwordParameter("pass")
+                .passwordParameter("password")
                 .successHandler(authenticationSuccessHandler())
-                .failureUrl("/login?error=true")
+                .failureUrl("/account?error=true")
                 .permitAll())
             .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout=true")
+                .logoutSuccessUrl("/account?logout=true")
                 .permitAll());
         return httpSecurity.build();
     }

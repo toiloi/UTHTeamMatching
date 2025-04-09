@@ -139,7 +139,8 @@
             <!-- Sidebar Start -->
             <div class="sidebar">
                 <div class="left">
-                    <img src="img/user.jpg" alt="User Profile">
+                    <img src="img/user.jpg">
+                    <span class="user-name" th:text="${currentUser.ho + ' ' + currentUser.ten }"></span>
                     <button id="toggle-sidebar">
                         <i class="fas fa-bars"></i>
                     </button>

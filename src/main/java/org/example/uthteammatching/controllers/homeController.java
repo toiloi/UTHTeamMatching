@@ -40,6 +40,7 @@ public class homeController {
             if (userOptional.isPresent()) {
                 UthUser currentUser = userOptional.get();
                 model.addAttribute("currentUser", currentUser);
+
             }
         }
         return "project"; // Trả về project.html

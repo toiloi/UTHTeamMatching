@@ -83,25 +83,29 @@
                                 </div>
 
                                 <!-- News Posts -->
-                                <div class="news-post card mb-4">
-                                    <div class="card-body">
-                                        <div class="d-flex mb-3">
-                                            <img src="img/user-2.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px;">
-                                            <div>
-                                                <h6 class="mb-0">Nguyễn Anh Toại</h6>
-                                                <small class="text-muted">5 giờ trước</small>
+                                    <div class="news-post card mb-4">
+                                        <div th:each=" bv : ${baiViets}">
+                                        <div class="card-body">
+                                            <div class="d-flex mb-3">
+                                                <img src="img/user-2.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                                <div>
+                                                    <p th:text="${#dates.createNow()}"></p>
+                                                    <p th:text="${bv.getNgayDang()}"></p>
+                                                    <a th:href="@{/InfoUser/{id}(id=${bv.userMaSo.getMaSo()})}" th:text="${bv.userMaSo.getTen()}" class="mb-0"></a>
+                                                    <small th:text="${@timeAgoUtil.toRelative(bv.ngayDang)}" class="text-muted"></small>
+                                                </div>
+                                            </div>
+                                            <p th:text="${bv.getNoiDung()}"class="card-text"></p>
+                                            <div class="d-flex justify-content-between">
+                                                <button class="btn btn-link text-decoration-none">
+                                                    <i class="far fa-thumbs-up"></i> Thích
+                                                </button>
+                                                <button class="btn btn-link text-decoration-none">
+                                                    <i class="far fa-comment"></i> Bình luận
+                                                </button>
                                             </div>
                                         </div>
-                                        <p class="card-text">Buổi họp team sắp tới sẽ diễn ra vào thứ 6 tuần này. Hãy chuẩn bị các báo cáo và ý tưởng mới!</p>
-                                        <div class="d-flex justify-content-between">
-                                            <button class="btn btn-link text-decoration-none">
-                                                <i class="far fa-thumbs-up"></i> Thích
-                                            </button>
-                                            <button class="btn btn-link text-decoration-none">
-                                                <i class="far fa-comment"></i> Bình luận
-                                            </button>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

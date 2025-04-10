@@ -10,10 +10,10 @@
         <!-- Lặp qua danh sách bạn bè đã lọc -->
         <div th:each="friend : ${friendUsers}" class="friend-item">
             <!-- Hiển thị avatar của bạn bè -->
-<!--            <img th:src="${friend.avatar}" th:alt="${friend.username}" class="friend-avatar">-->
-<!--            <div class="friend-info">-->
+            <img th:src="${friend.avatar != null} ? ${friend.avatar} : '/img/avatars/NULL.jpg'" class="friend-avatar">
+            <div class="friend-info">
                 <!-- Hiển thị tên bạn bè -->
-                <div class="friend-name" th:text="${friend.username}"></div>
+                <div class="friend-name" th:text="${friend.ho+ ' ' + friend.ten}"></div>
             </div>
         </div>
         <!-- Thông báo nếu không có bạn bè -->

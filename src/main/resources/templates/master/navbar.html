@@ -11,15 +11,17 @@
             <a th:href="@{/project}" class="nav-item nav-link">Dự án</a>
             <a th:href="@{/project}" class="nav-item nav-link">Thông báo</a>
             <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <span th:text="${currentUser.ho + ' ' + currentUser.ten}" class="nav-text"></span>
-                    <img th:src="@{'/img/user-' + (${currentUser.maSo % 5 + 1}) + '.jpg'}" class="nav-avatar">
+                <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+                    <span class="nav-text" th:text="${currentUser.ho + ' ' + currentUser.ten}"></span>
                 </a>
                 <div class="dropdown-menu fade-down m-0">
                     <a href="team.html" class="dropdown-item">Thông tin chi tiết</a>
                     <a href="testimonial.html" class="dropdown-item">Quản lý tài khoản</a>
                 </div>
             </div>
+            <a>
+                <img th:src="${currentUser.avatar != null} ? ${currentUser.avatar} : '/img/avatars/NULL.jpg'" class="nav-avatar">
+            </a>
         </div>
     </div>
 </nav>

@@ -1,10 +1,7 @@
 <div th:fragment="leftSidebar" class="sidebar">
     <div class="left">
-        <img src="img/user.jpg">
-        <span class="user-name" th:text="${currentUser.ho + ' ' + currentUser.ten }"></span>
-        <button id="toggle-sidebar">
-            <i class="fas fa-bars"></i>
-        </button>
+        <img th:src="${currentUser.avatar != null} ? ${currentUser.avatar} : '/img/avatars/NULL.jpg'">
+        <span class="user-name" th:text="${currentUser.ho + ' ' + currentUser.ten}" style="font-weight: bold;"></span>
     </div>
     <div class="right">
         <h1>UTH-TEAM</h1>

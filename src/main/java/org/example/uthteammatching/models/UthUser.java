@@ -14,9 +14,8 @@ import java.util.Set;
 @Table(name = "uthUser")
 public class UthUser {
     @Id
-    @Nationalized
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "maSo", nullable = false, length = 50)
+    @Column(name = "maSo", nullable = false)
     private Long maSo;
 
     @Nationalized
@@ -55,14 +54,22 @@ public class UthUser {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    // Thêm trường avatar
+    @Nationalized
+    @Column(name = "avatar", length = 255)
+    private String avatar;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<UserRole> userRoles;
-    public UthUser() {
 
+    // Constructor mặc định
+    public UthUser() {
     }
 
-    public UthUser(Long maSo, String ten, String ho, String gioiTinh, String chuyenNganh, String email, String sdt, String username, String pass, Boolean enabled, Set<UserRole> userRoles) {
+    // Constructor đầy đủ
+    public UthUser(Long maSo, String ten, String ho, String gioiTinh, String chuyenNganh, String email, String sdt,
+                   String username, String pass, Boolean enabled, String avatar, Set<UserRole> userRoles) {
         this.maSo = maSo;
         this.ten = ten;
         this.ho = ho;
@@ -73,9 +80,11 @@ public class UthUser {
         this.username = username;
         this.pass = pass;
         this.enabled = enabled;
+        this.avatar = avatar;
         this.userRoles = userRoles;
     }
 
+    // Getters và Setters
     public Long getMaSo() {
         return maSo;
     }
@@ -99,7 +108,6 @@ public class UthUser {
     public void setHo(String ho) {
         this.ho = ho;
     }
-
 
     public String getGioiTinh() {
         return gioiTinh;
@@ -155,6 +163,14 @@ public class UthUser {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public Set<UserRole> getUserRoles() {

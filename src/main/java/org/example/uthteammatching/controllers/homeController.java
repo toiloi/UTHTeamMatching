@@ -1,7 +1,9 @@
 package org.example.uthteammatching.controllers;
 
 import org.example.uthteammatching.models.BaiViet;
+import org.example.uthteammatching.models.ListFriend;
 import org.example.uthteammatching.models.UthUser;
+import org.example.uthteammatching.repositories.ListFriendRepository;
 import org.example.uthteammatching.repositories.UserRepository;
 import org.example.uthteammatching.services.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class homeController {
     private UserRepository userRepository;
 
     @Autowired
+    private ListFriendRepository listFriendRepository;
+
+    @Autowired
     private ArticleService articleService;
 
     @GetMapping("/")
@@ -31,10 +36,14 @@ public class homeController {
             String username = authentication.getName();
             Optional<UthUser> userOptional = userRepository.findByUsername(username);
             if (userOptional.isPresent()) {
+                UthUser currentUser = userOptional.get(); // Khai báo currentUser trong phạm vi này
                 List<BaiViet> baiViets = articleService.getAllArticles();
                 model.addAttribute("baiViets", baiViets);
-                UthUser currentUser = userOptional.get();
                 model.addAttribute("currentUser", currentUser);
+
+                // Lấy danh sách bạn bè của currentUser
+                List<ListFriend> friends = listFriendRepository.findByUserId1OrUserId2(currentUser, currentUser);
+                model.addAttribute("friends", friends);
             }
         }
         return "home"; // Trả về home.html
@@ -49,7 +58,6 @@ public class homeController {
             if (userOptional.isPresent()) {
                 UthUser currentUser = userOptional.get();
                 model.addAttribute("currentUser", currentUser);
-
             }
         }
         return "project";
@@ -58,7 +66,6 @@ public class homeController {
     @GetMapping("/InfoUser/{id}")
     public String showProfile(@PathVariable("id") Long id, Model model) {
         List<BaiViet> baiViets = articleService.getAllArticles();
-
         UthUser user = null;
         for (BaiViet bv : baiViets) {
             if (bv.getUserMaSo().getMaSo().equals(id)) {
@@ -66,7 +73,6 @@ public class homeController {
                 break;
             }
         }
-
         if (user != null) {
             model.addAttribute("user", user);
             return "InfoUser";

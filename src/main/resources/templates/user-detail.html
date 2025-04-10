@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Thông tin chi tiết</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    
+    <!-- Favicon -->
+    <link th:href="@{/img/favicon.ico}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css}" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="master/navbar::navbar"></div>
+
+    <div class="container">
+        <div class="profile-section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title mb-0">Thông tin cá nhân</h2>
+                <div class="action-buttons" th:if="${currentUser.maSo == student.maSo}">
+                    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                        <i class="fas fa-edit"></i> Chỉnh sửa thông tin
+                    </button>
+                    <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                        <i class="fas fa-key"></i> Đổi mật khẩu
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <img th:src="${student.avatar != null ? student.avatar : '/img/avatars/NULL.jpg'}" alt="Ảnh đại diện" class="profile-image mb-3">
+                </div>
+                <div class="col-md-9">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <p><span class="info-label">Mã số:</span> <span th:text="${student.maSo}"></span></p>
+                            <p><span class="info-label">Họ:</span> <span th:text="${student.ho}"></span></p>
+                            <p><span class="info-label">Tên:</span> <span th:text="${student.ten}"></span></p>
+                            <p><span class="info-label">Giới tính:</span> <span th:text="${student.gioiTinh}"></span></p>
+                            <p><span class="info-label">Chuyên ngành:</span> <span th:text="${student.chuyenNganh}"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><span class="info-label">Email:</span> <span th:text="${student.email}"></span></p>
+                            <p><span class="info-label">Số điện thoại:</span> <span th:text="${student.sdt}"></span></p>
+                            <p><span class="info-label">Tên đăng nhập:</span> <span th:text="${student.username}"></span></p>
+                            <p><span class="info-label">Trạng thái:</span> 
+                                <span th:if="${student.enabled}" class="text-success">Đang hoạt động</span>
+                                <span th:unless="${student.enabled}" class="text-danger">Đã khóa</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Roles Section -->
+        <div class="profile-section">
+            <h2 class="section-title">Vai trò người dùng</h2>
+            <div class="row">
+                <div class="col-12">
+                    <div th:if="${student.userRoles != null && !student.userRoles.empty}">
+                        <ul class="list-group">
+                            <li th:each="userRole : ${student.userRoles}" class="list-group-item">
+                                <span th:text="${userRole.role.ten}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div th:if="${student.userRoles == null || student.userRoles.empty}" class="alert alert-info">
+                        Người dùng chưa được phân quyền
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chỉnh sửa thông tin</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm" th:action="@{/user/update}" method="POST">
+                        <input type="hidden" name="maSo" th:value="${student.maSo}">
+                        <div class="mb-3">
+                            <label class="form-label">Họ</label>
+                            <input type="text" class="form-control" name="ho" th:value="${student.ho}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tên</label>
+                            <input type="text" class="form-control" name="ten" th:value="${student.ten}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" th:value="${student.email}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="tel" class="form-control" name="sdt" th:value="${student.sdt}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Giới tính</label>
+                            <select class="form-select" name="gioiTinh">
+                                <option value="Nam" th:selected="${student.gioiTinh == 'Nam'}">Nam</option>
+                                <option value="Nữ" th:selected="${student.gioiTinh == 'Nữ'}">Nữ</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Chuyên ngành</label>
+                            <input type="text" class="form-control" name="chuyenNganh" th:value="${student.chuyenNganh}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ảnh đại diện</label>
+                            <input type="file" class="form-control" name="avatarFile" accept="image/*">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" form="editProfileForm" class="btn btn-primary">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Đổi mật khẩu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="changePasswordForm" th:action="@{/user/change-password}" method="POST">
+                        <input type="hidden" name="maSo" th:value="${student.maSo}">
+                        <div class="mb-3">
+                            <label class="form-label">Mật khẩu hiện tại</label>
+                            <input type="password" class="form-control" name="currentPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mật khẩu mới</label>
+                            <input type="password" class="form-control" name="newPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Xác nhận mật khẩu mới</label>
+                            <input type="password" class="form-control" name="confirmPassword" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" form="changePasswordForm" class="btn btn-primary">Đổi mật khẩu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/lib/wow/wow.min.js}"></script>
+    <script th:src="@{/lib/easing/easing.min.js}"></script>
+    <script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+    <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+
+    <!-- Template Javascript -->
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html> 

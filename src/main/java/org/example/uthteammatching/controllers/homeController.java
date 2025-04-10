@@ -97,4 +97,19 @@ public class homeController {
             return "404";
         }
     }
+
+    @GetMapping("/user-detail/{id}")
+    public String userDetail(@PathVariable("id") Long id, Model model) {
+        Optional<UthUser> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            UthUser user = userOptional.get();
+            model.addAttribute("student", user); // Using "student" to match the template
+            UthUser currentUser = addCurrentUserToModel(model);
+            addFriendUsersToModel(model, currentUser);
+            return "user-detail";
+        } else {
+            model.addAttribute("errorMessage", "User not found");
+            return "404";
+        }
+    }
 }

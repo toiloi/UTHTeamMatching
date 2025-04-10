@@ -29,6 +29,253 @@
 
     <!-- Template Stylesheet -->
     <link th:href="@{/css/style.css}" rel="stylesheet">
+
+    <style>
+        .project-content {
+            padding: 2rem 0;
+        }
+        
+        .create-project-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .create-project-card:hover {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .project-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .project-status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .stats-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        
+        .stats-item {
+            padding: 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .stats-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .team-member-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        
+        .team-member {
+            padding: 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .team-member:hover {
+            background: #f8f9fa;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .btn-create-project {
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-create-project:hover {
+            transform: translateY(-2px);
+        }
+        
+        .project-description {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+        }
+        
+        .modal-header {
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            border-top: none;
+            padding: 1.5rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        
+        .btn-close:focus {
+            box-shadow: none;
+        }
+        
+        .project-details-modal .modal-content {
+            border-radius: 12px;
+            border: none;
+        }
+        
+        .project-details-modal .modal-header {
+            border-bottom: none;
+            padding: 1.5rem;
+            background-color: #f8f9fa;
+        }
+        
+        .project-details-modal .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .project-details-modal .modal-footer {
+            border-top: none;
+            padding: 1.5rem;
+        }
+        
+        .project-details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .project-details-content {
+            margin-bottom: 2rem;
+        }
+        
+        .project-details-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .project-details-section h6 {
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .project-details-section p {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        
+        .project-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .project-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e9ecef;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background-color: #0d6efd;
+            border: 2px solid #fff;
+        }
+        
+        .project-members {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .member-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .member-item img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .project-files {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #495057;
+        }
+        
+        .file-item:hover {
+            background-color: #e9ecef;
+        }
+        
+        .file-item i {
+            margin-right: 0.5rem;
+            color: #0d6efd;
+        }
+    </style>
 </head>
 
 <body>
@@ -60,24 +307,26 @@
                             <!-- Project Feed -->
                             <div class="project-feed">
                                 <!-- Create Project -->
-                                <div class="card mb-4">
-                                    <div class="card-body">
+                                <div class="card create-project-card mb-4">
+                                    <div class="card-body p-4">
                                         <div class="d-flex mb-3">
-                                            <img src="img/user.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                            <img src="img/user.jpg" class="avatar me-3" alt="User Avatar">
                                             <div class="flex-grow-1">
-                                                <textarea class="form-control" rows="3" placeholder="Tạo dự án mới..."></textarea>
+                                                <textarea id="thoughtInput" class="form-control" rows="3" placeholder="Bạn đang nghĩ gì?"></textarea>
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-between">
+                                        <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <button class="btn btn-outline-primary me-2">
-                                                    <i class="fas fa-image"></i> Ảnh
+                                                <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                                                    <i class="fas fa-image me-2"></i>Ảnh
                                                 </button>
-                                                <button class="btn btn-outline-primary">
-                                                    <i class="fas fa-file"></i> Tài liệu
+                                                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                                                    <i class="fas fa-file me-2"></i>Tài liệu
                                                 </button>
                                             </div>
-                                            <button class="btn btn-primary">Tạo dự án</button>
+                                            <button class="btn btn-primary btn-create-project" data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                                                <i class="fas fa-plus me-2"></i>Tạo dự án
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -85,37 +334,47 @@
                                 <!-- Project List -->
                                 <div class="project-list">
                                     <!-- Project Item -->
-                                    <div class="card mb-4">
-                                        <div class="card-body">
+                                    <div class="card project-card">
+                                        <div class="card-body p-4">
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h5 class="card-title mb-0">Dự án 1</h5>
-                                                <span class="badge bg-primary">Đang thực hiện</span>
+                                                <span class="project-status-badge bg-primary">Đang thực hiện</span>
                                             </div>
-                                            <p class="card-text">Mô tả ngắn về dự án và các mục tiêu cần đạt được.</p>
+                                            <p class="project-description mb-3">Mô tả ngắn về dự án và các mục tiêu cần đạt được.</p>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex align-items-center">
-                                                    <img src="img/user-1.jpg" class="rounded-circle me-2" style="width: 30px; height: 30px;">
-                                                    <small class="text-muted">Người quản lý: Nguyễn Văn A</small>
+                                                    <img src="img/user-1.jpg" class="avatar me-2">
+                                                    <div>
+                                                        <h6 class="mb-0">Nguyễn Văn A</h6>
+                                                        <small class="text-muted">Quản lý dự án</small>
+                                                    </div>
                                                 </div>
-                                                <button class="btn btn-outline-primary btn-sm">Xem chi tiết</button>
+                                                <button class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-eye me-2"></i>Xem chi tiết
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Project Item -->
-                                    <div class="card mb-4">
-                                        <div class="card-body">
+                                    <div class="card project-card">
+                                        <div class="card-body p-4">
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h5 class="card-title mb-0">Dự án 2</h5>
-                                                <span class="badge bg-success">Hoàn thành</span>
+                                                <span class="project-status-badge bg-success">Hoàn thành</span>
                                             </div>
-                                            <p class="card-text">Mô tả ngắn về dự án và các mục tiêu cần đạt được.</p>
+                                            <p class="project-description mb-3">Mô tả ngắn về dự án và các mục tiêu cần đạt được.</p>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex align-items-center">
-                                                    <img src="img/user-2.jpg" class="rounded-circle me-2" style="width: 30px; height: 30px;">
-                                                    <small class="text-muted">Người quản lý: Trần Thị B</small>
+                                                    <img src="img/user-2.jpg" class="avatar me-2">
+                                                    <div>
+                                                        <h6 class="mb-0">Trần Thị B</h6>
+                                                        <small class="text-muted">Developer</small>
+                                                    </div>
                                                 </div>
-                                                <button class="btn btn-outline-primary btn-sm">Xem chi tiết</button>
+                                                <button class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-eye me-2"></i>Xem chi tiết
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -126,45 +385,56 @@
                         <!-- Project Sidebar -->
                         <div class="col-lg-4">
                             <!-- Project Stats -->
-                            <div class="card mb-4">
-                                <div class="card-header">
+                            <div class="card stats-card mb-4">
+                                <div class="card-header bg-white border-0 py-3">
                                     <h5 class="mb-0">Thống kê dự án</h5>
                                 </div>
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between mb-3">
-                                        <span>Tổng số dự án</span>
-                                        <span class="badge bg-primary">12</span>
+                                <div class="card-body p-0">
+                                    <div class="stats-item d-flex justify-content-between align-items-center p-3">
+                                        <div>
+                                            <h6 class="mb-0">Tổng số dự án</h6>
+                                            <small class="text-muted">Tất cả dự án</small>
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill px-3 py-2">12</span>
                                     </div>
-                                    <div class="d-flex justify-content-between mb-3">
-                                        <span>Đang thực hiện</span>
-                                        <span class="badge bg-warning">5</span>
+                                    <div class="stats-item d-flex justify-content-between align-items-center p-3">
+                                        <div>
+                                            <h6 class="mb-0">Đang thực hiện</h6>
+                                            <small class="text-muted">Dự án đang hoạt động</small>
+                                        </div>
+                                        <span class="badge bg-warning rounded-pill px-3 py-2">5</span>
                                     </div>
-                                    <div class="d-flex justify-content-between">
-                                        <span>Hoàn thành</span>
-                                        <span class="badge bg-success">7</span>
+                                    <div class="stats-item d-flex justify-content-between align-items-center p-3">
+                                        <div>
+                                            <h6 class="mb-0">Hoàn thành</h6>
+                                            <small class="text-muted">Dự án đã hoàn thành</small>
+                                        </div>
+                                        <span class="badge bg-success rounded-pill px-3 py-2">7</span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Team Members -->
-                            <div class="card">
-                                    <div class="card-header">
+                            <div class="card team-member-card">
+                                <div class="card-header bg-white border-0 py-3">
                                     <h5 class="mb-0">Thành viên dự án</h5>
                                 </div>
-                                <div class="card-body">
-                                    <div class="team-member d-flex align-items-center mb-3">
-                                        <img src="img/user-1.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                <div class="card-body p-0">
+                                    <div class="team-member d-flex align-items-center p-3">
+                                        <img src="img/user-1.jpg" class="avatar me-3">
                                         <div>
                                             <h6 class="mb-0">Nguyễn Văn A</h6>
                                             <small class="text-muted">Quản lý dự án</small>
                                         </div>
+                                        <span class="badge bg-success rounded-pill ms-auto">Online</span>
                                     </div>
-                                    <div class="team-member d-flex align-items-center mb-3">
-                                        <img src="img/user-2.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                    <div class="team-member d-flex align-items-center p-3">
+                                        <img src="img/user-2.jpg" class="avatar me-3">
                                         <div>
                                             <h6 class="mb-0">Trần Thị B</h6>
                                             <small class="text-muted">Developer</small>
                                         </div>
+                                        <span class="badge bg-secondary rounded-pill ms-auto">Offline</span>
                                     </div>
                                 </div>
                             </div>
@@ -189,6 +459,208 @@
     <script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
     <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
+
+    <!-- Create Project Modal -->
+    <div class="modal fade" id="createProjectModal" tabindex="-1" aria-labelledby="createProjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createProjectModalLabel">Tạo dự án mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createProjectForm">
+                        <div class="mb-3">
+                            <label for="projectName" class="form-label">Tên dự án</label>
+                            <input type="text" class="form-control" id="projectName" placeholder="Nhập tên dự án" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectDescription" class="form-label">Mô tả dự án</label>
+                            <textarea class="form-control" id="projectDescription" rows="4" placeholder="Mô tả chi tiết về dự án" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectStatus" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="projectStatus" required>
+                                <option value="">Chọn trạng thái</option>
+                                <option value="planning">Đang lập kế hoạch</option>
+                                <option value="in_progress">Đang thực hiện</option>
+                                <option value="completed">Hoàn thành</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectManager" class="form-label">Người quản lý</label>
+                            <select class="form-select" id="projectManager" required>
+                                <option value="">Chọn người quản lý</option>
+                                <option value="1">Nguyễn Văn A</option>
+                                <option value="2">Trần Thị B</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectStartDate" class="form-label">Ngày bắt đầu</label>
+                            <input type="date" class="form-control" id="projectStartDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectEndDate" class="form-label">Ngày kết thúc</label>
+                            <input type="date" class="form-control" id="projectEndDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectFiles" class="form-label">Tài liệu đính kèm</label>
+                            <input type="file" class="form-control" id="projectFiles" multiple>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="submitProject">Tạo dự án</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Details Modal -->
+    <div class="modal fade project-details-modal" id="projectDetailsModal" tabindex="-1" aria-labelledby="projectDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="project-details-header">
+                        <h5 class="modal-title" id="projectDetailsModalLabel">Dự án 1</h5>
+                        <span class="badge bg-primary project-status-badge">Đang thực hiện</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="project-details-content">
+                        <div class="project-details-section">
+                            <h6>Mô tả dự án</h6>
+                            <p>Mô tả chi tiết về dự án và các mục tiêu cần đạt được. Bao gồm các thông tin về phạm vi dự án, các yêu cầu kỹ thuật và các mốc thời gian quan trọng.</p>
+                        </div>
+                        
+                        <div class="project-details-section">
+                            <h6>Thời gian thực hiện</h6>
+                            <div class="project-timeline">
+                                <div class="timeline-item">
+                                    <h6 class="mb-1">Bắt đầu</h6>
+                                    <p class="mb-0">01/01/2024</p>
+                                </div>
+                                <div class="timeline-item">
+                                    <h6 class="mb-1">Dự kiến kết thúc</h6>
+                                    <p class="mb-0">31/12/2024</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-details-section">
+                            <h6>Thành viên dự án</h6>
+                            <div class="project-members">
+                                <div class="member-item">
+                                    <img src="img/user-1.jpg" alt="Member">
+                                    <div>
+                                        <h6 class="mb-0">Nguyễn Văn A</h6>
+                                        <small class="text-muted">Quản lý dự án</small>
+                                    </div>
+                                </div>
+                                <div class="member-item">
+                                    <img src="img/user-2.jpg" alt="Member">
+                                    <div>
+                                        <h6 class="mb-0">Trần Thị B</h6>
+                                        <small class="text-muted">Developer</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-details-section">
+                            <h6>Tài liệu đính kèm</h6>
+                            <div class="project-files">
+                                <a href="#" class="file-item">
+                                    <i class="fas fa-file-pdf"></i>
+                                    <span>Yêu cầu dự án.pdf</span>
+                                </a>
+                                <a href="#" class="file-item">
+                                    <i class="fas fa-file-word"></i>
+                                    <span>Kế hoạch dự án.docx</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary">Chỉnh sửa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thought Modal -->
+    <div class="modal fade" id="thoughtModal" tabindex="-1" aria-labelledby="thoughtModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="thoughtModalLabel">Tạo bài viết</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control" rows="3" placeholder="Thọ ơi, bạn đang nghĩ gì thế?"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary">Đăng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update the project cards to trigger the modal -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle form submission
+            document.getElementById('submitProject').addEventListener('click', function() {
+                const form = document.getElementById('createProjectForm');
+                if (form.checkValidity()) {
+                    // Here you would typically send the form data to your backend
+                    alert('Dự án đã được tạo thành công!');
+                    // Close the modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('createProjectModal'));
+                    modal.hide();
+                    // Reset the form
+                    form.reset();
+                } else {
+                    form.reportValidity();
+                }
+            });
+            
+            // Add date validation
+            const startDate = document.getElementById('projectStartDate');
+            const endDate = document.getElementById('projectEndDate');
+            
+            startDate.addEventListener('change', function() {
+                endDate.min = this.value;
+            });
+            
+            endDate.addEventListener('change', function() {
+                startDate.max = this.value;
+            });
+            
+            // Add click handlers for project cards
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Don't trigger if clicking on buttons or links
+                    if (!e.target.closest('button') && !e.target.closest('a')) {
+                        const modal = new bootstrap.Modal(document.getElementById('projectDetailsModal'));
+                        modal.show();
+                    }
+                });
+            });
+
+            const thoughtInput = document.getElementById('thoughtInput');
+            const thoughtModal = new bootstrap.Modal(document.getElementById('thoughtModal'));
+
+            thoughtInput.addEventListener('click', function() {
+                thoughtModal.show();
+            });
+        });
+    </script>
 </body>
 
 </html> 

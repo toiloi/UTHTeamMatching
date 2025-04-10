@@ -1,29 +1,29 @@
 <div th:fragment="leftSidebar" class="sidebar">
     <div class="left">
-        <img th:src="${currentUser.avatar != null} ? ${currentUser.avatar} : '/img/avatars/NULL.jpg'">
-        <span class="user-name" th:text="${currentUser.ho + ' ' + currentUser.ten}" style="font-weight: bold;"></span>
+        <img th:src="${currentUser.avatar != null} ? ${currentUser.avatar} : '/img/avatars/NULL.jpg'" alt="User Avatar">
+        <span class="user-name" th:text="${currentUser.ho + ' ' + currentUser.ten}"></span>
     </div>
     <div class="right">
         <h1>UTH-TEAM</h1>
         <nav class="buttons">
-            <button>
+            <a th:href="@{/}" class="nav-link">
                 <i class="fas fa-home"></i>
-                <span><a th:href="@{/}">Bảng tin</a></span>
-            </button>
-            <button>
+                <span>Bảng tin</span>
+            </a>
+            <a th:href="@{/project}" class="nav-link">
                 <i class="fas fa-book"></i>
-                <span><a th:href="@{/project}">Dự án</a></span>
-            </button>
-            <button>
+                <span>Dự án</span>
+            </a>
+            <a th:href="@{/notifications}" class="nav-link">
                 <i class="fas fa-users"></i>
-                <span><a th:href="@{/}">Thông báo</a></span>
-            </button>
+                <span>Thông báo</span>
+            </a>
         </nav>
         <nav class="buttons">
-            <button>
+            <a th:href="@{/logout}" class="nav-link">
                 <i class="fas fa-sign-out-alt"></i>
-                <span><a th:href="@{/logout}">Đăng xuất</a></span>
-            </button>
+                <span>Đăng xuất</span>
+            </a>
         </nav>
     </div>
 </div>

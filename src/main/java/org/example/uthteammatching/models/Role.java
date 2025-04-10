@@ -1,5 +1,6 @@
 package org.example.uthteammatching.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -14,6 +15,7 @@ public class Role {
     @Column(name = "ten")
     private String ten;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "role")
     private Set<UserRole> roleUsers;
 

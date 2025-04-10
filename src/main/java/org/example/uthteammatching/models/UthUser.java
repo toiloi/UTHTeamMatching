@@ -1,5 +1,6 @@
 package org.example.uthteammatching.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,6 +55,7 @@ public class UthUser {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<UserRole> userRoles;
     public UthUser() {

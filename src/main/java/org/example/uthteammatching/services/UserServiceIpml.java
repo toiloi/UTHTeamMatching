@@ -12,6 +12,7 @@ public class UserServiceIpml implements UserService {
     private UserRepository userRepository;
     @Override
     public UthUser findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

@@ -1,5 +1,6 @@
 package org.example.uthteammatching.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,9 +10,11 @@ public class UserRole {
     @Column(name = "maSo")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long maSo;
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "userId",referencedColumnName = "maSo")
     private UthUser user;
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "roleId",referencedColumnName = "maSo")
     private Role role;

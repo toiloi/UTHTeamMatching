@@ -1,7 +1,7 @@
 package org.example.uthteammatching.controllers;
 
 import org.example.uthteammatching.models.UthUser;
-import org.example.uthteammatching.repositories.UserRepository; // Sử dụng UserRepository thay vì UthUserRepository
+import org.example.uthteammatching.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,31 +15,34 @@ import java.util.Optional;
 public class homeController {
 
     @Autowired
-    private UserRepository userRepository; // Inject UserRepository
+    private UserRepository userRepository;
 
     @GetMapping("/")
     public String home(Model model) {
-        // Lấy thông tin người dùng đã đăng nhập từ SecurityContext
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // Kiểm tra xem người dùng đã đăng nhập chưa
         if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
-            // Lấy username của người dùng đã đăng nhập
             String username = authentication.getName();
-
-            // Truy vấn UthUser từ database dựa trên username
             Optional<UthUser> userOptional = userRepository.findByUsername(username);
-
-            // Nếu tìm thấy user, thêm vào model
             if (userOptional.isPresent()) {
                 UthUser currentUser = userOptional.get();
                 model.addAttribute("currentUser", currentUser);
-            } else {
-                // Trường hợp không tìm thấy user (ít xảy ra nếu Security hoạt động đúng)
-                model.addAttribute("currentUser", null);
             }
         }
+        return "home"; // Trả về home.html
+    }
 
-        return "home"; // Trả về template home.html
+    @GetMapping("/project")
+    public String project(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
+            String username = authentication.getName();
+            Optional<UthUser> userOptional = userRepository.findByUsername(username);
+            if (userOptional.isPresent()) {
+                UthUser currentUser = userOptional.get();
+                model.addAttribute("currentUser", currentUser);
+
+            }
+        }
+        return "project"; // Trả về project.html
     }
 }

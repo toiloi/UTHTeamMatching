@@ -1,0 +1,25 @@
+<nav th:fragment="navbar" class="navbar navbar-expand-lg bg-white navbar-light shadow fixed-top p-0">
+    <a href="home.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+        <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>UTH-TEAM</h2>
+    </a>
+    <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav ms-auto p-4 p-lg-0">
+            <a th:href="@{/}" class="nav-item nav-link">Bảng tin</a>
+            <a th:href="@{/project}" class="nav-item nav-link">Dự án</a>
+            <a th:href="@{/project}" class="nav-item nav-link">Thông báo</a>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    <span th:text="${currentUser.ho + ' ' + currentUser.ten}" class="nav-text"></span>
+                    <img th:src="@{'/img/user-' + (${currentUser.maSo % 5 + 1}) + '.jpg'}" class="nav-avatar">
+                </a>
+                <div class="dropdown-menu fade-down m-0">
+                    <a href="team.html" class="dropdown-item">Thông tin chi tiết</a>
+                    <a href="testimonial.html" class="dropdown-item">Quản lý tài khoản</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

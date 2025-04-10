@@ -1,0 +1,36 @@
+<div th:fragment="leftSidebar" class="sidebar">
+    <div class="left">
+        <img src="img/user.jpg">
+        <span class="user-name" th:text="${currentUser.ho + ' ' + currentUser.ten }"></span>
+        <button id="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+    <div class="right">
+        <h1>UTH-TEAM</h1>
+        <nav class="buttons">
+            <button>
+                <i class="fas fa-home"></i>
+                <span><a th:href="@{/}">Bảng tin</a></span>
+            </button>
+            <button>
+                <i class="fas fa-book"></i>
+                <span><a th:href="@{/project}">Dự án</a></span>
+            </button>
+            <button>
+                <i class="fas fa-users"></i>
+                <span><a th:href="@{/}">Thông báo</a></span>
+            </button>
+        </nav>
+        <nav class="buttons">
+            <button>
+                <i class="fas fa-cog"></i>
+                <span>Cài đặt</span>
+            </button>
+            <button>
+                <i class="fas fa-sign-out-alt"></i>
+                <span><a th:href="@{/logout}">Đăng xuất</a></span>
+            </button>
+        </nav>
+    </div>
+</div>

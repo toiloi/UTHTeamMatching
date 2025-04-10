@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,28 +30,8 @@ public class homeController {
     @Autowired
     private ArticleService articleService;
 
-    @GetMapping("/")
-    public String home(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
-            String username = authentication.getName();
-            Optional<UthUser> userOptional = userRepository.findByUsername(username);
-            if (userOptional.isPresent()) {
-                UthUser currentUser = userOptional.get(); // Khai báo currentUser trong phạm vi này
-                List<BaiViet> baiViets = articleService.getAllArticles();
-                model.addAttribute("baiViets", baiViets);
-                model.addAttribute("currentUser", currentUser);
-
-                // Lấy danh sách bạn bè của currentUser
-                List<ListFriend> friends = listFriendRepository.findByUserId1OrUserId2(currentUser, currentUser);
-                model.addAttribute("friends", friends);
-            }
-        }
-        return "home"; // Trả về home.html
-    }
-
-    @GetMapping("/project")
-    public String project(Model model) {
+    // Phương thức chung để lấy currentUser và thêm vào model
+    private UthUser addCurrentUserToModel(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
             String username = authentication.getName();
@@ -58,8 +39,43 @@ public class homeController {
             if (userOptional.isPresent()) {
                 UthUser currentUser = userOptional.get();
                 model.addAttribute("currentUser", currentUser);
+                return currentUser;
             }
         }
+        return null; // Trả về null nếu không tìm thấy user
+    }
+
+    // Phương thức chung để lấy danh sách bạn bè và thêm vào model
+    private void addFriendUsersToModel(Model model, UthUser currentUser) {
+        if (currentUser != null) {
+            List<ListFriend> friends = listFriendRepository.findByUserId1OrUserId2WithFetch(currentUser);
+            List<UthUser> friendUsers = new ArrayList<>();
+            for (ListFriend friend : friends) {
+                if (friend.getUserId1().equals(currentUser)) {
+                    friendUsers.add(friend.getUserId2());
+                } else {
+                    friendUsers.add(friend.getUserId1());
+                }
+            }
+            model.addAttribute("friendUsers", friendUsers);
+        }
+    }
+
+    @GetMapping("/")
+    public String home(Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
+        if (currentUser != null) {
+            List<BaiViet> baiViets = articleService.getAllArticles();
+            model.addAttribute("baiViets", baiViets);
+        }
+        return "home"; // Trả về home.html
+    }
+
+    @GetMapping("/project")
+    public String project(Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
         return "project";
     }
 

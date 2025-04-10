@@ -7,26 +7,17 @@
     </div>
     <input type="text" class="search-friends" placeholder="Tìm kiếm bạn bè...">
     <div class="friends-list">
-        <!-- Lặp qua danh sách bạn bè -->
-        <div th:each="friend : ${friends}" class="friend-item">
+        <!-- Lặp qua danh sách bạn bè đã lọc -->
+        <div th:each="friend : ${friendUsers}" class="friend-item">
             <!-- Hiển thị avatar của bạn bè -->
-            <img th:src="${friend.userId2.maSo == currentUser.maSo ? friend.userId1.avatar : friend.userId2.avatar}"
-                 th:alt="${friend.userId2.maSo == currentUser.maSo ? friend.userId1.username : friend.userId2.username}"
-                 class="friend-avatar">
-            <div class="friend-info">
+<!--            <img th:src="${friend.avatar}" th:alt="${friend.username}" class="friend-avatar">-->
+<!--            <div class="friend-info">-->
                 <!-- Hiển thị tên bạn bè -->
-                <div class="friend-name"
-                     th:text="${friend.userId2.maSo == currentUser.maSo ? friend.userId1.username : friend.userId2.username}">
-                </div>
-                <!-- Hiển thị trạng thái -->
-                <div class="friend-status">
-                    <span th:classappend="${friend.userId2.maSo == currentUser.maSo ? friend.userId1.status : friend.userId2.status} == 'online' ? 'status-dot online' : 'status-dot offline'"></span>
-                    <span th:text="${friend.userId2.maSo == currentUser.maSo ? friend.userId1.status : friend.userId2.status} == 'online' ? 'Đang hoạt động' : 'Hoạt động cách đây ít phút'"></span>
-                </div>
+                <div class="friend-name" th:text="${friend.username}"></div>
             </div>
         </div>
         <!-- Thông báo nếu không có bạn bè -->
-        <div th:if="${#lists.isEmpty(friends)}" class="friend-item">
+        <div th:if="${#lists.isEmpty(friendUsers)}" class="friend-item">
             <div class="friend-info">
                 <div class="friend-name">Chưa có bạn bè nào</div>
             </div>

@@ -15,4 +15,6 @@ public class UserServiceIpml implements UserService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+
 }

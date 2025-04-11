@@ -100,7 +100,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editProfileForm" th:action="@{/user/update}" method="POST">
+                    <form id="editProfileForm" th:action="@{/user-detail/{id}(id=${student.maSo})}" method="POST">
                         <input type="hidden" name="maSo" th:value="${student.maSo}">
                         <div class="mb-3">
                             <label class="form-label">Họ</label>

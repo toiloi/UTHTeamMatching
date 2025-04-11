@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,4 +113,28 @@ public class homeController {
             return "404";
         }
     }
+    @PostMapping("/user-detail/{id}")
+    public String updateUser(@PathVariable("id") Long id, UthUser updatedUser, Model model) {
+        Optional<UthUser> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            UthUser user = userOptional.get();
+            model.addAttribute("student", user);
+            user.setHo(updatedUser.getHo());
+            user.setTen(updatedUser.getTen());
+
+            user.setEmail(updatedUser.getEmail());
+            user.setSdt(updatedUser.getSdt());
+            user.setGioiTinh(updatedUser.getGioiTinh());
+            user.setChuyenNganh(updatedUser.getChuyenNganh());
+            user.setAvatar(updatedUser.getAvatar());
+
+            userRepository.save(user); // Lưu vào database
+
+            return "redirect:/user-detail/" + id; // Quay lại trang chi tiết
+        } else {
+            model.addAttribute("errorMessage", "User not found");
+            return "404";
+        }
+    }
 }
+

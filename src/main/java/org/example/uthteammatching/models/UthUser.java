@@ -43,7 +43,7 @@ public class UthUser {
     private String sdt;
 
     @Nationalized
-    @Column(name = "username", length = 20)
+    @Column(name = "username", length = 20, unique = true)
     private String username;
 
     @Nationalized

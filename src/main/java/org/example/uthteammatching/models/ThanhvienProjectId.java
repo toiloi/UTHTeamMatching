@@ -22,6 +22,7 @@ public class ThanhvienProjectId implements java.io.Serializable {
     @Column(name = "projectMaSo", nullable = false, length = 50)
     private String projectMaSo;
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

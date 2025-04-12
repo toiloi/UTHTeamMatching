@@ -1,12 +1,12 @@
 package org.example.uthteammatching.controllers;
 
-import org.example.uthteammatching.models.BaiViet;
-import org.example.uthteammatching.models.ListFriend;
-import org.example.uthteammatching.models.UthUser;
+import org.example.uthteammatching.models.*;
 import org.example.uthteammatching.repositories.ListFriendRepository;
+import org.example.uthteammatching.repositories.ProjectRepository;
 import org.example.uthteammatching.repositories.UserRepository;
 import org.example.uthteammatching.services.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,16 +14,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 public class homeController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
 
     @Autowired
     private ListFriendRepository listFriendRepository;
@@ -75,10 +82,52 @@ public class homeController {
 
     @GetMapping("/project")
     public String project(Model model) {
+        // này là list friend của tọi hê
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
+
+       //List dự án nè hê
+        List<Project> duAnList = projectRepository.findAllByOrderByNgayTaoDesc();
+        model.addAttribute("duAnList", duAnList);
+
         return "project";
     }
+
+    @PostMapping("/project")
+    public String registerProject(@RequestParam String nameproject,
+                                  @RequestParam String moTa,
+                                  @RequestParam String trangThai,
+//                                  @RequestParam String nguoiQuanLy,
+                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayBatDau,
+                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayKetThuc,
+                                  RedirectAttributes redirectAttributes) {
+
+        // Kiểm tra tên dự án đã tồn tại chưa
+        if (projectRepository.existsByTenProject(nameproject)) {
+            redirectAttributes.addFlashAttribute("error", "Tên dự án đã tồn tại!");
+            return "redirect:/project";
+        }
+
+
+        // Tạo mới Project
+        Project project = new Project();
+        project.setMaProject(UUID.randomUUID().toString());
+        project.setTenProject(nameproject);
+        project.setMoTa(moTa);
+        project.setTrangThai(trangThai);
+        project.setNgayBatDau(ngayBatDau);
+        project.setNgayKetThuc(ngayKetThuc);
+
+        // Gán người quản lý (nếu là User)
+//        Optional<UthUser> userOptional = userRepository.findByUsername(nguoiQuanLy);
+//        userOptional.ifPresent(project::setNguoiQuanLy); // set nếu tìm được
+
+        projectRepository.save(project);
+
+        redirectAttributes.addFlashAttribute("success", "Dự án đã được đăng thành công!");
+        return "redirect:/project";
+    }
+
 
     @GetMapping("/InfoUser/{id}")
     public String showProfile(@PathVariable("id") Long id, Model model) {
@@ -98,6 +147,8 @@ public class homeController {
             return "404";
         }
     }
+
+
 
     @GetMapping("/user-detail/{id}")
     public String userDetail(@PathVariable("id") Long id, Model model) {
@@ -127,6 +178,7 @@ public class homeController {
             user.setGioiTinh(updatedUser.getGioiTinh());
             user.setChuyenNganh(updatedUser.getChuyenNganh());
             user.setAvatar(updatedUser.getAvatar());
+
 
             userRepository.save(user); // Lưu vào database
 

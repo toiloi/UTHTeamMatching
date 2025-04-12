@@ -59,23 +59,32 @@
                         <div class="col-lg-8">
                             <!-- News Feed -->
                             <div class="news-feed">
+
+                                <div th:each="bv : ${baiViets}">
                                 <!-- Sample Post 1 -->
                                 <div class="news-post">
                                     <div class="news-header">
                                         <img src="/img/avatars/NULL.jpg" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                                         <div class="news-user-info">
-                                            <a href="#" class="news-user-name">Nguyễn Văn A</a>
-                                            <span class="news-time">15/03/2024 09:30</span>
+                                            <a th:href="@{/user-detail/{id}(id=${bv.userMaSo.getMaSo()})}" th:text="${bv.userMaSo.getTen()}" style="text-decoration: none;" ></a>                                            <span th:text="${bv.getNgayDang()}" class="news-time"></span>
                                         </div>
                                     </div>
                                     <div class="news-content">
-                                        Tìm thành viên cho dự án website thương mại điện tử
-                                    </div>
+                                        <p th:text="${#strings.abbreviate(bv.noiDung, 100)}" class="card-text"></p>                                    </div>
                                     <div class="news-project">
-                                        <div class="news-project-title">Website Thương mại điện tử</div>
+                                        <div class="news-project-title">
+                                            <a href="javascript:void(0);" class="project-name"
+                                               th:data-project-id="${bv.projectMaSo.getMaProject()}"
+                                               th:data-project-name="${bv.projectMaSo.getTenProject()}"
+                                               th:data-project-desc="${bv.projectMaSo.getMoTa()}"
+                                               th:data-project-date-start="${bv.projectMaSo.getNgayBatDau()}"
+                                               th:data-project-date-end="${bv.projectMaSo.getNgayKetThuc()}"
+                                               th:data-user-name="${bv.userMaSo.getHo() +' '+ bv.userMaSo.getTen()}"
+                                               style="text-decoration: none;"
+                                               th:text="${bv.projectMaSo.getTenProject()}"></a>
+                                        </div>
                                         <div class="news-project-desc">
-                                            Xây dựng website bán hàng với các chức năng: quản lý sản phẩm, giỏ hàng, thanh toán online, quản lý đơn hàng.
-                                            Công nghệ sử dụng: Spring Boot, ReactJS, MySQL.
+                                            <a th:text="${bv.projectMaSo.getMoTa()}"></a>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center mt-3">
                                             <div class="news-participants">
@@ -90,6 +99,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                                 </div>
 
                                 <!-- Sample Post 2 -->
@@ -198,11 +208,109 @@
             <!-- News Content End -->
         </div>
         <!-- Content Container End -->
+
     </div>
     <!-- Main Container End -->
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <div class="modal fade" id="projectDetailsModal" tabindex="-1" aria-labelledby="projectDetailsLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="project-details-header">
+                        <h5 class="modal-title" id="modalProjectName"></h5>
+                        <span class="badge bg-primary project-status-badge">Đang thực hiện</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Nơi hiển thị thông tin dự án -->
+                    <div class="card project-card">
+                        <div class="card-body p-4">
+
+                            <div class="project-details-section">
+                                <h6>Mô tả dự án</h6>
+                                <p class="project-description mb-3" id="modalProjectDesc"></p>
+                            </div>
+
+                            <div class="project-details-section">
+                                <h6>Thời gian thực hiện</h6>
+                                <div class="project-timeline">
+                                    <div class="timeline-item">
+                                        <h6 class="mb-1">Bắt đầu</h6>
+                                        <p class="mb-0" id="modalDateStart"></p>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <h6 class="mb-1">Dự kiến kết thúc</h6>
+                                        <p class="mb-0" id="modalDateEnd"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="project-details-section">
+                                <h6>Thành viên dự án</h6>
+                                <div class="project-members">
+                                    <div class="member-item">
+                                        <img src="img/user-1.jpg" alt="Member">
+                                        <div>
+                                            <h6 class="mb-0" id="modalUserName"></h6>
+                                            <small class="text-muted">Quản lý dự án</small>
+                                        </div>
+                                    </div>
+                                    <div class="member-item">
+                                        <img src="img/user-2.jpg" alt="Member">
+                                        <div>
+                                            <h6 class="mb-0">Trần Thị B</h6>
+                                            <small class="text-muted">Developer</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="project-details-section">
+                                <h6>Tài liệu đính kèm</h6>
+                                <div class="project-files">
+                                    <a href="#" class="file-item">
+                                        <i class="fas fa-file-pdf"></i>
+                                        <span>Yêu cầu dự án.pdf</span>
+                                    </a>
+                                    <a href="#" class="file-item">
+                                        <i class="fas fa-file-word"></i>
+                                        <span>Kế hoạch dự án.docx</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.querySelectorAll('.project-name').forEach(el => {
+            el.addEventListener('click', function () {
+                const projectName = this.dataset.projectName;
+                const desc = this.dataset.projectDesc;
+                const name = this.dataset.userName;
+                const dateStart = this.dataset.projectDateStart;
+                const dateEnd = this.dataset.projectDateEnd;
+
+                document.getElementById('modalProjectName').innerText = projectName;
+                document.getElementById('modalProjectDesc').innerText = desc;
+                document.getElementById('modalUserName').innerText = name;
+                document.getElementById('modalDateStart').innerText = dateStart;
+                document.getElementById('modalDateEnd').innerText = dateEnd;
+
+                const modal = new bootstrap.Modal(document.getElementById('projectDetailsModal'));
+                modal.show();
+            });
+        });
+    </script>
+
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

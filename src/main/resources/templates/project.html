@@ -468,51 +468,48 @@
                     <h5 class="modal-title" id="createProjectModalLabel">Tạo dự án mới</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="createProjectForm">
+                <form th:action="@{/project}" method="post">
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="projectName" class="form-label">Tên dự án</label>
-                            <input type="text" class="form-control" id="projectName" placeholder="Nhập tên dự án" required>
+                            <label for="nameproject" class="form-label">Tên dự án</label>
+                            <input type="text" class="form-control" id="nameproject" name="nameproject" placeholder="Nhập tên dự án" required>
                         </div>
                         <div class="mb-3">
-                            <label for="projectDescription" class="form-label">Mô tả dự án</label>
-                            <textarea class="form-control" id="projectDescription" rows="4" placeholder="Mô tả chi tiết về dự án" required></textarea>
+                            <label for="moTa" class="form-label">Mô tả dự án</label>
+                            <textarea class="form-control" id="moTa" name="moTa" rows="4" placeholder="Mô tả chi tiết về dự án" required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="projectStatus" class="form-label">Trạng thái</label>
-                            <select class="form-select" id="projectStatus" required>
+                            <label for="trangThai" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="trangThai" name="trangThai" required>
                                 <option value="">Chọn trạng thái</option>
                                 <option value="planning">Đang lập kế hoạch</option>
                                 <option value="in_progress">Đang thực hiện</option>
                                 <option value="completed">Hoàn thành</option>
                             </select>
                         </div>
+<!--                        <div class="mb-3">-->
+<!--                            <label for="projectManager" class="form-label">Người quản lý</label>-->
+<!--                            <input type="text" class="form-control" id="projectManager" name="nguoiQuanLy" placeholder="Nhập tên người quản lý" required>-->
+<!--                        </div>-->
                         <div class="mb-3">
-                            <label for="projectManager" class="form-label">Người quản lý</label>
-                            <select class="form-select" id="projectManager" required>
-                                <option value="">Chọn người quản lý</option>
-                                <option value="1">Nguyễn Văn A</option>
-                                <option value="2">Trần Thị B</option>
-                            </select>
+                            <label for="ngayBatDau" class="form-label">Ngày bắt đầu</label>
+                            <input type="date" class="form-control" id="ngayBatDau" name="ngayBatDau" required>
                         </div>
                         <div class="mb-3">
-                            <label for="projectStartDate" class="form-label">Ngày bắt đầu</label>
-                            <input type="date" class="form-control" id="projectStartDate" required>
+                            <label for="ngayKetThuc" class="form-label">Ngày kết thúc</label>
+                            <input type="date" class="form-control" id="ngayKetThuc" name="ngayKetThuc" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="projectEndDate" class="form-label">Ngày kết thúc</label>
-                            <input type="date" class="form-control" id="projectEndDate" required>
-                        </div>
-                        <div class="mb-3">
+                        <!-- Nếu muốn dùng upload file thì cần thêm enctype -->
+                        <!-- <div class="mb-3">
                             <label for="projectFiles" class="form-label">Tài liệu đính kèm</label>
-                            <input type="file" class="form-control" id="projectFiles" multiple>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary" id="submitProject">Tạo dự án</button>
-                </div>
+                            <input type="file" class="form-control" id="projectFiles" name="files" multiple>
+                        </div> -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Tạo dự án</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

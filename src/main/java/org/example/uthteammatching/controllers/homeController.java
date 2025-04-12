@@ -80,6 +80,25 @@ public class homeController {
         return "project";
     }
 
+    @GetMapping("/InfoUser/{id}")
+    public String showProfile(@PathVariable("id") Long id, Model model) {
+        List<BaiViet> baiViets = articleService.getAllArticles();
+        UthUser user = null;
+        for (BaiViet bv : baiViets) {
+            if (bv.getUserMaSo().getMaSo().equals(id)) {
+                user = bv.getUserMaSo();
+                break;
+            }
+        }
+        if (user != null) {
+            model.addAttribute("user", user);
+            return "InfoUser";
+        } else {
+            model.addAttribute("errorMessage", "User not found");
+            return "404";
+        }
+    }
+
     @GetMapping("/user-detail/{id}")
     public String userDetail(@PathVariable("id") Long id, Model model) {
         Optional<UthUser> userOptional = userRepository.findById(id);
@@ -94,7 +113,6 @@ public class homeController {
             return "404";
         }
     }
-
     @PostMapping("/user-detail/{id}")
     public String updateUser(@PathVariable("id") Long id, UthUser updatedUser, Model model) {
         Optional<UthUser> userOptional = userRepository.findById(id);

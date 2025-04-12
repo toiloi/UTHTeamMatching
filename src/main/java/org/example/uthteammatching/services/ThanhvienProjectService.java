@@ -14,7 +14,7 @@ public class ThanhvienProjectService {
     private ThanhvienProjectRepository repository;
 
     public void themThanhVien(UthUser user, Project project, String vaiTro) {
-        ThanhvienProjectId id = new ThanhvienProjectId(user, project);
+        ThanhvienProjectId id = new ThanhvienProjectId();
         if (!repository.existsById(id)) {
             ThanhvienProject tvp = new ThanhvienProject();
             tvp.setId(id);

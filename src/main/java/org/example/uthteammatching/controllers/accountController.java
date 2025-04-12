@@ -3,9 +3,11 @@ package org.example.uthteammatching.controllers;
 import org.example.uthteammatching.models.Role;
 import org.example.uthteammatching.models.UthUser;
 import org.example.uthteammatching.models.UserRole;
+import org.example.uthteammatching.models.SinhVien; // Thêm import cho SinhVien
 import org.example.uthteammatching.repositories.RoleRepository;
 import org.example.uthteammatching.repositories.UserRepository;
 import org.example.uthteammatching.repositories.UserRoleRepository;
+import org.example.uthteammatching.repositories.SinhVienRepository; // Thêm import cho SinhVienRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 
 @Controller
 public class accountController {
@@ -30,6 +33,9 @@ public class accountController {
     @Autowired
     private UserRoleRepository userRoleRepository;
 
+    @Autowired
+    private SinhVienRepository sinhVienRepository;
+
     @GetMapping("/login")
     public String showLoginForm() {
         return "login";
@@ -41,6 +47,7 @@ public class accountController {
     }
 
     @PostMapping("/register")
+    @Transactional
     public String registerUser(@RequestParam String username,
                              @RequestParam String pass,
                              @RequestParam String email,
@@ -76,6 +83,19 @@ public class accountController {
 
         // Lưu user vào database
         userRepository.save(user);
+
+        try {
+            SinhVien sinhVien = new SinhVien();
+            sinhVien.setUthUser(user); // Liên kết với UthUser, Hibernate sẽ tự động gán id
+            sinhVien.setKyNang(""); // Thiết lập giá trị mặc định cho kyNang
+            System.out.println("Đang lưu SinhVien với maSo: " + sinhVien.getId() + ", kyNang: " + sinhVien.getKyNang());
+            sinhVienRepository.saveAndFlush(sinhVien);
+            System.out.println("Đã lưu SinhVien thành công!");
+        } catch (Exception e) {
+            System.out.println("Lỗi khi lưu SinhVien: " + e.getMessage());
+            e.printStackTrace();
+            // Không ném lại ngoại lệ để tránh rollback toàn bộ transaction
+        }
 
         // Tìm hoặc tạo role USER
         Role userRole = roleRepository.findByTen("USER")

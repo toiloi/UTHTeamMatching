@@ -1,12 +1,14 @@
 package org.example.uthteammatching.controllers;
 
-import org.example.uthteammatching.models.BaiViet;
-import org.example.uthteammatching.models.ListFriend;
-import org.example.uthteammatching.models.UthUser;
+import org.example.uthteammatching.models.*;
 import org.example.uthteammatching.repositories.ListFriendRepository;
+import org.example.uthteammatching.repositories.ProjectRepository;
+import org.example.uthteammatching.repositories.ThanhvienProjectRepository;
 import org.example.uthteammatching.repositories.UserRepository;
 import org.example.uthteammatching.services.ArticleService;
+import org.example.uthteammatching.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +34,12 @@ public class homeController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private ThanhvienProjectRepository thanhvienProjectRepository;
 
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
@@ -77,27 +87,31 @@ public class homeController {
     public String project(Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
+        List<Project> projects = projectRepository.findAll();
+        model.addAttribute("projects", projects);
         return "project";
     }
 
-    @GetMapping("/InfoUser/{id}")
-    public String showProfile(@PathVariable("id") Long id, Model model) {
-        List<BaiViet> baiViets = articleService.getAllArticles();
-        UthUser user = null;
-        for (BaiViet bv : baiViets) {
-            if (bv.getUserMaSo().getMaSo().equals(id)) {
-                user = bv.getUserMaSo();
-                break;
-            }
-        }
-        if (user != null) {
-            model.addAttribute("user", user);
-            return "InfoUser";
-        } else {
-            model.addAttribute("errorMessage", "User not found");
-            return "404";
-        }
+    @PostMapping("/project")
+    public String createProject(@RequestParam("nameProject") String tenProject,
+                                @RequestParam("moTa") String moTa,
+                                @RequestParam("trangThai") String trangThai,
+                                @RequestParam("ngayBatDau") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayBatDau,
+                                @RequestParam("ngayKetThuc") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayKetThuc) {
+
+        Project project = new Project();
+        project.setTenProject(tenProject);
+        project.setMoTa(moTa);
+        project.setTrangThai(trangThai);
+        project.setNgayBatDau(ngayBatDau);
+        project.setNgayKetThuc(ngayKetThuc);
+
+        projectRepository.save(project);
+
+        return "redirect:/project";
     }
+
+
 
     @GetMapping("/user-detail/{id}")
     public String userDetail(@PathVariable("id") Long id, Model model) {

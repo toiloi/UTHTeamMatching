@@ -84,6 +84,17 @@ public class UthUser {
         this.userRoles = userRoles;
     }
 
+    public UthUser(String username, String pass, String ho, String ten, String gioiTinh, String chuyenNganh, String email, String sdt) {
+        this.username = username;
+        this.pass = pass;
+        this.ten = ten;
+        this.ho = ho;
+        this.gioiTinh = gioiTinh;
+        this.chuyenNganh = chuyenNganh;
+        this.email = email;
+        this.sdt = sdt;
+    }
+
     // Getters và Setters
     public Long getMaSo() {
         return maSo;

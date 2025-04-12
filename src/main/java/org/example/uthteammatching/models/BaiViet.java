@@ -9,15 +9,15 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @Entity
 public class BaiViet {
     @Id
-    @Nationalized
-    @Column(name = "id", nullable = false, length = 50)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Nationalized
     @Lob
@@ -38,4 +38,14 @@ public class BaiViet {
     @JoinColumn(name = "projectMaSo")
     private org.example.uthteammatching.models.Project projectMaSo;
 
+    public BaiViet(String noiDung, Instant ngayDang, org.example.uthteammatching.models.UthUser userMaSo, org.example.uthteammatching.models.Project projectMaSo) {
+        this.noiDung = noiDung;
+        this.ngayDang = ngayDang;
+        this.userMaSo = userMaSo;
+        this.projectMaSo = projectMaSo;
+    }
+
+    public BaiViet() {
+
+    }
 }

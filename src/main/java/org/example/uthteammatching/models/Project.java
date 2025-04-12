@@ -1,20 +1,23 @@
 package org.example.uthteammatching.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
 public class Project {
-    public String getMaProject() {
+
+    public Long getMaProject() {
         return maProject;
     }
 
@@ -38,7 +41,7 @@ public class Project {
         return trangThai;
     }
 
-    public void setMaProject(String maProject) {
+    public void setMaProject(Long maProject) {
         this.maProject = maProject;
     }
 
@@ -63,9 +66,8 @@ public class Project {
     }
 
     @Id
-    @Nationalized
-    @Column(name = "maProject", nullable = false, length = 50)
-    private String maProject;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long maProject;
 
     @Nationalized
     @Column(name = "tenProject", nullable = false, length = 100)
@@ -87,4 +89,27 @@ public class Project {
     private String trangThai;
     @Column(name = "ngayTao", updatable = false)
     private LocalDateTime ngayTao = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "projectMaSo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ThanhvienProject> thanhVienProjects = new ArrayList<>();
+    public Project(){}
+    public Project(String tenProject, String moTa, LocalDate ngayBatDau, LocalDate ngayKetThuc, String trangThai) {
+        this.tenProject = tenProject;
+        this.moTa = moTa;
+        this.ngayBatDau = ngayBatDau;
+        this.ngayKetThuc = ngayKetThuc;
+        this.trangThai = trangThai;
+    }
+
+    public void addThanhVien(ThanhvienProject tv) {
+        thanhVienProjects.add(tv);
+        tv.setProjectMaSo(this);
+    }
+
+    public void removeThanhVien(ThanhvienProject tv) {
+        thanhVienProjects.remove(tv);
+        tv.setProjectMaSo(null);
+    }
+
+
 }

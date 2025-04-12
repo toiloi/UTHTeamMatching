@@ -334,26 +334,30 @@
                                 <!-- Project List -->
                                 <div class="project-list">
                                     <!-- Project Item -->
+                                    <div th:each="project : ${projects}">
                                     <div class="card project-card">
                                         <div class="card-body p-4">
                                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <h5 class="card-title mb-0">Dự án 1</h5>
-                                                <span class="project-status-badge bg-primary">Đang thực hiện</span>
+                                                <h5 th:text="${project.getTenProject()}" class="card-title mb-0"></h5>
+                                                <span th:text="${project.getTrangThai()}" class="project-status-badge bg-primary"></span>
                                             </div>
-                                            <p class="project-description mb-3">Mô tả ngắn về dự án và các mục tiêu cần đạt được.</p>
+                                            <p th:text="${project.getMoTa()}" class="project-description mb-3"></p>
                                             <div class="d-flex justify-content-between align-items-center">
+                                                <div th:each="tv : ${project.thanhVienProjects}">
                                                 <div class="d-flex align-items-center">
                                                     <img src="img/user-1.jpg" class="avatar me-2">
                                                     <div>
-                                                        <h6 class="mb-0">Nguyễn Văn A</h6>
-                                                        <small class="text-muted">Quản lý dự án</small>
+                                                        <h6 th:text="${tv.getUserMaSo().getHo()+' ' +tv.getUserMaSo().getTen()}" class="mb-0"></h6>
+                                                        <small th:text="${tv.getVaiTro()}" class="text-muted"></small>
                                                     </div>
+                                                </div>
                                                 </div>
                                                 <button class="btn btn-outline-primary btn-sm">
                                                     <i class="fas fa-eye me-2"></i>Xem chi tiết
                                                 </button>
                                             </div>
                                         </div>
+                                    </div>
                                     </div>
 
                                     <!-- Project Item -->
@@ -471,8 +475,8 @@
                 <form th:action="@{/project}" method="post">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="nameproject" class="form-label">Tên dự án</label>
-                            <input type="text" class="form-control" id="nameproject" name="nameproject" placeholder="Nhập tên dự án" required>
+                            <label for="nameProject" class="form-label">Tên dự án</label>
+                            <input type="text" class="form-control" id="nameProject" name="nameProject" placeholder="Nhập tên dự án" required>
                         </div>
                         <div class="mb-3">
                             <label for="moTa" class="form-label">Mô tả dự án</label>
@@ -531,7 +535,7 @@
                             <h6>Mô tả dự án</h6>
                             <p>Mô tả chi tiết về dự án và các mục tiêu cần đạt được. Bao gồm các thông tin về phạm vi dự án, các yêu cầu kỹ thuật và các mốc thời gian quan trọng.</p>
                         </div>
-                        
+
                         <div class="project-details-section">
                             <h6>Thời gian thực hiện</h6>
                             <div class="project-timeline">
@@ -545,7 +549,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="project-details-section">
                             <h6>Thành viên dự án</h6>
                             <div class="project-members">
@@ -565,7 +569,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="project-details-section">
                             <h6>Tài liệu đính kèm</h6>
                             <div class="project-files">

@@ -12,7 +12,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     List<Project> findAll();
 
-    Project findByMaProject(String maProject);
+    Project findByMaProject(Long maProject);
     boolean existsByTenProject(String tenProject);
     List<Project> findAllByOrderByNgayTaoDesc(); // Mới nhất trước
 }

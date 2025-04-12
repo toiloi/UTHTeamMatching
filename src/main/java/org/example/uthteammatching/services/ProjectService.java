@@ -17,7 +17,7 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public Project getProject(String maProject) {
+    public Project getProject(Long maProject) {
         return projectRepository.findByMaProject(maProject);
     }
 }

@@ -1,5 +1,6 @@
 package org.example.uthteammatching.controllers;
 
+
 import org.example.uthteammatching.models.*;
 import org.example.uthteammatching.repositories.*;
 import org.example.uthteammatching.services.ArticleService;
@@ -18,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -29,9 +27,6 @@ public class homeController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private SinhVienRepository sinhVienRepository;
 
     @Autowired
     private ListFriendRepository listFriendRepository;
@@ -43,11 +38,10 @@ public class homeController {
     private ProjectRepository projectRepository;
 
     @Autowired
-    private ThanhvienProjectService thanhvienProjectService;
+    private ThanhvienProjectRepository thanhvienProjectRepository;
 
     @Autowired
-    private ProjectService projectService;
-
+    private NotificationRepository notificationRepository;
 
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
@@ -87,11 +81,20 @@ public class homeController {
         if (currentUser != null) {
             List<BaiViet> baiViets = articleService.getAllArticles();
             model.addAttribute("baiViets", baiViets);
-            Set<Long> projectUserJoinedIds = currentUser.getThanhVienProjects().stream()
-                    .map(tp -> tp.getProjectMaSo().getMaProject())
-                    .collect(Collectors.toSet());
-            model.addAttribute("projectUserJoinedIds", projectUserJoinedIds);
-            //List những project mà người dùng đã tham gia
+
+            Map<Long, String> baiVietRoleMap = new HashMap<>();
+            for (BaiViet bv : baiViets) {
+                Project project = bv.getProjectMaSo();
+                if (project != null && project.getThanhVienProjects() != null) {
+                    for (ThanhvienProject tv : project.getThanhVienProjects()) {
+                        if (tv.getUserMaSo() != null && tv.getUserMaSo().getMaSo().equals(currentUser.getMaSo())) {
+                            baiVietRoleMap.put(bv.getId(), tv.getVaiTro());
+                            break;
+                        }
+                    }
+                }
+            }
+            model.addAttribute("baiVietRoleMap", baiVietRoleMap);
         }
         return "home"; // Trả về home.html
     }
@@ -104,11 +107,21 @@ public class homeController {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("Project không tồn tại"));
 
-        thanhvienProjectService.addUserToProject(currentUser, project, "Thành viên");
-        //Thông báo tham gia thành công
+        ThanhvienProject tvp = new ThanhvienProject();
+        ThanhvienProjectId id = new ThanhvienProjectId();
+        id.setUserMaSo(currentUser.getMaSo());
+        id.setProjectMaSo(project.getMaProject());
+        tvp.setId(id);
+        tvp.setUserMaSo(currentUser);
+        tvp.setProjectMaSo(project);
+        tvp.setVaiTro("PENDING");
+        thanhvienProjectRepository.save(tvp);
+
 
         return "redirect:/";
     }
+
+
 
     @GetMapping("/project")
     public String project(Model model) {
@@ -163,11 +176,30 @@ public class homeController {
     }
 
 
+    @GetMapping("/project/search")
+    public String searchProject(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
+        List<Project> results = new ArrayList<>();
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            results = projectRepository.findByTenProjectContainingIgnoreCase(keyword);
+            model.addAttribute("keyword", keyword);
+        }
+
+        model.addAttribute("results", results);
+        return "project";
+    }
+
+
+
+
+
     @GetMapping("/user-detail/{id}")
     public String userDetail(@PathVariable("id") Long id, Model model) {
-        Optional<SinhVien> sinhVienOptional = sinhVienRepository.findById(id);
-        if (sinhVienOptional.isPresent()) {
-            SinhVien sinhVien = sinhVienOptional.get();
+        Optional<UthUser> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            UthUser sinhVien = userOptional.get();
             model.addAttribute("student", sinhVien);
             UthUser currentUser = addCurrentUserToModel(model);
             addFriendUsersToModel(model, currentUser);
@@ -203,33 +235,72 @@ public class homeController {
     }
 
 
-<<<<<<< HEAD
-    // tìm kiếm dự án theo từ khoá nè
-    @GetMapping("/projects/search")
-    public String searchProjects(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
-        List<Project> projects;
-        if (keyword == null || keyword.trim().isEmpty()) {
-            projects = projectService.getAllProject();
-            model.addAttribute("message", "Vui lòng nhập từ khóa tìm kiếm.");
-        } else {
-            projects = projectService.searchProjects(keyword);
-            model.addAttribute("message", projects.isEmpty() ? "Không tìm thấy dự án." : null);
-        }
-        model.addAttribute("projects", projects);
-        model.addAttribute("keyword", keyword);
-        return "project";
-    }
-=======
     @GetMapping("/notification")
     public String notification(Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
-        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
+        addFriendUsersToModel(model, currentUser);
+        List<Project> joinRequests = new ArrayList<>();
+        for (ThanhvienProject tv : currentUser.getThanhVienProjects()) {
+            if ("LEADER".equals(tv.getVaiTro())) {
+                Project project = tv.getProjectMaSo();
+                boolean hasPendingMember = project.getThanhVienProjects().stream()
+                        .anyMatch(member -> "PENDING".equals(member.getVaiTro()));
+                if (hasPendingMember) {
+                    joinRequests.add(project);
+                }
+            }
+        }
+        model.addAttribute("joinRequests", joinRequests);
+        List<Notification> notifications = notificationRepository.findByUserOrderByCreatedAtDesc(currentUser);
+        model.addAttribute("notifications", notifications);
 
         return "notification";
     }
 
 
 
->>>>>>> 597f62c63893779ae4208e50b7d418fd2d500b08
-}
+    @PostMapping("/project/approve")
+    public String approveRequest(@RequestParam("userIdRequest") Long userId,
+                                 @RequestParam("projectIdRequest") Long projectId) {
+        ThanhvienProjectId tvId = new ThanhvienProjectId();
+        tvId.setUserMaSo(userId);
+        tvId.setProjectMaSo(projectId);
+        UthUser user = userRepository.findById(userId).orElse(null);
+        try {
+            ThanhvienProject request = thanhvienProjectRepository.findByUserMaSo_MaSoAndProjectMaSo_MaProject(userId, projectId);
+            request.setVaiTro("Thành viên");
+            thanhvienProjectRepository.save(request);
+            notificationRepository.save(new Notification(
+                    "Bạn đã được duyệt tham gia dự án " + projectRepository.findByMaProject(projectId).getTenProject(), user));
 
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
+
+        return "redirect:/notification";
+    }
+
+    @PostMapping("/project/reject")
+    public String rejectRequest(@RequestParam("userIdRequest") Long userId,
+                                @RequestParam("projectIdRequest") Long projectId) {
+        UthUser user = userRepository.findById(userId).orElse(null);
+        try {
+            ThanhvienProject tv = thanhvienProjectRepository
+                    .findByUserMaSo_MaSoAndProjectMaSo_MaProject(userId, projectId);
+
+            thanhvienProjectRepository.delete(tv);
+
+            Notification noti = new Notification(
+                        "Bạn đã bị từ chối tham gia dự án " + projectRepository.findByMaProject(projectId).getTenProject(), user);
+            notificationRepository.save(noti);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/notification";
+    }
+
+
+
+
+}

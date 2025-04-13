@@ -122,16 +122,19 @@
                                         <div class="d-flex justify-content-between align-items-center mt-3">
                                             <div class="news-participants">
                                                 <div th:each="tv : ${bv.projectMaSo.thanhVienProjects}">
-                                                    <a th:href="@{/user-detail/{id}(id=${tv.userMaSo.getMaSo()})}">
-                                                        <img th:src="${tv.userMaSo.getAvatar()}"
-                                                             class="participant-avatar"
-                                                             th:title="${tv.userMaSo.getHo() + ' ' + tv.userMaSo.getTen()}">
-                                                    </a>
+                                                    <div th:if="${tv.getVaiTro() != 'PENDING'}">
+                                                        <a th:href="@{/user-detail/{id}(id=${tv.userMaSo.maSo})}">
+                                                            <img th:src="${tv.userMaSo.avatar}"
+                                                                 class="participant-avatar"
+                                                                 th:title="${tv.userMaSo.ho + ' ' + tv.userMaSo.ten}">
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <!-- Nếu chưa tham gia -->
+
+                                            <!-- Nếu chưa có trong project -->
                                             <div class="project-join"
-                                                 th:if="${not #lists.contains(projectUserJoinedIds, bv.projectMaSo.maProject)}">
+                                                 th:if="${baiVietRoleMap[bv.id]} == null">
                                                 <form action="/project/join" method="post">
                                                     <input type="hidden" name="projectId" th:value="${bv.projectMaSo.maProject}">
                                                     <button type="submit" class="btn btn-primary">
@@ -140,13 +143,25 @@
                                                 </form>
                                             </div>
 
-                                            <!-- Nếu đã tham gia -->
+                                            <!-- Nếu đã có trong project -->
                                             <div class="project-join"
-                                                 th:if="${#lists.contains(projectUserJoinedIds, bv.projectMaSo.maProject)}">
-                                                <button class="btn btn-secondary" disabled>
-                                                    <i class="fas fa-check me-1"></i> Đã tham gia
-                                                </button>
+                                                 th:if="${baiVietRoleMap[bv.id]} != null">
+
+                                                <!-- Nếu vai trò là PENDING -->
+                                                <div th:if="${baiVietRoleMap[bv.id] == 'PENDING'}">
+                                                    <button class="btn btn-warning" disabled>
+                                                        <i class="fas fa-clock me-1"></i> Đang chờ duyệt
+                                                    </button>
+                                                </div>
+
+                                                <!-- Nếu vai trò khác PENDING -->
+                                                <div th:if="${baiVietRoleMap[bv.id] != 'PENDING'}">
+                                                    <button class="btn btn-secondary" disabled>
+                                                        <i class="fas fa-check me-1"></i> Đã tham gia
+                                                    </button>
+                                                </div>
                                             </div>
+
 
                                         </div>
                                     </div>

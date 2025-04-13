@@ -12,4 +12,12 @@ import java.util.List;
 @Repository
 public interface ThanhvienProjectRepository extends JpaRepository<ThanhvienProject, ThanhvienProjectId> {
     boolean existsById(ThanhvienProjectId id);
+
+    boolean existsByUserMaSoAndProjectMaSo(UthUser userMaSo, Project projectMaSo);
+
+    List<ThanhvienProject> findByUserMaSoAndVaiTro(UthUser userMaSo, String vaiTro);
+
+    List<ThanhvienProject> findByProjectMaSoInAndVaiTro(List<Project> projects, String vaiTro);
+
+    ThanhvienProject findByUserMaSo_MaSoAndProjectMaSo_MaProject(Long userMaSo, Long projectMaSo);
 }

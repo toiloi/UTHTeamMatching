@@ -31,4 +31,15 @@ public class ThanhvienProjectService {
 
         thanhvienProjectRepository.save(tvp);
     }
+
+    public void addJoinRequest(UthUser user, Project project) {
+        ThanhvienProject thanhvienProject = new ThanhvienProject();
+        thanhvienProject.setUserMaSo(user);
+        thanhvienProject.setProjectMaSo(project);
+        thanhvienProject.setVaiTro("Thành viên");
+
+        thanhvienProjectRepository.save(thanhvienProject);
+    }
+
+
 }

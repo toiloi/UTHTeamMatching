@@ -6,14 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "uthUser")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class UthUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,6 +68,10 @@ public class UthUser {
 
     @OneToMany(mappedBy = "userMaSo", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ThanhvienProject> thanhVienProjects = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications = new ArrayList<>();
+
 
     // Constructor mặc định
     public UthUser() {

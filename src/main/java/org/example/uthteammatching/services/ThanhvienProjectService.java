@@ -37,7 +37,6 @@ public class ThanhvienProjectService {
         thanhvienProject.setUserMaSo(user);
         thanhvienProject.setProjectMaSo(project);
         thanhvienProject.setVaiTro("Thành viên");
-        thanhvienProject.setTrangThai("PENDING");
 
         thanhvienProjectRepository.save(thanhvienProject);
     }

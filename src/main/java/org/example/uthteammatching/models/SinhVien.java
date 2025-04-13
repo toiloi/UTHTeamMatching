@@ -11,16 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @Setter
 @Entity
-public class SinhVien {
-    @Id
-    @Column(name = "maSo", nullable = false)
-    private Long id;
-
-    @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "maSo", nullable = false)
-    private UthUser uthUser;
+public class SinhVien extends UthUser{
 
     @ColumnDefault("100")
     @Column(name = "mucDoUyTin")

@@ -77,7 +77,15 @@
                                             </tr>
                                         </thead>
                                         <tbody id="usersList">
-                                            <!-- Users will be loaded here dynamically -->
+                                        <tr th:each="user : ${users}">
+                                            <td th:text="${user.maSo}"></td>
+                                            <td th:text="${user.ho}"></td>
+                                            <td th:text="${user.ten}"></td>
+                                            <td th:text="${user.email}"></td>
+                                            <td th:text="${user.sdt}"></td>
+                                            <td th:text="${user.chuyenNganh}"></td>
+                                            <td th:text="${user.enabled}"></td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>

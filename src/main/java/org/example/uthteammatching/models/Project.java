@@ -92,6 +92,7 @@ public class Project {
 
     @OneToMany(mappedBy = "projectMaSo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ThanhvienProject> thanhVienProjects = new ArrayList<>();
+
     public Project(){}
     public Project(String tenProject, String moTa, LocalDate ngayBatDau, LocalDate ngayKetThuc, String trangThai) {
         this.tenProject = tenProject;

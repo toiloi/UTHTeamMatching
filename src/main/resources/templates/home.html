@@ -98,7 +98,8 @@
                                     <div class="news-header">
                                         <img src="/img/avatars/NULL.jpg" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                                         <div class="news-user-info">
-                                            <a th:href="@{/user-detail/{id}(id=${bv.userMaSo.getMaSo()})}" th:text="${bv.userMaSo.getTen()}" style="text-decoration: none;" ></a>                                            <span th:text="${bv.getNgayDang()}" class="news-time"></span>
+                                            <a th:href="@{/user-detail/{id}(id=${bv.userMaSo.getMaSo()})}" th:text="${bv.userMaSo.getHo() + ' ' + bv.userMaSo.getTen()}" style="text-decoration: none;" ></a>
+                                            <span th:text="${#temporals.format(bv.ngayDang, 'HH:mm dd/MM/yyyy')}" class="news-time"></span>
                                         </div>
                                     </div>
                                     <div class="news-content">
@@ -120,18 +121,33 @@
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center mt-3">
                                             <div class="news-participants">
-                                                <img src="/img/avatars/NULL.jpg" class="participant-avatar" title="Nguyễn Văn A">
-                                                <img src="/img/avatars/NULL.jpg" class="participant-avatar" title="Trần Thị B">
-                                                <img src="/img/avatars/NULL.jpg" class="participant-avatar" title="Lê Văn C">
+                                                <div th:each="tv : ${bv.projectMaSo.thanhVienProjects}">
+                                                    <a th:href="@{/user-detail/{id}(id=${tv.userMaSo.getMaSo()})}">
+                                                        <img th:src="${tv.userMaSo.getAvatar()}"
+                                                             class="participant-avatar"
+                                                             th:title="${tv.userMaSo.getHo() + ' ' + tv.userMaSo.getTen()}">
+                                                    </a>
+                                                </div>
                                             </div>
-                                            <div class="project-join">
+                                            <!-- Nếu chưa tham gia -->
+                                            <div class="project-join"
+                                                 th:if="${not #lists.contains(projectUserJoinedIds, bv.projectMaSo.maProject)}">
                                                 <form action="/project/join" method="post">
-                                                    <input type="hidden" name="projectId" th:value="${bv.getProjectMaSo().getMaProject()}">
+                                                    <input type="hidden" name="projectId" th:value="${bv.projectMaSo.maProject}">
                                                     <button type="submit" class="btn btn-primary">
                                                         <i class="fas fa-user-plus me-1"></i> Tham gia ngay
                                                     </button>
                                                 </form>
                                             </div>
+
+                                            <!-- Nếu đã tham gia -->
+                                            <div class="project-join"
+                                                 th:if="${#lists.contains(projectUserJoinedIds, bv.projectMaSo.maProject)}">
+                                                <button class="btn btn-secondary" disabled>
+                                                    <i class="fas fa-check me-1"></i> Đã tham gia
+                                                </button>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

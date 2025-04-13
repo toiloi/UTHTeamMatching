@@ -90,6 +90,14 @@
                 <div th:if="${student.userRoles == null || student.userRoles.empty}" class="alert alert-info">
                     Người dùng chưa được phân quyền
                 </div>
+
+                //hiển thị SinhVien
+                <div class="col-md-6">
+                    <p><span class="">Kỹ năng:</span> <span th:text="${student.getKyNang()}"></span></p>
+                    <p><span class="">Độ uy tín:</span> <span th:text="${student.getMucDoUyTin()}"></span></p>
+                    <p><span class="">Thời gian rảnh:</span> <span th:text="${student.getThoiGianRanhNgay()+' '+student.getThoiGianRanhTuan()}"></span></p>
+                </div>
+
             </div>
         </div>
     </div>

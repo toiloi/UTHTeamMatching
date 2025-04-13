@@ -14,13 +14,20 @@ import java.util.Objects;
 @Embeddable
 public class ThanhvienProjectId implements java.io.Serializable {
     private static final long serialVersionUID = -9093897019423483989L;
-    @Nationalized
-    @Column(name = "userMaSo", nullable = false, length = 50)
-    private String userMaSo;
 
-    @Nationalized
-    @Column(name = "projectMaSo", nullable = false, length = 50)
-    private String projectMaSo;
+    @Column(name = "user_ma_so")
+    private Long userMaSo;
+
+    @Column(name = "project_ma_so")
+    private Long projectMaSo;
+
+
+    public ThanhvienProjectId() {}
+
+    public ThanhvienProjectId(Long maSo, Long maProject) {
+        this.userMaSo = maSo;
+        this.projectMaSo = maProject;
+    }
 
 
     @Override

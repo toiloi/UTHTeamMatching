@@ -17,17 +17,17 @@ public class ThanhvienProject {
     @MapsId("userMaSo")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "userMaSo", nullable = false)
+    @JoinColumn(name = "user_ma_so", nullable = false)
     private org.example.uthteammatching.models.UthUser userMaSo;
 
     @MapsId("projectMaSo")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "projectMaSo", nullable = false)
+    @JoinColumn(name = "project_ma_so", nullable = false)
     private Project projectMaSo;
 
     @Nationalized
-    @Column(name = "vaiTro", length = 50)
+    @Column(name = "vai_tro", length = 50)
     private String vaiTro;
 
 }

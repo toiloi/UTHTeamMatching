@@ -70,7 +70,7 @@ public class accountController {
         }
 
         // Tạo user mới
-        UthUser user = new UthUser();
+        SinhVien user = new SinhVien();
         user.setUsername(username);
         user.setPass(passwordEncoder.encode(pass)); // Mã hóa mật khẩu
         user.setEmail(email);
@@ -84,18 +84,18 @@ public class accountController {
         // Lưu user vào database
         userRepository.save(user);
 
-        try {
-            SinhVien sinhVien = new SinhVien();
-            sinhVien.setUthUser(user); // Liên kết với UthUser, Hibernate sẽ tự động gán id
-            sinhVien.setKyNang(""); // Thiết lập giá trị mặc định cho kyNang
-            System.out.println("Đang lưu SinhVien với maSo: " + sinhVien.getId() + ", kyNang: " + sinhVien.getKyNang());
-            sinhVienRepository.saveAndFlush(sinhVien);
-            System.out.println("Đã lưu SinhVien thành công!");
-        } catch (Exception e) {
-            System.out.println("Lỗi khi lưu SinhVien: " + e.getMessage());
-            e.printStackTrace();
-            // Không ném lại ngoại lệ để tránh rollback toàn bộ transaction
-        }
+//        try {
+//            SinhVien sinhVien = new SinhVien();
+//            sinhVien.setUthUser(user); // Liên kết với UthUser, Hibernate sẽ tự động gán id
+//            sinhVien.setKyNang(""); // Thiết lập giá trị mặc định cho kyNang
+//            System.out.println("Đang lưu SinhVien với maSo: " + sinhVien.getId() + ", kyNang: " + sinhVien.getKyNang());
+//            sinhVienRepository.saveAndFlush(sinhVien);
+//            System.out.println("Đã lưu SinhVien thành công!");
+//        } catch (Exception e) {
+//            System.out.println("Lỗi khi lưu SinhVien: " + e.getMessage());
+//            e.printStackTrace();
+//            // Không ném lại ngoại lệ để tránh rollback toàn bộ transaction
+//        }
 
         // Tìm hoặc tạo role USER
         Role userRole = roleRepository.findByTen("USER")

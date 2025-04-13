@@ -41,6 +41,10 @@ public class homeController {
     @Autowired
     private ThanhvienProjectRepository thanhvienProjectRepository;
 
+    @Autowired
+    private ProjectService projectService;
+
+
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -149,6 +153,23 @@ public class homeController {
             model.addAttribute("errorMessage", "User not found");
             return "404";
         }
+    }
+
+
+    // tìm kiếm dự án theo từ khoá nè
+    @GetMapping("/projects/search")
+    public String searchProjects(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+        List<Project> projects;
+        if (keyword == null || keyword.trim().isEmpty()) {
+            projects = projectService.getAllProject();
+            model.addAttribute("message", "Vui lòng nhập từ khóa tìm kiếm.");
+        } else {
+            projects = projectService.searchProjects(keyword);
+            model.addAttribute("message", projects.isEmpty() ? "Không tìm thấy dự án." : null);
+        }
+        model.addAttribute("projects", projects);
+        model.addAttribute("keyword", keyword);
+        return "project";
     }
 }
 

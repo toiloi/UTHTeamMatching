@@ -20,4 +20,12 @@ public class ProjectService {
     public Project getProject(Long maProject) {
         return projectRepository.findByMaProject(maProject);
     }
+
+    public List<Project> searchProjects(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return projectRepository.findAll(); // Hoặc trả về danh sách rỗng
+        }
+        return projectRepository.findByTenProjectContainingIgnoreCaseOrMoTaContainingIgnoreCase(keyword);
+    }
+
 }

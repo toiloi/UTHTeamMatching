@@ -57,6 +57,38 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-8">
+                            <!-- Form tìm kiếm -->
+                            <form action="/projects/search" method="get" class="search-form">
+                                <input type="text" name="keyword" class="project-feed"
+                                       placeholder="Tìm dự án ..." th:value="${keyword}">
+                                <button type="submit">Tìm</button>
+                            </form>
+
+                            <!-- Hiển thị thông báo nếu có -->
+                            <div th:if="${message}" class="message" th:text="${message}"></div>
+
+                            <!-- Bảng hiển thị dự án -->
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Tên</th>
+                                    <th>Mô tả</th>
+                                    <th>Ngày bắt đầu</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="project : ${projects}">
+                                    <td th:text="${project.maProject}"></td>
+                                    <td th:text="${project.tenProject}"></td>
+                                    <td th:text="${project.moTa}"></td>
+                                    <td th:text="${project.ngayBatDau != null} ? ${#temporals.format(project.ngayBatDau, 'dd/MM/yyyy')}"></td>
+                                </tr>
+                                <tr th:if="${projects == null or projects.isEmpty()}">
+                                    <td colspan="4">Không có dự án nào được tìm thấy.</td>
+                                </tr>
+                                </tbody>
+                            </table>
                             <!-- News Feed -->
                             <div class="news-feed">
 

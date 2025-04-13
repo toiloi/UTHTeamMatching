@@ -7,7 +7,30 @@
 <body>
 
 <h2>Đây là trang thông báo</h2>
+<h3>Các yêu cầu tham gia dự án</h3>
 
+<div th:each="joinRequest : ${joinRequests}">
+    <div th:each="tv :${joinRequest.thanhVienProjects}">
+        <div th:if="${tv.getVaiTro() == 'PENDING'}">
+            <p><span th:text="${tv.getUserMaSo().getTen()}"></span> muốn tham gia dự án <span th:text="${joinRequest.getTenProject()}"></span>.</p>
+            <form th:action="@{/project/approve}" method="post">
+                <input type="hidden" name="userIdRequest" th:value="${tv.getUserMaSo().getMaSo()}" />
+                <input type="hidden" name="projectIdRequest" th:value="${joinRequest.getMaProject()}"/>
+                <button type="submit">Duyệt</button>
+            </form>
+            <form th:action="@{/project/reject}" method="post">
+                <input type="hidden" name="userIdRequest" th:value="${tv.getUserMaSo().getMaSo()}" />
+                <input type="hidden" name="projectIdRequest" th:value="${joinRequest.getMaProject()}" />
+                <button type="submit">Từ chối</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<h3>Các thông báo: </h3>
+<div th:each="nt : ${notifications}">
+    <a th:text="${nt.getMessage()}"></a>
+</div>
 
 
 </body>

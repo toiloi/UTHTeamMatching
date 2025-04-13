@@ -70,7 +70,7 @@ public class accountController {
         }
 
         // Tạo user mới
-        SinhVien user = new SinhVien();
+        UthUser user = new UthUser();
         user.setUsername(username);
         user.setPass(passwordEncoder.encode(pass)); // Mã hóa mật khẩu
         user.setEmail(email);
@@ -79,7 +79,7 @@ public class accountController {
         user.setSdt(sdt);
         user.setGioiTinh(gioiTinh);
         user.setChuyenNganh(chuyenNganh);
-        user.setEnabled(true); // Mặc định là active
+        user.setEnabled(true);// Mặc định là active
 
         // Lưu user vào database
         userRepository.save(user);

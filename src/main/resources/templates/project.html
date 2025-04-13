@@ -299,7 +299,48 @@
         <div th:replace="master/leftSidebar::leftSidebar"></div>
         <!-- Sidebar End -->
 
-            <!-- Project Content Start -->
+        <form th:action="@{/project/search}" method="get" class="d-flex mb-3">
+            <input class="form-control me-2" type="search" name="keyword" placeholder="Đây là thanh tìm kiếm dự án" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Tìm</button>
+        </form>
+
+        <!-- Chỉ hiển thị kết quả nếu keyword không null -->
+        <div th:if="${keyword != null}">
+            <h3>Kết quả tìm kiếm cho: "<span th:text="${keyword}"></span>"</h3>
+
+            <div th:if="${#lists.isEmpty(results)}">
+                <p>Không tìm thấy dự án nào.</p>
+            </div>
+
+            <div th:each="project : ${results}">
+                <div class="card project-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 th:text="${project.getTenProject()}" class="card-title mb-0"></h5>
+                            <span th:text="${project.getTrangThai()}" class="project-status-badge bg-primary"></span>
+                        </div>
+                        <p th:text="${project.getMoTa()}" class="project-description mb-3"></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div th:each="tv : ${project.thanhVienProjects}">
+                                <div class="d-flex align-items-center">
+                                    <img src="img/user-1.jpg" class="avatar me-2">
+                                    <div>
+                                        <h6 th:text="${tv.getUserMaSo().getHo()+' ' +tv.getUserMaSo().getTen()}" class="mb-0"></h6>
+                                        <small th:text="${tv.getVaiTro()}" class="text-muted"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-eye me-2"></i>Xem chi tiết
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Project Content Start -->
             <div class="project-content">
                 <div class="container">
                     <div class="row">

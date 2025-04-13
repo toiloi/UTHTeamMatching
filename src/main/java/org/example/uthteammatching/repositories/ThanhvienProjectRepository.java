@@ -11,8 +11,5 @@ import java.util.List;
 
 @Repository
 public interface ThanhvienProjectRepository extends JpaRepository<ThanhvienProject, ThanhvienProjectId> {
-    List<ThanhvienProject> findByProjectMaSo_MaProject(Long projectId);
     boolean existsById(ThanhvienProjectId id);
-
-    boolean existsByUserMaSoAndProjectMaSo(UthUser currentUser, Project project);
 }

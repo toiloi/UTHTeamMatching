@@ -7,6 +7,7 @@ import org.example.uthteammatching.repositories.ThanhvienProjectRepository;
 import org.example.uthteammatching.repositories.UserRepository;
 import org.example.uthteammatching.services.ArticleService;
 import org.example.uthteammatching.services.ProjectService;
+import org.example.uthteammatching.services.ThanhvienProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
@@ -17,11 +18,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class homeController {
@@ -39,7 +43,7 @@ public class homeController {
     private ProjectRepository projectRepository;
 
     @Autowired
-    private ThanhvienProjectRepository thanhvienProjectRepository;
+    private ThanhvienProjectService thanhvienProjectService;
 
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
@@ -79,8 +83,27 @@ public class homeController {
         if (currentUser != null) {
             List<BaiViet> baiViets = articleService.getAllArticles();
             model.addAttribute("baiViets", baiViets);
+            Set<Long> projectUserJoinedIds = currentUser.getThanhVienProjects().stream()
+                    .map(tp -> tp.getProjectMaSo().getMaProject())
+                    .collect(Collectors.toSet());
+            model.addAttribute("projectUserJoinedIds", projectUserJoinedIds);
+            //List những project mà người dùng đã tham gia
         }
         return "home"; // Trả về home.html
+    }
+
+    @PostMapping("/project/join")
+    public String joinProject(@RequestParam("projectId") Long projectId, Model model, RedirectAttributes redirectAttributes) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser);
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Project không tồn tại"));
+
+        thanhvienProjectService.addUserToProject(currentUser, project, "Thành viên");
+        //Thông báo tham gia thành công
+
+        return "redirect:/";
     }
 
     @GetMapping("/project")
@@ -89,6 +112,18 @@ public class homeController {
         addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
         List<Project> projects = projectRepository.findAll();
         model.addAttribute("projects", projects);
+        long totalProjects = projects.size();
+        long doingProjects = projects.stream()
+                .filter(p -> "Đang thực hiện".equalsIgnoreCase(p.getTrangThai()))
+                .count();
+        long doneProjects = projects.stream()
+                .filter(p -> "Đã hoàn thành".equalsIgnoreCase(p.getTrangThai()))
+                .count();
+
+        model.addAttribute("totalProjects", totalProjects);
+        model.addAttribute("doingProjects", doingProjects);
+        model.addAttribute("doneProjects", doneProjects);
+
         return "project";
     }
 
@@ -97,7 +132,11 @@ public class homeController {
                                 @RequestParam("moTa") String moTa,
                                 @RequestParam("trangThai") String trangThai,
                                 @RequestParam("ngayBatDau") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayBatDau,
-                                @RequestParam("ngayKetThuc") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayKetThuc) {
+                                @RequestParam("ngayKetThuc") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayKetThuc, Model model) {
+
+
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser);
 
         Project project = new Project();
         project.setTenProject(tenProject);
@@ -105,6 +144,14 @@ public class homeController {
         project.setTrangThai(trangThai);
         project.setNgayBatDau(ngayBatDau);
         project.setNgayKetThuc(ngayKetThuc);
+
+        ThanhvienProject tv = new ThanhvienProject();
+        ThanhvienProjectId tvId = new ThanhvienProjectId(currentUser.getMaSo(), project.getMaProject());
+        tv.setId(tvId);
+        tv.setProjectMaSo(project);
+        tv.setUserMaSo(currentUser);
+        tv.setVaiTro("Trưởng nhóm");
+        project.getThanhVienProjects().add(tv);
 
         projectRepository.save(project);
 

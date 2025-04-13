@@ -20,4 +20,8 @@ public class ProjectService {
     public Project getProject(Long maProject) {
         return projectRepository.findByMaProject(maProject);
     }
+
+    public boolean existsByTenProject(String nameProject) {
+        return projectRepository.existsByTenProject(nameProject);
+    }
 }

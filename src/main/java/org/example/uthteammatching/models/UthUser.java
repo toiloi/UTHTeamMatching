@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -62,6 +63,9 @@ public class UthUser {
     @JsonManagedReference
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<UserRole> userRoles;
+
+    @OneToMany(mappedBy = "userMaSo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ThanhvienProject> thanhVienProjects = new HashSet<>();
 
     // Constructor mặc định
     public UthUser() {

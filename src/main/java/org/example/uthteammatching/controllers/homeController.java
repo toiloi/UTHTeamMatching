@@ -21,6 +21,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.IOException;
 
 @Controller
 public class homeController {
@@ -211,22 +216,71 @@ public class homeController {
     }
 
     @PostMapping("/user-detail/{id}")
-    public String updateUser(@PathVariable("id") Long id, UthUser updatedUser, Model model) {
+    public String updateUser(
+            @PathVariable("id") Long id,
+            @RequestParam("ho") String ho,
+            @RequestParam("ten") String ten,
+            @RequestParam("email") String email,
+            @RequestParam("sdt") String sdt,
+            @RequestParam("gioiTinh") String gioiTinh,
+            @RequestParam("chuyenNganh") String chuyenNganh,
+            @RequestParam(value = "avatarFile", required = false) MultipartFile avatarFile,
+            Model model) {
         Optional<UthUser> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             UthUser user = userOptional.get();
             model.addAttribute("student", user);
-            user.setHo(updatedUser.getHo());
-            user.setTen(updatedUser.getTen());
 
-            user.setEmail(updatedUser.getEmail());
-            user.setSdt(updatedUser.getSdt());
-            user.setGioiTinh(updatedUser.getGioiTinh());
-            user.setChuyenNganh(updatedUser.getChuyenNganh());
-            user.setAvatar(updatedUser.getAvatar());
+            // Cập nhật thông tin người dùng
+            user.setHo(ho);
+            user.setTen(ten);
+            user.setEmail(email);
+            user.setSdt(sdt);
+            user.setGioiTinh(gioiTinh);
+            user.setChuyenNganh(chuyenNganh);
+
+            // Xử lý upload ảnh đại diện
+            if (avatarFile != null && !avatarFile.isEmpty()) {
+                try {
+                    // Kiểm tra định dạng file
+                    String contentType = avatarFile.getContentType();
+                    if (!contentType.equals("image/jpeg") && !contentType.equals("image/png")) {
+                        model.addAttribute("errorMessage", "Chỉ hỗ trợ file JPG hoặc PNG");
+                        return "user-detail";
+                    }
+
+                    // Kiểm tra kích thước file (giới hạn 5MB)
+                    if (avatarFile.getSize() > 5 * 1024 * 1024) {
+                        model.addAttribute("errorMessage", "File quá lớn, tối đa 5MB");
+                        return "user-detail";
+                    }
+
+                    // Xóa ảnh cũ nếu có
+                    if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
+                        try {
+                            String oldAvatarPath = "src/main/resources/static" + user.getAvatar();
+                            Files.deleteIfExists(Paths.get(oldAvatarPath));
+                        } catch (IOException e) {
+                            e.printStackTrace(); // Ghi log lỗi
+                        }
+                    }
+
+                    // Lưu ảnh mới
+                    String uploadDir = "src/main/resources/static/img/avatars/";
+                    String fileName = System.currentTimeMillis() + "_" + avatarFile.getOriginalFilename();
+                    Path filePath = Paths.get(uploadDir, fileName);
+                    Files.createDirectories(filePath.getParent());
+                    Files.write(filePath, avatarFile.getBytes());
+
+                    // Cập nhật đường dẫn ảnh trong database
+                    user.setAvatar("/img/avatars/" + fileName);
+                } catch (IOException e) {
+                    model.addAttribute("errorMessage", "Lỗi khi upload ảnh: " + e.getMessage());
+                    return "user-detail";
+                }
+            }
 
             userRepository.save(user); // Lưu vào database
-
             return "redirect:/user-detail/" + id; // Quay lại trang chi tiết
         } else {
             model.addAttribute("errorMessage", "User not found");

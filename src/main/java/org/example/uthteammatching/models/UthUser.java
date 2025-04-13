@@ -13,6 +13,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "uthUser")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class UthUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

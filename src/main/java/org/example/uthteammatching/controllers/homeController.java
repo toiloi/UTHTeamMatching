@@ -1,10 +1,7 @@
 package org.example.uthteammatching.controllers;
 
 import org.example.uthteammatching.models.*;
-import org.example.uthteammatching.repositories.ListFriendRepository;
-import org.example.uthteammatching.repositories.ProjectRepository;
-import org.example.uthteammatching.repositories.ThanhvienProjectRepository;
-import org.example.uthteammatching.repositories.UserRepository;
+import org.example.uthteammatching.repositories.*;
 import org.example.uthteammatching.services.ArticleService;
 import org.example.uthteammatching.services.ProjectService;
 import org.example.uthteammatching.services.ThanhvienProjectService;
@@ -32,6 +29,9 @@ public class homeController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SinhVienRepository sinhVienRepository;
 
     @Autowired
     private ListFriendRepository listFriendRepository;
@@ -159,13 +159,12 @@ public class homeController {
     }
 
 
-
     @GetMapping("/user-detail/{id}")
     public String userDetail(@PathVariable("id") Long id, Model model) {
-        Optional<UthUser> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            UthUser user = userOptional.get();
-            model.addAttribute("student", user); // Using "student" to match the template
+        Optional<SinhVien> sinhVienOptional = sinhVienRepository.findById(id);
+        if (sinhVienOptional.isPresent()) {
+            SinhVien sinhVien = sinhVienOptional.get();
+            model.addAttribute("student", sinhVien);
             UthUser currentUser = addCurrentUserToModel(model);
             addFriendUsersToModel(model, currentUser);
             return "user-detail";
@@ -174,6 +173,7 @@ public class homeController {
             return "404";
         }
     }
+
     @PostMapping("/user-detail/{id}")
     public String updateUser(@PathVariable("id") Long id, UthUser updatedUser, Model model) {
         Optional<UthUser> userOptional = userRepository.findById(id);
@@ -197,5 +197,17 @@ public class homeController {
             return "404";
         }
     }
+
+
+    @GetMapping("/notification")
+    public String notification(Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
+
+        return "notification";
+    }
+
+
+
 }
 

@@ -30,7 +30,4 @@ public class ThanhvienProject {
     @Column(name = "vai_tro", length = 50)
     private String vaiTro;
 
-    @Column(name = "trang_thai", length = 20)
-    private String trangThai;
-
 }

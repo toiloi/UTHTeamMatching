@@ -96,7 +96,7 @@
                                 <!-- Sample Post 1 -->
                                 <div class="news-post">
                                     <div class="news-header">
-                                        <img src="/img/avatars/NULL.jpg" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                                        <img th:src="${bv.userMaSo.avatar != null ? bv.userMaSo.avatar : '/img/avatars/NULL.jpg'}" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                                         <div class="news-user-info">
                                             <a th:href="@{/user-detail/{id}(id=${bv.userMaSo.getMaSo()})}" th:text="${bv.userMaSo.getHo() + ' ' + bv.userMaSo.getTen()}" style="text-decoration: none;" ></a>
                                             <span th:text="${#temporals.format(bv.ngayDang, 'HH:mm dd/MM/yyyy')}" class="news-time"></span>
@@ -124,7 +124,7 @@
                                                 <div th:each="tv : ${bv.projectMaSo.thanhVienProjects}">
                                                     <div th:if="${tv.getVaiTro() != 'PENDING'}">
                                                         <a th:href="@{/user-detail/{id}(id=${tv.userMaSo.maSo})}">
-                                                            <img th:src="${tv.userMaSo.avatar}"
+                                                            <img th:src="${tv.userMaSo.avatar != null ? tv.userMaSo.avatar : '/img/avatars/NULL.jpg'}"
                                                                  class="participant-avatar"
                                                                  th:title="${tv.userMaSo.ho + ' ' + tv.userMaSo.ten}">
                                                         </a>

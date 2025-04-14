@@ -13,7 +13,7 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(columnDefinition = "NVARCHAR(1000)")
     private String message;
 
     private boolean seen = false;

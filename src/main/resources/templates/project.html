@@ -352,7 +352,7 @@
                                 <div class="card create-project-card mb-4">
                                     <div class="card-body p-4">
                                         <div class="d-flex mb-3">
-                                            <img src="img/user.jpg" class="avatar me-3" alt="User Avatar">
+                                            <img th:src="${currentUser.avatar != null ? currentUser.avatar : '/img/avatars/NULL.jpg'}" class="avatar me-3" alt="User Avatar">
                                             <div class="flex-grow-1">
                                                 <textarea id="thoughtInput" class="form-control" rows="3" placeholder="Bạn đang nghĩ gì?"></textarea>
                                             </div>
@@ -387,11 +387,7 @@
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div th:each="tv : ${project.thanhVienProjects}">
                                                     <div class="d-flex align-items-center">
-                                                        <img src="img/user-1.jpg" class="avatar me-2">
-                                                        <div>
-                                                            <h6 th:text="${tv.getUserMaSo().getHo()+' ' +tv.getUserMaSo().getTen()}" class="mb-0"></h6>
-                                                            <small th:text="${tv.getVaiTro()}" class="text-muted"></small>
-                                                        </div>
+                                                        <img th:src="${tv.getUserMaSo().avatar != null ? tv.getUserMaSo().avatar : '/img/avatars/NULL.jpg'}" class="avatar me-2">
                                                     </div>
                                                     </div>
                                                     <button class="btn btn-outline-primary btn-sm">
@@ -433,31 +429,6 @@
                                             <small class="text-muted">Dự án đã hoàn thành</small>
                                         </div>
                                         <span th:text="${doneProjects}" class="badge bg-success rounded-pill px-3 py-2"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Team Members -->
-                            <div class="card team-member-card">
-                                <div class="card-header bg-white border-0 py-3">
-                                    <h5 class="mb-0">Thành viên dự án</h5>
-                                </div>
-                                <div class="card-body p-0">
-                                    <div class="team-member d-flex align-items-center p-3">
-                                        <img src="img/user-1.jpg" class="avatar me-3">
-                                        <div>
-                                            <h6 class="mb-0">Nguyễn Văn A</h6>
-                                            <small class="text-muted">Quản lý dự án</small>
-                                        </div>
-                                        <span class="badge bg-success rounded-pill ms-auto">Online</span>
-                                    </div>
-                                    <div class="team-member d-flex align-items-center p-3">
-                                        <img src="img/user-2.jpg" class="avatar me-3">
-                                        <div>
-                                            <h6 class="mb-0">Trần Thị B</h6>
-                                            <small class="text-muted">Developer</small>
-                                        </div>
-                                        <span class="badge bg-secondary rounded-pill ms-auto">Offline</span>
                                     </div>
                                 </div>
                             </div>

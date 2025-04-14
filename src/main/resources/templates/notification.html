@@ -1,37 +1,164 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <title>Thông báo - UTH-TEAM</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link th:href="@{/img/favicon.ico}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css}" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
+
 <body>
+    <!-- Spinner Start -->
+    <div th:replace="master/spinner::spinner"></div>
+    <!-- Spinner End -->
 
-<h2>Đây là trang thông báo</h2>
-<h3>Các yêu cầu tham gia dự án</h3>
+    <!-- Main Container Start -->
+    <div class="main-container d-flex flex-column min-vh-100">
+        <!-- Navbar Start -->
+        <div th:replace="master/navbar::navbar"></div>
+        <!-- Navbar End -->
 
-<div th:each="joinRequest : ${joinRequests}">
-    <div th:each="tv :${joinRequest.thanhVienProjects}">
-        <div th:if="${tv.getVaiTro() == 'PENDING'}">
-            <p><span th:text="${tv.getUserMaSo().getTen()}"></span> muốn tham gia dự án <span th:text="${joinRequest.getTenProject()}"></span>.</p>
-            <form th:action="@{/project/approve}" method="post">
-                <input type="hidden" name="userIdRequest" th:value="${tv.getUserMaSo().getMaSo()}" />
-                <input type="hidden" name="projectIdRequest" th:value="${joinRequest.getMaProject()}"/>
-                <button type="submit">Duyệt</button>
-            </form>
-            <form th:action="@{/project/reject}" method="post">
-                <input type="hidden" name="userIdRequest" th:value="${tv.getUserMaSo().getMaSo()}" />
-                <input type="hidden" name="projectIdRequest" th:value="${joinRequest.getMaProject()}" />
-                <button type="submit">Từ chối</button>
-            </form>
+        <!-- Content Container Start -->
+        <div class="content-container flex-grow-1">
+            <!-- Right Sidebar Start -->
+            <div th:replace="master/rightSidebar::rightSidebar"></div>
+            <!-- Right Sidebar End -->
+
+            <!-- Sidebar Start -->
+            <div th:replace="master/leftSidebar::leftSidebar"></div>
+            <!-- Sidebar End -->
+
+            <!-- Notification Content Start -->
+            <div class="notification-content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <!-- Join Requests Section -->
+                            <div class="card mb-4">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>Yêu cầu tham gia dự án</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div th:each="joinRequest : ${joinRequests}" class="join-request-item mb-3">
+                                        <div th:each="tv :${joinRequest.thanhVienProjects}">
+                                            <div th:if="${tv.getVaiTro() == 'PENDING'}" class="d-flex justify-content-between align-items-center">
+                                                <div class="request-info">
+                                                    <p class="mb-0">
+                                                        <strong th:text="${tv.getUserMaSo().getTen()}"></strong> 
+                                                        muốn tham gia dự án 
+                                                        <strong th:text="${joinRequest.getTenProject()}"></strong>
+                                                    </p>
+                                                </div>
+                                                <div class="request-actions">
+                                                    <form th:action="@{/project/approve}" method="post" class="d-inline me-2">
+                                                        <input type="hidden" name="userIdRequest" th:value="${tv.getUserMaSo().getMaSo()}" />
+                                                        <input type="hidden" name="projectIdRequest" th:value="${joinRequest.getMaProject()}"/>
+                                                        <button type="submit" class="btn btn-success btn-sm">
+                                                            <i class="fas fa-check me-1"></i>Duyệt
+                                                        </button>
+                                                    </form>
+                                                    <form th:action="@{/project/reject}" method="post" class="d-inline">
+                                                        <input type="hidden" name="userIdRequest" th:value="${tv.getUserMaSo().getMaSo()}" />
+                                                        <input type="hidden" name="projectIdRequest" th:value="${joinRequest.getMaProject()}" />
+                                                        <button type="submit" class="btn btn-danger btn-sm">
+                                                            <i class="fas fa-times me-1"></i>Từ chối
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div th:if="${joinRequests == null or joinRequests.isEmpty()}" class="text-center text-muted">
+                                        <p class="mb-0">Không có yêu cầu tham gia dự án nào.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Notifications Section -->
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Thông báo</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div th:each="nt : ${notifications}" class="notification-item mb-3 p-3 border-bottom">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-info-circle text-primary me-3"></i>
+                                            <div class="notification-content">
+                                                <p class="mb-0" th:text="${nt.getMessage()}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div th:if="${notifications == null or notifications.isEmpty()}" class="text-center text-muted">
+                                        <p class="mb-0">Không có thông báo nào.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar -->
+                        <div class="col-lg-4">
+                            <!-- Quick Stats -->
+                            <div class="card mb-4">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Thống kê</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="stat-item mb-3">
+                                        <h6 class="mb-1">Yêu cầu đang chờ</h6>
+                                        <p class="mb-0 text-primary" th:text="${joinRequests != null ? joinRequests.size() : 0}"></p>
+                                    </div>
+                                    <div class="stat-item">
+                                        <h6 class="mb-1">Thông báo mới</h6>
+                                        <p class="mb-0 text-primary" th:text="${notifications != null ? notifications.size() : 0}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Notification Content End -->
         </div>
+        <!-- Content Container End -->
     </div>
-</div>
+    <!-- Main Container End -->
 
-<h3>Các thông báo: </h3>
-<div th:each="nt : ${notifications}">
-    <a th:text="${nt.getMessage()}"></a>
-</div>
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
+    <!-- JavaScript Libraries -->
+    <script th:src="@{https://code.jquery.com/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/lib/wow/wow.min.js}"></script>
+    <script th:src="@{/lib/easing/easing.min.js}"></script>
+    <script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+    <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
 
+    <!-- Template Javascript -->
+    <script th:src="@{/js/main.js}"></script>
 </body>
 </html>

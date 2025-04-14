@@ -72,25 +72,6 @@
     </div>
 
     <!-- Roles Section -->
-    <div class="profile-section">
-        <h2 class="section-title">Vai trò người dùng</h2>
-        <div class="row">
-            <div class="col-12">
-                <div th:if="${student.userRoles != null && !student.userRoles.empty}">
-                    <ul class="list-group">
-                        <li th:each="userRole : ${student.userRoles}" class="list-group-item">
-                            <span th:text="${userRole.role.ten}"></span>
-                        </li>
-                    </ul>
-                </div>
-                <div th:if="${student.userRoles == null || student.userRoles.empty()}" class="alert alert-info">
-                    Người dùng chưa được phân quyền
-                </div>
-
-
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- Edit Profile Modal -->

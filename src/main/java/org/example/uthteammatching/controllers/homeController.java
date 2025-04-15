@@ -391,6 +391,9 @@ public class homeController {
 
         if (foundUser != null && !foundUser.getMaSo().equals(currentUser.getMaSo())) {
             model.addAttribute("searchResult", foundUser);
+            boolean isFriend = listFriendRepository.existsByUserId1AndUserId2(currentUser, foundUser) ||
+                    listFriendRepository.existsByUserId1AndUserId2(foundUser, currentUser);
+            model.addAttribute("isFriend", isFriend);
         } else {
             model.addAttribute("notFound", "Không tìm thấy người dùng phù hợp.");
         }

@@ -12,5 +12,5 @@ import java.util.List;
 public interface ListFriendRepository extends JpaRepository<ListFriend, ListFriendId> {
     @Query("SELECT lf FROM ListFriend lf JOIN FETCH lf.userId1 JOIN FETCH lf.userId2 WHERE lf.userId1 = :user OR lf.userId2 = :user")
     List<ListFriend> findByUserId1OrUserId2WithFetch(@Param("user") UthUser user);
-
+    boolean existsByUserId1AndUserId2(UthUser currentUser, UthUser foundUser);
 }

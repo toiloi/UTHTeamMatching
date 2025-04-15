@@ -38,13 +38,17 @@
     <div class="card p-3 mt-2">
         <p><strong>Họ tên:</strong> <span th:text="${searchResult.getHo()+searchResult.getTen()}"></span></p>
         <p><strong>SĐT:</strong> <span th:text="${searchResult.getSdt()}"></span></p>
-
-        <form action="/ketban/send-request" method="post">
-            <input type="hidden" name="friendId" th:value="${searchResult.getMaSo()}">
-            <button type="submit" class="btn btn-success">
-                <i class="fas fa-user-plus me-1"></i> Gửi lời mời kết bạn
-            </button>
-        </form>
+        <div th:if="${isFriend == false}">
+            <form action="/ketban/send-request" method="post">
+                <input type="hidden" name="friendId" th:value="${searchResult.getMaSo()}">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-user-plus me-1"></i> Gửi lời mời kết bạn
+                </button>
+            </form>
+        </div>
+        <div th:if="${isFriend == true}">
+            <button class="btn btn-secondary" disabled>Đã là bạn bè</button>
+        </div>
     </div>
 </div>
 

@@ -13,6 +13,7 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(columnDefinition = "NVARCHAR(1000)")
     private String message;
 
@@ -24,9 +25,19 @@ public class Notification {
     @JoinColumn(name = "user_id")
     private UthUser user;
 
-    public Notification(String message, UthUser userId) {
+
+    @ManyToOne
+    @JoinColumn(name = "from_user_id") // Người gửi thông báo
+    private UthUser userFrom;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationType type;
+
+    public Notification(String message, UthUser userId, UthUser userFrom, NotificationType type) {
         this.message = message;
         this.user = userId;
+        this.userFrom = userFrom;
+        this.type = type;
         this.createdAt = LocalDateTime.now();
     }
     public Notification() {}

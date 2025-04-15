@@ -63,7 +63,12 @@ public class accountController {
             return "redirect:/account";
         }
 
-        // Kiểm tra email đã tồn tại chưa
+        // Kiểm tra sđt đã tồn tại chưa
+        if (userRepository.existsBySdt(sdt)) {
+            redirectAttributes.addFlashAttribute("error", "Số điện thoại đã được sử dụng!");
+            return "redirect:/account";
+        }
+
         if (userRepository.existsByEmail(email)) {
             redirectAttributes.addFlashAttribute("error", "Email đã được sử dụng!");
             return "redirect:/account";

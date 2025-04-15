@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<UthUser, Long> {
     boolean existsByEmail(String email);
     List<UthUser> findByHoContainingOrTenContainingOrEmailContaining(String ho, String ten, String email);
     Optional<UthUser> findByUsername(String username);
-} 
+    UthUser findBySdt(String sdt);
+    boolean existsBySdt(String sdt);
+}

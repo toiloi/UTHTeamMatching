@@ -22,6 +22,15 @@ public class ListFriendId implements java.io.Serializable {
     @Column(name = "user_id_2", nullable = false)
     private Long userId2;
 
+    public ListFriendId(Long userId1, Long userId2) {
+        this.userId1 = userId1;
+        this.userId2 = userId2;
+    }
+
+    public ListFriendId() {
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

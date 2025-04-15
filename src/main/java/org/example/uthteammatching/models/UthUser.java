@@ -42,7 +42,7 @@ public class UthUser {
     private String email;
 
     @Nationalized
-    @Column(name = "sdt", length = 15)
+    @Column(name = "sdt", length = 15, unique = true)
     private String sdt;
 
     @Nationalized
@@ -201,4 +201,5 @@ public class UthUser {
     public void setUserRoles(Set<UserRole> userRoles) {
         this.userRoles = userRoles;
     }
+
 }

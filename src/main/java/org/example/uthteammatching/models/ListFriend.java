@@ -22,4 +22,13 @@ public class ListFriend {
     @JoinColumn(name = "user_id_2", nullable = false)
     private UthUser userId2;
 
+    public ListFriend(ListFriendId id, UthUser userId1, UthUser userId2) {
+        this.id = id;
+        this.userId1 = userId1;
+        this.userId2 = userId2;
+    }
+
+    public ListFriend() {
+
+    }
 }

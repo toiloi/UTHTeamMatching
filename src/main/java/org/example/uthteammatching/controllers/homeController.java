@@ -4,8 +4,7 @@ package org.example.uthteammatching.controllers;
 import org.example.uthteammatching.models.*;
 import org.example.uthteammatching.repositories.*;
 import org.example.uthteammatching.services.ArticleService;
-import org.example.uthteammatching.services.ProjectService;
-import org.example.uthteammatching.services.ThanhvienProjectService;
+import org.example.uthteammatching.services.ListFriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
@@ -19,8 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
+
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,6 +47,8 @@ public class homeController {
 
     @Autowired
     private NotificationRepository notificationRepository;
+    @Autowired
+    private ListFriendService listFriendService;
 
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
@@ -63,6 +65,7 @@ public class homeController {
         return null; // Trả về null nếu không tìm thấy user
     }
 
+
     // Phương thức chung để lấy danh sách bạn bè và thêm vào model
     private void addFriendUsersToModel(Model model, UthUser currentUser) {
         if (currentUser != null) {
@@ -78,6 +81,7 @@ public class homeController {
             model.addAttribute("friendUsers", friendUsers);
         }
     }
+
 
     @GetMapping("/")
     public String home(Model model) {
@@ -104,6 +108,7 @@ public class homeController {
         return "home"; // Trả về home.html
     }
 
+
     @PostMapping("/project/join")
     public String joinProject(@RequestParam("projectId") Long projectId, Model model, RedirectAttributes redirectAttributes) {
         UthUser currentUser = addCurrentUserToModel(model);
@@ -127,7 +132,6 @@ public class homeController {
     }
 
 
-
     @GetMapping("/project")
     public String project(Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
@@ -148,6 +152,7 @@ public class homeController {
 
         return "project";
     }
+
 
     @PostMapping("/project")
     public String createProject(@RequestParam("nameProject") String tenProject,
@@ -197,9 +202,6 @@ public class homeController {
     }
 
 
-
-
-
     @GetMapping("/user-detail/{id}")
     public String userDetail(@PathVariable("id") Long id, Model model) {
         Optional<UthUser> userOptional = userRepository.findById(id);
@@ -214,6 +216,7 @@ public class homeController {
             return "404";
         }
     }
+
 
     @PostMapping("/user-detail/{id}")
     public String updateUser(
@@ -312,10 +315,13 @@ public class homeController {
     }
 
 
-
     @PostMapping("/project/approve")
     public String approveRequest(@RequestParam("userIdRequest") Long userId,
-                                 @RequestParam("projectIdRequest") Long projectId) {
+                                 @RequestParam("projectIdRequest") Long projectId, Model model) {
+
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
+
         ThanhvienProjectId tvId = new ThanhvienProjectId();
         tvId.setUserMaSo(userId);
         tvId.setProjectMaSo(projectId);
@@ -324,8 +330,9 @@ public class homeController {
             ThanhvienProject request = thanhvienProjectRepository.findByUserMaSo_MaSoAndProjectMaSo_MaProject(userId, projectId);
             request.setVaiTro("Thành viên");
             thanhvienProjectRepository.save(request);
+            notificationRepository.save(new Notification("Bạn đã duyệt "+user.getHo()+' '+user.getTen()+" vào dự án "+projectRepository.findByMaProject(projectId).getTenProject(), currentUser, null, NotificationType.NOTIFICATION));
             notificationRepository.save(new Notification(
-                    "Bạn đã được duyệt tham gia dự án " + projectRepository.findByMaProject(projectId).getTenProject(), user));
+                    "Bạn đã được duyệt tham gia dự án " + projectRepository.findByMaProject(projectId).getTenProject(), user, currentUser, NotificationType.NOTIFICATION));
 
         } catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
@@ -334,9 +341,13 @@ public class homeController {
         return "redirect:/notification";
     }
 
+
     @PostMapping("/project/reject")
     public String rejectRequest(@RequestParam("userIdRequest") Long userId,
-                                @RequestParam("projectIdRequest") Long projectId) {
+                                @RequestParam("projectIdRequest") Long projectId, Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
+
         UthUser user = userRepository.findById(userId).orElse(null);
         try {
             ThanhvienProject tv = thanhvienProjectRepository
@@ -344,9 +355,10 @@ public class homeController {
 
             thanhvienProjectRepository.delete(tv);
 
-            Notification noti = new Notification(
-                        "Bạn đã bị từ chối tham gia dự án " + projectRepository.findByMaProject(projectId).getTenProject(), user);
-            notificationRepository.save(noti);
+            notificationRepository.save(new Notification("Bạn từ chối cho "+user.getHo()+' '+user.getTen()+" tham vào dự án "+projectRepository.findByMaProject(projectId).getTenProject(), currentUser, null, NotificationType.NOTIFICATION));
+
+            notificationRepository.save(new Notification("Bạn đã bị từ chối tham vào dự án "+projectRepository.findByMaProject(projectId).getTenProject(), currentUser, null, NotificationType.NOTIFICATION));
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -354,6 +366,86 @@ public class homeController {
         return "redirect:/notification";
     }
 
+
+    @GetMapping("/ketban")
+    public String ketBan(Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser);
+        List<Notification> friendRequestNotifications = notificationRepository
+                .findByUserAndTypeOrderByCreatedAtDesc(currentUser, NotificationType.FRIEND_REQUEST);
+
+        model.addAttribute("friendRequestNotifications", friendRequestNotifications);
+        return "ketban";
+    }
+
+    @PostMapping("/ketban")
+    public String ketBan1(Model model) {
+        return "ketban";
+    }
+
+    @GetMapping("/ketban/search")
+    public String searchUserByPhone(@RequestParam("phone") String phone, Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
+        UthUser foundUser = userRepository.findBySdt(phone);
+
+        if (foundUser != null && !foundUser.getMaSo().equals(currentUser.getMaSo())) {
+            model.addAttribute("searchResult", foundUser);
+        } else {
+            model.addAttribute("notFound", "Không tìm thấy người dùng phù hợp.");
+        }
+
+        return "ketban";
+    }
+
+    @PostMapping("/ketban/send-request")
+    public String sendFriendRequest(@RequestParam("friendId") Long friendId, Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser);
+
+        UthUser targetUser = userRepository.findById(friendId).orElse(null);
+
+        if (targetUser != null) {
+            notificationRepository.save(new Notification(currentUser.getHo()+' '+currentUser.getTen()+" đã gửi lời mời kết bạn!", targetUser, currentUser, NotificationType.FRIEND_REQUEST));
+        }
+
+        return "redirect:/ketban";
+    }
+
+    @PostMapping("/ketban/accept-friend")
+    public String acceptFriend(@RequestParam("notificationId") Long notificationId, Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser);
+
+        Notification notification = notificationRepository.findById(notificationId).orElse(null);
+        UthUser targetUser = notification.getUserFrom();
+
+        if (targetUser != null) {
+            assert currentUser != null;
+            listFriendService.createListFriend(targetUser, currentUser);
+            notificationRepository.delete(notification);
+            notificationRepository.save(new Notification("Bạn đã chấp nhận lời mời kết bạn của "+targetUser.getHo()+' '+targetUser.getTen(), currentUser, null, NotificationType.NOTIFICATION));
+            notificationRepository.save(new Notification(currentUser.getHo()+' '+currentUser.getTen()+" đã chấp nhận lời mời kết bạn!", targetUser, null, NotificationType.NOTIFICATION));
+
+        }
+        return "redirect:/ketban";
+    }
+
+    @PostMapping("/ketban/reject-friend")
+    public String rejectFriend(@RequestParam("notificationId") Long notificationId, Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser);
+
+        Notification notification = notificationRepository.findById(notificationId).orElse(null);
+        UthUser targetUser = notification.getUserFrom();
+
+        if (targetUser != null) {
+            assert currentUser != null;
+            listFriendService.createListFriend(targetUser, currentUser);
+            notificationRepository.delete(notification);
+        }
+        return "redirect:/ketban";
+    }
 
 
 

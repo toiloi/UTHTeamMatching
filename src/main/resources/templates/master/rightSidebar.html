@@ -8,13 +8,17 @@
     <input type="text" class="search-friends" placeholder="Tìm kiếm bạn bè...">
     <div class="friends-list">
         <!-- Lặp qua danh sách bạn bè đã lọc -->
-        <div th:each="friend : ${friendUsers}" class="friend-item">
+        <div th:each="friend : ${friendUsers}">
             <!-- Hiển thị avatar của bạn bè -->
-            <img th:src="${friend.avatar != null} ? ${friend.avatar} : '/img/avatars/NULL.jpg'" class="friend-avatar">
-            <div class="friend-info">
-                <!-- Hiển thị tên bạn bè -->
-                <div class="friend-name" th:text="${friend.ho+ ' ' + friend.ten}"></div>
-            </div>
+            <a th:href="@{/chat(friendId=${friend.maSo})}">
+                <div class="friend-item">
+                    <img th:src="${friend.avatar != null} ? ${friend.avatar} : '/img/avatars/NULL.jpg'" class="friend-avatar">
+                    <div class="friend-info">
+                        <!-- Hiển thị tên bạn bè -->
+                        <div class="friend-name" th:text="${friend.ho+ ' ' + friend.ten}"></div>
+                    </div>
+                </div>
+            </a>
         </div>
         <!-- Thông báo nếu không có bạn bè -->
         <div th:if="${#lists.isEmpty(friendUsers)}" class="friend-item">

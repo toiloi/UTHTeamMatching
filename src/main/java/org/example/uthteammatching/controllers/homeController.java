@@ -47,6 +47,7 @@ public class homeController {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
     @Autowired
     private ListFriendService listFriendService;
 

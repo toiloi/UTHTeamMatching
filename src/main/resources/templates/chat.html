@@ -89,15 +89,34 @@
   }
 
 
+  function loadMessages() {
+    fetch(`/getMessages?senderId=${currentUserId}&receiverId=${friendId}`)
+            .then(response => response.json())
+            .then(messages => {
+              console.log("💬 Loaded messages from DB:", messages);
+              messages.forEach(msg => {
+                displayMessage(msg);
+              });
+            })
+            .catch(error => console.error('Error loading messages:', error));
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    // Disable nút gửi lúc đầu
     document.getElementById("send-button").disabled = true;
+
+    // Load tin nhắn từ database
+    loadMessages();
+
+    // Kết nối WebSocket
     connectWebSocket(currentUserId);
 
-    // Gắn sự kiện gửi
+    // Gắn sự kiện gửi khi bấm nút gửi
     document.getElementById("send-button").addEventListener("click", function () {
       sendMessage(currentUserId, friendId);
     });
   });
+
 </script>
 
 </body>

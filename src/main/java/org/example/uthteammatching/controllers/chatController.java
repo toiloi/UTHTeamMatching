@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.example.uthteammatching.models.ChatMessage;
 import org.example.uthteammatching.models.ListFriend;
 import org.example.uthteammatching.models.UthUser;
+import org.example.uthteammatching.repositories.ChatMessageRepository;
 import org.example.uthteammatching.repositories.ListFriendRepository;
 import org.example.uthteammatching.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
@@ -17,11 +19,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -36,6 +41,9 @@ public class chatController {
 
     @Autowired
     private ListFriendRepository listFriendRepository;
+
+    @Autowired
+    private ChatMessageRepository chatMessageRepository;
 
     private UthUser addCurrentUserToModel(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -68,6 +76,24 @@ public class chatController {
         }
     }
 
+    @GetMapping("/getMessages")
+    @ResponseBody
+    public List<ChatMessage> getMessages(@RequestParam Long senderId, @RequestParam Long receiverId) {
+        return chatMessageRepository.findConversation(senderId, receiverId);
+    }
+
+    @EventListener
+    public void handleMessageReceived(ChatMessage message) {
+        // Cập nhật trạng thái tin nhắn
+        Optional<ChatMessage> chatMessage = chatMessageRepository.findById(message.getId());
+        chatMessage.ifPresent(msg -> {
+            msg.setStatus(ChatMessage.MessageStatus.DELIVERED);
+            chatMessageRepository.save(msg);
+        });
+    }
+
+
+
     @GetMapping("/chat")
     public String chatPage(@RequestParam("friendId") Long friendId, Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
@@ -89,22 +115,24 @@ public class chatController {
         System.out.println("Principal name: " + principal.getName());
         System.out.println("Received message: " + message.getContent());
 
-        // Lấy thông tin người gửi
+        message.setTimestamp(LocalDateTime.now());
+        message.setStatus(ChatMessage.MessageStatus.SENT);
         UthUser sender = userRepository.findById(message.getSenderId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         message.setSenderName(sender.getTen());
+        chatMessageRepository.save(message);
 
         // Log
         System.out.println("Người gửi: " + message.getSenderId() + " " + message.getSenderName());
         System.out.println("Gửi message đến user " + message.getReceiverId() + ": " + message.getContent());
 
         messagingTemplate.convertAndSend(
-                "/topic/messages.user-" + message.getReceiverId(),  // destination riêng của người nhận
+                "/topic/messages.user-" + message.getReceiverId(),
                 message
         );
 
-        // Gửi lại cho người gửi (để họ cũng thấy tin mình vừa gửi)
+
         messagingTemplate.convertAndSend(
                 "/topic/messages.user-" + message.getSenderId(),
                 message

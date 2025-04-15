@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @NoArgsConstructor
@@ -20,13 +21,15 @@ public class ChatMessage {
 
     private Long senderId;
     private Long receiverId;
+
+    @Column(columnDefinition = "NVARCHAR(100)")
     private String senderName;
 
     @Column(columnDefinition = "NVARCHAR(1000)")
     private String content;
 
     @Column(nullable = false)
-    private LocalDateTime timestamp;
+    private ZonedDateTime timestamp;
 
     @Enumerated(EnumType.STRING)
     private MessageStatus status;

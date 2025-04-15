@@ -44,7 +44,6 @@
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function (frame) {
-      console.log('✅ Connected: ' + frame);
       isConnected = true;
 
       // Phải enable nút gửi sau khi kết nối
@@ -73,17 +72,19 @@
       content: content
     };
 
-    console.log("✅ Sending message:", message);
     stompClient.send("/app/chat", {}, JSON.stringify(message));
     document.getElementById('messageInput').value = '';
   }
 
   function displayMessage(msg) {
-    console.log("Displaying message: ", msg);  // Log tin nhắn để kiểm tra
+
+    const formattedTime = new Date(msg.timestamp).toLocaleString('en-US', {
+      hour: '2-digit', minute: '2-digit', hour12: false
+    });
 
     const chatBox = document.getElementById("chat-box");
     const div = document.createElement("div");
-    div.innerText = `[${msg.senderName}] ${msg.content}`;  // Hiển thị tên người gửi và nội dung tin nhắn
+    div.innerText = `[${msg.senderName}] ${formattedTime} - ${msg.content}`;  // Hiển thị tên người gửi và nội dung tin nhắn
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;  // Cuộn xuống dưới khi có tin nhắn mới
   }
@@ -93,7 +94,6 @@
     fetch(`/getMessages?senderId=${currentUserId}&receiverId=${friendId}`)
             .then(response => response.json())
             .then(messages => {
-              console.log("💬 Loaded messages from DB:", messages);
               messages.forEach(msg => {
                 displayMessage(msg);
               });

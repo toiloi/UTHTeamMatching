@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -44,6 +44,7 @@ public class chatController {
 
     @Autowired
     private ChatMessageRepository chatMessageRepository;
+
 
     private UthUser addCurrentUserToModel(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -76,11 +77,13 @@ public class chatController {
         }
     }
 
+
     @GetMapping("/getMessages")
     @ResponseBody
     public List<ChatMessage> getMessages(@RequestParam Long senderId, @RequestParam Long receiverId) {
         return chatMessageRepository.findConversation(senderId, receiverId);
     }
+
 
     @EventListener
     public void handleMessageReceived(ChatMessage message) {
@@ -110,12 +113,11 @@ public class chatController {
     }
 
 
+
     @MessageMapping("/chat")
     public void sendChatMessage(ChatMessage message, Principal principal) {
-        System.out.println("Principal name: " + principal.getName());
-        System.out.println("Received message: " + message.getContent());
 
-        message.setTimestamp(LocalDateTime.now());
+        message.setTimestamp(ZonedDateTime.now(ZoneOffset.UTC));
         message.setStatus(ChatMessage.MessageStatus.SENT);
         UthUser sender = userRepository.findById(message.getSenderId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -123,15 +125,10 @@ public class chatController {
         message.setSenderName(sender.getTen());
         chatMessageRepository.save(message);
 
-        // Log
-        System.out.println("Người gửi: " + message.getSenderId() + " " + message.getSenderName());
-        System.out.println("Gửi message đến user " + message.getReceiverId() + ": " + message.getContent());
-
         messagingTemplate.convertAndSend(
                 "/topic/messages.user-" + message.getReceiverId(),
                 message
         );
-
 
         messagingTemplate.convertAndSend(
                 "/topic/messages.user-" + message.getSenderId(),

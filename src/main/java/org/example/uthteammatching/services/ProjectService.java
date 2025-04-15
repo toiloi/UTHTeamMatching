@@ -21,7 +21,6 @@ public class ProjectService {
         return projectRepository.findByMaProject(maProject);
     }
 
-
     public List<Project> searchProjects(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return projectRepository.findAll(); // Hoặc trả về danh sách rỗng
@@ -33,5 +32,4 @@ public class ProjectService {
     public boolean existsByTenProject(String nameProject) {
         return projectRepository.existsByTenProject(nameProject);
     }
-
 }

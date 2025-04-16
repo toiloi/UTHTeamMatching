@@ -3,9 +3,11 @@ package org.example.uthteammatching.controllers;
 import lombok.RequiredArgsConstructor;
 import org.example.uthteammatching.models.ChatMessage;
 import org.example.uthteammatching.models.ListFriend;
+import org.example.uthteammatching.models.Project;
 import org.example.uthteammatching.models.UthUser;
 import org.example.uthteammatching.repositories.ChatMessageRepository;
 import org.example.uthteammatching.repositories.ListFriendRepository;
+import org.example.uthteammatching.repositories.ProjectRepository;
 import org.example.uthteammatching.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -44,6 +46,8 @@ public class chatController {
 
     @Autowired
     private ChatMessageRepository chatMessageRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
 
 
     private UthUser addCurrentUserToModel(Model model) {
@@ -97,8 +101,8 @@ public class chatController {
 
 
 
-    @GetMapping("/chat")
-    public String chatPage(@RequestParam("friendId") Long friendId, Model model) {
+    @GetMapping("/chatFriend")
+    public String chatFriend(@RequestParam("friendId") Long friendId, Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser);
         model.addAttribute("currentUser", currentUser);
@@ -112,10 +116,22 @@ public class chatController {
         return "chat";
     }
 
+    @GetMapping("/chatProject")
+    public String chatProject(@RequestParam("projectId") Long projectId, Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser);
+        model.addAttribute("currentUser", currentUser);
+        Project project = projectRepository.findByMaProject(projectId);
+
+        return "chat";
+    }
+
+
+
 
 
     @MessageMapping("/chat")
-    public void sendChatMessage(ChatMessage message, Principal principal) {
+    public void sendChatMessage(ChatMessage message) {
 
         message.setTimestamp(ZonedDateTime.now(ZoneOffset.UTC));
         message.setStatus(ChatMessage.MessageStatus.SENT);

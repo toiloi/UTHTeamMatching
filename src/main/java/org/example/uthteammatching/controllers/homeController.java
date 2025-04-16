@@ -91,7 +91,6 @@ public class homeController {
         if (currentUser != null) {
             List<BaiViet> baiViets = articleService.getAllArticles();
             model.addAttribute("baiViets", baiViets);
-
             Map<Long, String> baiVietRoleMap = new HashMap<>();
             for (BaiViet bv : baiViets) {
                 Project project = bv.getProjectMaSo();
@@ -105,6 +104,9 @@ public class homeController {
                 }
             }
             model.addAttribute("baiVietRoleMap", baiVietRoleMap);
+
+            List<Project> projects = projectRepository.findByThanhVienProjects_UserMaSo(currentUser);
+            model.addAttribute("projects", projects);
         }
         return "home"; // Trả về home.html
     }
@@ -137,7 +139,7 @@ public class homeController {
     public String project(Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
-        List<Project> projects = projectRepository.findAll();
+        List<Project> projects = projectRepository.findByThanhVienProjects_UserMaSo(currentUser);
         model.addAttribute("projects", projects);
         long totalProjects = projects.size();
         long doingProjects = projects.stream()

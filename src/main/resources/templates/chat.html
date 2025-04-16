@@ -40,7 +40,7 @@
   let isConnected = false;
 
   function connectWebSocket(currentUserId) {
-    const socket = new SockJS('/ws');
+    const socket = new SockJS('http://172.24.240.1:8080/ws');
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function (frame) {

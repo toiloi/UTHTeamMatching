@@ -187,8 +187,22 @@ public class homeController {
     }
 
 
-    @GetMapping("/project/search")
+    @GetMapping("/search")
     public String searchProject(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
+        List<Project> results = new ArrayList<>();
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            results = projectRepository.findByTenProjectContainingIgnoreCase(keyword);
+            model.addAttribute("keyword", keyword);
+        }
+
+        model.addAttribute("results", results);
+        return "home";
+    }
+    @GetMapping("project/search")
+    public String searchProject1(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
         List<Project> results = new ArrayList<>();
@@ -201,7 +215,6 @@ public class homeController {
         model.addAttribute("results", results);
         return "project";
     }
-
 
     @GetMapping("/user-detail/{id}")
     public String userDetail(@PathVariable("id") Long id, Model model) {

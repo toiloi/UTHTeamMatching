@@ -811,7 +811,7 @@
 .auth-container {
     min-height: 100vh;
     background: linear-gradient(135deg, #06BBCC 0%, #0e4166 100%);
-    padding: 40px 0;
+    padding: 20px 0;
     position: relative;
     overflow: hidden;
 }
@@ -1405,7 +1405,7 @@
 }
 
 body {
-    padding-top: 70px;
+    padding-top: 0;
 }
 
 .navbar {

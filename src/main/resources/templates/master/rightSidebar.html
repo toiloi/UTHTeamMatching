@@ -1,7 +1,7 @@
 <div th:fragment="rightSidebar" class="right-sidebar">
     <div class="friends-header">
         <h3>Bạn bè</h3>
-        <button class="btn btn-sm btn-primary">
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#friendRequestModal">
             <i class="fas fa-plus"></i>
         </button>
     </div>
@@ -37,4 +37,229 @@
 
 
     </div>
+
+    <!-- Friend Request Modal -->
+    <div class="modal fade" id="friendRequestModal" tabindex="-1" aria-labelledby="friendRequestModalLabel" aria-hidden="true" data-bs-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="friendRequestModalLabel">Tìm kiếm bạn bè</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Tab Navigation -->
+                    <ul class="nav nav-tabs mb-3" id="friendTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button" role="tab">Tìm kiếm</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="requests-tab" data-bs-toggle="tab" data-bs-target="#requests" type="button" role="tab">Lời mời kết bạn</button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="friendTabsContent">
+                        <!-- Search Tab -->
+                        <div class="tab-pane fade show active" id="search" role="tabpanel">
+                            <form action="/ketban/search" method="get" class="d-flex mb-3 search-form">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                    <input type="text" name="phone" class="form-control" placeholder="Nhập số điện thoại hoặc tên người dùng">
+                                    <button type="submit" class="btn btn-primary search-btn">
+                                        <i class="fas fa-search me-1"></i> Tìm kiếm
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <div th:if="${searchResult != null}" class="search-result">
+                                <div class="card p-3 result-card">
+                                    <div class="d-flex align-items-center">
+                                        <img th:src="${searchResult.avatar != null} ? ${searchResult.avatar} : '/img/avatars/NULL.jpg'" 
+                                             class="rounded-circle me-3 result-avatar" style="width: 50px; height: 50px;">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1 result-name" th:text="${searchResult.ho + ' ' + searchResult.ten}"></h6>
+                                            <small class="text-muted result-phone" th:text="${searchResult.sdt}"></small>
+                                        </div>
+                                        <div th:if="${isFriend == false}" class="friend-action">
+                                            <form action="/ketban/send-request" method="post">
+                                                <input type="hidden" name="friendId" th:value="${searchResult.maSo}">
+                                                <button type="submit" class="btn btn-primary add-friend-btn">
+                                                    <i class="fas fa-user-plus me-1"></i> Kết bạn
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div th:if="${isFriend == true}">
+                                            <button class="btn btn-secondary" disabled>Đã là bạn bè</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Friend Requests Tab -->
+                        <div class="tab-pane fade" id="requests" role="tabpanel">
+                            <div th:if="${friendRequestNotifications != null && !#lists.isEmpty(friendRequestNotifications)}">
+                                <div class="list-group request-list">
+                                    <div th:each="notification : ${friendRequestNotifications}" class="list-group-item request-item">
+                                        <div class="d-flex align-items-center">
+                                            <img th:src="${notification.sender.avatar != null} ? ${notification.sender.avatar} : '/img/avatars/NULL.jpg'"
+                                                 class="rounded-circle me-3 request-avatar" style="width: 40px; height: 40px;">
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1 request-name" th:text="${notification.sender.ho + ' ' + notification.sender.ten}"></h6>
+                                                <small class="text-muted request-message" th:text="${notification.message}"></small>
+                                            </div>
+                                            <div class="btn-group request-actions">
+                                                <form action="/ketban/accept-friend" method="post" class="d-inline">
+                                                    <input type="hidden" name="notificationId" th:value="${notification.id}">
+                                                    <button type="submit" class="btn btn-success btn-sm accept-btn">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                </form>
+                                                <form action="/ketban/reject-friend" method="post" class="d-inline">
+                                                    <input type="hidden" name="notificationId" th:value="${notification.id}">
+                                                    <button type="submit" class="btn btn-danger btn-sm reject-btn">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:if="${friendRequestNotifications == null || #lists.isEmpty(friendRequestNotifications)}" class="text-center py-3 empty-requests">
+                                <p class="text-muted">Không có lời mời kết bạn nào</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add anime.js animations -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Modal animations
+            const modal = document.getElementById('friendRequestModal');
+            modal.addEventListener('show.bs.modal', function() {
+                anime({
+                    targets: '.modal-content',
+                    scale: [0.8, 1],
+                    opacity: [0, 1],
+                    duration: 300,
+                    easing: 'easeOutElastic(1, .8)'
+                });
+            });
+
+            // Tab switch animations
+            const tabs = document.querySelectorAll('[data-bs-toggle="tab"]');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const target = document.querySelector(this.dataset.bsTarget);
+                    anime({
+                        targets: target,
+                        translateX: [100, 0],
+                        opacity: [0, 1],
+                        duration: 300,
+                        easing: 'easeOutQuad'
+                    });
+                });
+            });
+
+            // Search form animation
+            const searchForm = document.querySelector('.search-form');
+            anime({
+                targets: searchForm,
+                translateY: [-20, 0],
+                opacity: [0, 1],
+                duration: 400,
+                delay: 200
+            });
+
+            // Search result animation
+            const resultCard = document.querySelector('.result-card');
+            if (resultCard) {
+                anime({
+                    targets: '.result-card',
+                    scale: [0.9, 1],
+                    opacity: [0, 1],
+                    duration: 400,
+                    delay: 300
+                });
+                anime({
+                    targets: '.result-avatar',
+                    scale: [0, 1],
+                    rotate: [180, 0],
+                    duration: 600,
+                    delay: 400
+                });
+                anime({
+                    targets: ['.result-name', '.result-phone'],
+                    translateX: [-20, 0],
+                    opacity: [0, 1],
+                    duration: 400,
+                    delay: 500
+                });
+                anime({
+                    targets: '.add-friend-btn',
+                    scale: [0.8, 1],
+                    opacity: [0, 1],
+                    duration: 400,
+                    delay: 600
+                });
+            }
+
+            // Friend request animations
+            const requestItems = document.querySelectorAll('.request-item');
+            requestItems.forEach((item, index) => {
+                anime({
+                    targets: item,
+                    translateX: [-50, 0],
+                    opacity: [0, 1],
+                    duration: 400,
+                    delay: index * 100
+                });
+                anime({
+                    targets: item.querySelector('.request-avatar'),
+                    scale: [0, 1],
+                    rotate: [180, 0],
+                    duration: 600,
+                    delay: index * 100 + 100
+                });
+                anime({
+                    targets: [item.querySelector('.request-name'), item.querySelector('.request-message')],
+                    translateX: [-20, 0],
+                    opacity: [0, 1],
+                    duration: 400,
+                    delay: index * 100 + 200
+                });
+                anime({
+                    targets: item.querySelector('.request-actions'),
+                    scale: [0.8, 1],
+                    opacity: [0, 1],
+                    duration: 400,
+                    delay: index * 100 + 300
+                });
+            });
+
+            // Button hover effects
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    anime({
+                        targets: this,
+                        scale: 1.05,
+                        duration: 200
+                    });
+                });
+                button.addEventListener('mouseleave', function() {
+                    anime({
+                        targets: this,
+                        scale: 1,
+                        duration: 200
+                    });
+                });
+            });
+        });
+    </script>
 </div>

@@ -124,6 +124,7 @@ public class chatController {
         return "chat";
     }
 
+
     @GetMapping("/chatProject/{projectId}")
     public String chatProject(@PathVariable("projectId") Long projectId, Model model) {
         UthUser currentUser = addCurrentUserToModel(model);

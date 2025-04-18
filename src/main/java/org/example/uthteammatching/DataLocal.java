@@ -183,7 +183,12 @@ public class DataLocal implements CommandLineRunner {
             Long userId5 = user5Key.getKey().longValue();
             jdbcTemplate.update("INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)", userId5, roleIdUser);
 
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId1, userId2);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId1, userId3);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId1, userId5);
             jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId2, userId3);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId2, userId5);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId3, userId5);
 
             // 2. Insert Projects và lấy ID
             KeyHolder project1Key = new GeneratedKeyHolder();

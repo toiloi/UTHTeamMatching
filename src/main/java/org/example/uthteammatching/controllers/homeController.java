@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +52,9 @@ public class homeController {
 
     @Autowired
     private ListFriendService listFriendService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
@@ -613,6 +617,104 @@ public class homeController {
         }
         
         return response;
+    }
+
+    @PostMapping("/user/change-password")
+    public String changePassword(
+            @RequestParam("maSo") Long maSo,
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+        
+        Optional<UthUser> userOptional = userRepository.findById(maSo);
+        if (!userOptional.isPresent()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Người dùng không tồn tại");
+            redirectAttributes.addFlashAttribute("data-error-message", "Người dùng không tồn tại");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        UthUser user = userOptional.get();
+
+        // Kiểm tra mật khẩu hiện tại
+        if (!passwordEncoder.matches(currentPassword, user.getPass())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu hiện tại không đúng");
+            redirectAttributes.addFlashAttribute("data-error-message", "Mật khẩu hiện tại không đúng");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        // Kiểm tra mật khẩu mới và xác nhận mật khẩu
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới và xác nhận mật khẩu không khớp");
+            redirectAttributes.addFlashAttribute("data-error-message", "Mật khẩu mới và xác nhận mật khẩu không khớp");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        // Kiểm tra mật khẩu mới không được giống mật khẩu cũ
+        if (passwordEncoder.matches(newPassword, user.getPass())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới không được giống mật khẩu hiện tại");
+            redirectAttributes.addFlashAttribute("data-error-message", "Mật khẩu mới không được giống mật khẩu hiện tại");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        // Kiểm tra độ dài mật khẩu mới
+        if (newPassword.length() < 6) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới phải có ít nhất 6 ký tự");
+            redirectAttributes.addFlashAttribute("data-error-message", "Mật khẩu mới phải có ít nhất 6 ký tự");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        // Kiểm tra độ phức tạp của mật khẩu mới
+        if (!newPassword.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$")) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới phải có ít nhất 6 ký tự, bao gồm chữ hoa, chữ thường và số");
+            redirectAttributes.addFlashAttribute("data-error-message", "Mật khẩu mới phải có ít nhất 6 ký tự, bao gồm chữ hoa, chữ thường và số");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        try {
+            // Cập nhật mật khẩu mới
+            user.setPass(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            
+            // Thêm thông báo thành công
+            redirectAttributes.addFlashAttribute("successMessage", "Đổi mật khẩu thành công!");
+            redirectAttributes.addFlashAttribute("data-success-message", "Đổi mật khẩu thành công!");
+            
+            // Đóng modal sau khi đổi mật khẩu thành công
+            redirectAttributes.addFlashAttribute("closeModal", true);
+            
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Có lỗi xảy ra khi đổi mật khẩu. Vui lòng thử lại sau.");
+            redirectAttributes.addFlashAttribute("data-error-message", "Có lỗi xảy ra khi đổi mật khẩu. Vui lòng thử lại sau.");
+        }
+
+        return "redirect:/user-detail/" + maSo;
+    }
+
+    @GetMapping("/project-details-test")
+    public String projectDetailsTest(Model model) {
+        // Add some test data to the model
+        model.addAttribute("project", new Project() {
+            {
+                setTenProject("Dự án Quản lý học tập trực tuyến");
+                setMoTa("Xây dựng hệ thống quản lý học tập trực tuyến với các tính năng quản lý khóa học, bài giảng, và tương tác giữa giảng viên và sinh viên.");
+                setTrangThai("Đang thực hiện");
+                setNgayBatDau(LocalDate.of(2024, 1, 1));
+                setNgayKetThuc(LocalDate.of(2024, 6, 30));
+            }
+        });
+
+        // Add test current user
+        model.addAttribute("currentUser", new UthUser() {
+            {
+                setHo("Nguyễn");
+                setTen("Văn A");
+                setAvatar("/img/avatars/NULL.jpg");
+            }
+        });
+
+        return "project-details";
     }
 
 }

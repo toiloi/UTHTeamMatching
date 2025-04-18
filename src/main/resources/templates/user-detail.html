@@ -26,12 +26,31 @@
 
     <!-- Template Stylesheet -->
     <link th:href="@{/css/style.css}" rel="stylesheet">
+    <!-- User Detail Specific Stylesheet -->
+    <link th:href="@{/css/user-detail.css}" rel="stylesheet">
 </head>
 <body>
 <!-- Navbar -->
 <div th:replace="master/navbar::navbar"></div>
 
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
 <div class="container">
+    <!-- Success Message -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Error Message -->
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <div class="profile-section">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="section-title mb-0" >Thông tin cá nhân</h2>
@@ -135,20 +154,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="changePasswordForm" th:action="@{/user/change-password}" method="POST">
+                <form id="changePasswordForm" th:action="@{/user/change-password}" method="POST" onsubmit="return validatePasswordForm()">
                     <input type="hidden" name="maSo" th:value="${student.maSo}">
                     <div class="mb-3">
                         <label class="form-label">Mật khẩu hiện tại</label>
-                        <input type="password" class="form-control" name="currentPassword" required>
+                        <input type="password" class="form-control" name="currentPassword" id="currentPassword" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Mật khẩu mới</label>
-                        <input type="password" class="form-control" name="newPassword" required>
+                        <input type="password" class="form-control" name="newPassword" id="newPassword" required>
+                        <small class="form-text text-muted">Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ hoa, chữ thường và số</small>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Xác nhận mật khẩu mới</label>
-                        <input type="password" class="form-control" name="confirmPassword" required>
+                        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" required>
                     </div>
+                    <div id="passwordError" class="alert alert-danger d-none"></div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -169,5 +190,98 @@
 
 <!-- Template Javascript -->
 <script th:src="@{/js/main.js}"></script>
+
+<script>
+// Toast Notification Function
+function showToast(type, title, message) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    
+    const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+    
+    toast.innerHTML = `
+        <i class="fas fa-${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => {
+            container.removeChild(toast);
+        }, 300);
+    }, 5000);
+}
+
+function validatePasswordForm() {
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const errorDiv = document.getElementById('passwordError');
+    
+    // Reset error message
+    errorDiv.classList.add('d-none');
+    errorDiv.innerHTML = '';
+    
+    // Check if new password is different from current password
+    if (newPassword === currentPassword) {
+        errorDiv.innerHTML = 'Mật khẩu mới không được giống mật khẩu hiện tại';
+        errorDiv.classList.remove('d-none');
+        return false;
+    }
+    
+    // Check password complexity
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    if (!passwordRegex.test(newPassword)) {
+        errorDiv.innerHTML = 'Mật khẩu mới phải có ít nhất 6 ký tự, bao gồm chữ hoa, chữ thường và số';
+        errorDiv.classList.remove('d-none');
+        return false;
+    }
+    
+    // Check if new password matches confirmation
+    if (newPassword !== confirmPassword) {
+        errorDiv.innerHTML = 'Mật khẩu mới và xác nhận mật khẩu không khớp';
+        errorDiv.classList.remove('d-none');
+        return false;
+    }
+    
+    return true;
+}
+
+// Clear form when modal is closed
+document.getElementById('changePasswordModal').addEventListener('hidden.bs.modal', function () {
+    document.getElementById('changePasswordForm').reset();
+    document.getElementById('passwordError').classList.add('d-none');
+});
+
+// Show success/error message from server response
+document.addEventListener('DOMContentLoaded', function() {
+    const successMessage = document.querySelector('[data-success-message]');
+    const errorMessage = document.querySelector('[data-error-message]');
+    
+    if (successMessage) {
+        showToast('success', 'Thành công', successMessage.dataset.successMessage);
+    }
+    
+    if (errorMessage) {
+        showToast('error', 'Lỗi', errorMessage.dataset.errorMessage);
+    }
+    
+    // Auto close modal if success
+    const closeModal = document.querySelector('[data-close-modal="true"]');
+    if (closeModal) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
+        if (modal) {
+            modal.hide();
+        }
+    }
+});
+</script>
 </body>
 </html> 

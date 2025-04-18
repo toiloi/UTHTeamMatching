@@ -412,9 +412,7 @@ public class homeController {
     public String searchUserByPhone(@RequestParam("phone") String phone, Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser);
-        
-        List<UthUser> users = userRepository.findBySdt(phone);
-        UthUser foundUser = users != null && !users.isEmpty() ? users.get(0) : null;
+        UthUser foundUser = userRepository.findBySdt(phone);
 
         if (foundUser != null && !foundUser.getMaSo().equals(currentUser.getMaSo())) {
             model.addAttribute("searchResult", foundUser);

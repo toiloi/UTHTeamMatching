@@ -20,4 +20,7 @@ public interface ThanhvienProjectRepository extends JpaRepository<ThanhvienProje
     List<ThanhvienProject> findByProjectMaSoInAndVaiTro(List<Project> projects, String vaiTro);
 
     ThanhvienProject findByUserMaSo_MaSoAndProjectMaSo_MaProject(Long userMaSo, Long projectMaSo);
+
+    // Thêm phương thức mới để lấy danh sách thành viên theo dự án
+    List<ThanhvienProject> findByProjectMaSo(Project projectMaSo);
 }

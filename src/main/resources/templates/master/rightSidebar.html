@@ -82,19 +82,16 @@
                                 <div class="list-group request-list">
                                     <div th:each="notification : ${friendRequestNotifications}" class="list-group-item request-item">
                                         <div class="d-flex align-items-center">
-                                            <img th:src="${notification.sender.avatar != null} ? ${notification.sender.avatar} : '/img/avatars/NULL.jpg'"
+                                            <img th:src="${notification.userFrom.avatar != null} ? ${notification.userFrom.avatar} : '/img/avatars/NULL.jpg'"
                                                  class="rounded-circle me-3 request-avatar" style="width: 40px; height: 40px;">
                                             <div class="flex-grow-1">
-                                                <h6 class="mb-1 request-name" th:text="${notification.sender.ho + ' ' + notification.sender.ten}"></h6>
+                                                <h6 class="mb-1 request-name" th:text="${notification.userFrom.ho + ' ' + notification.userFrom.ten}"></h6>
                                                 <small class="text-muted request-message" th:text="${notification.message}"></small>
                                             </div>
                                             <div class="btn-group request-actions">
-                                                <form action="/ketban/accept-friend" method="post" class="d-inline">
-                                                    <input type="hidden" name="notificationId" th:value="${notification.id}">
-                                                    <button type="submit" class="btn btn-success btn-sm accept-btn">
-                                                        <i class="fas fa-check"></i>
-                                                    </button>
-                                                </form>
+                                                <button th:onclick="'acceptFriendRequest(this, \'' + ${notification.id} + '\')'" class="btn btn-success btn-sm accept-btn">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
                                                 <form action="/ketban/reject-friend" method="post" class="d-inline">
                                                     <input type="hidden" name="notificationId" th:value="${notification.id}">
                                                     <button type="submit" class="btn btn-danger btn-sm reject-btn">
@@ -119,4 +116,6 @@
     <!-- Include JavaScript files -->
     <script src="/js/friend-search.js"></script>
     <script src="/js/friend-animations.js"></script>
+    <script src="/js/friend-requests.js"></script>
+    <link rel="stylesheet" href="/css/notifications.css">
 </div>

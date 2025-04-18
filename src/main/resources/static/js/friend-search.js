@@ -1,3 +1,41 @@
+// Tạo toast container nếu chưa tồn tại
+function getOrCreateToastContainer() {
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+    return container;
+}
+
+function showToast(type, title, message) {
+    const container = getOrCreateToastContainer();
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `
+        <div class="toast-header bg-${type}">
+            <i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}-circle me-2"></i>
+            <strong class="me-auto">${title}</strong>
+            <button type="button" class="btn-close btn-close-white" onclick="this.closest('.toast').remove()"></button>
+        </div>
+        <div class="toast-body">
+            ${message}
+        </div>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Tự động xóa toast sau 3 giây
+    setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 3000);
+}
+
 // Friend search functionality
 document.addEventListener('DOMContentLoaded', function() {
     const searchForm = document.getElementById('searchFriendForm');
@@ -8,69 +46,60 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function handleSearch(e) {
     e.preventDefault();
-    
-    const phone = document.getElementById('searchPhone').value;
+    const searchPhone = document.getElementById('searchPhone');
+    const phone = searchPhone.value.trim();
     const searchResults = document.getElementById('searchResults');
     
-    console.log('Searching for:', phone); // Debug log
+    if (!phone) {
+        searchResults.innerHTML = `
+            <div class="alert alert-warning" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Vui lòng nhập số điện thoại hoặc tên người dùng
+            </div>
+        `;
+        return;
+    }
     
-    // Hiển thị loading spinner
     searchResults.innerHTML = `
-        <div class="text-center p-3">
+        <div class="text-center">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Đang tìm kiếm...</span>
             </div>
         </div>
     `;
-
-    // Gọi API tìm kiếm
+    
     fetch(`/ketban/search-ajax?phone=${encodeURIComponent(phone)}`)
-        .then(response => {
-            console.log('Response status:', response.status); // Debug log
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             console.log('Response data:', data); // Debug log
-            
-            if (!data.success) {
-                throw new Error(data.error || 'Đã xảy ra lỗi không xác định');
-            }
-            
-            if (data.user) {
-                // Hiển thị kết quả tìm kiếm
+            if (data.success && data.user) {
                 searchResults.innerHTML = `
-                    <div class="search-result">
-                        <div class="card border-0 shadow-sm result-card">
-                            <div class="card-body p-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="position-relative me-3">
-                                        <img src="${data.user.avatar || '/img/avatars/NULL.jpg'}" 
-                                             class="rounded-circle result-avatar" style="width: 40px; height: 40px;">
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1 result-name fw-bold">${data.user.ho} ${data.user.ten}</h6>
-                                        <small class="text-muted result-phone">
-                                            <i class="fas fa-phone-alt me-1"></i>
-                                            <span>${data.user.sdt}</span>
-                                        </small>
-                                    </div>
-                                    ${data.isFriend ? `
-                                        <div class="ms-2">
-                                            <span class="badge bg-secondary">Đã là bạn bè</span>
-                                        </div>
-                                    ` : data.hasSentRequest ? `
-                                        <div class="ms-2">
-                                            <span class="badge bg-primary">Đã gửi lời mời</span>
-                                        </div>
-                                    ` : `
-                                        <div class="friend-action ms-2">
-                                            <button onclick="sendFriendRequest('${data.user.maSo}')" 
-                                                    class="btn btn-primary btn-sm add-friend-btn px-3">
-                                                Kết bạn
-                                            </button>
-                                        </div>
-                                    `}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img src="${data.user.avatar || '/img/avatars/NULL.jpg'}" 
+                                     class="rounded-circle me-3" 
+                                     style="width: 50px; height: 50px;">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">${data.user.ho} ${data.user.ten}</h6>
+                                    <small class="text-muted">${data.user.sdt || 'Không có số điện thoại'}</small>
                                 </div>
+                                ${data.isFriend ? `
+                                    <div class="ms-2">
+                                        <span class="badge bg-secondary">Đã là bạn bè</span>
+                                    </div>
+                                ` : data.hasSentRequest ? `
+                                    <div class="ms-2">
+                                        <span class="badge bg-primary">Đã gửi lời mời</span>
+                                    </div>
+                                ` : `
+                                    <div class="friend-action ms-2">
+                                        <button onclick="sendFriendRequest('${data.user.maSo}')" 
+                                                class="btn btn-primary btn-sm add-friend-btn px-3">
+                                            Kết bạn
+                                        </button>
+                                    </div>
+                                `}
                             </div>
                         </div>
                     </div>
@@ -86,11 +115,11 @@ function handleSearch(e) {
             }
         })
         .catch(error => {
-            console.error('Error:', error); // Debug log
+            console.error('Error:', error);
             searchResults.innerHTML = `
                 <div class="alert alert-danger" role="alert">
                     <i class="fas fa-exclamation-circle me-2"></i>
-                    ${error.message || 'Đã xảy ra lỗi khi tìm kiếm. Vui lòng thử lại sau.'}
+                    Đã xảy ra lỗi khi tìm kiếm. Vui lòng thử lại sau!
                 </div>
             `;
         });
@@ -114,33 +143,13 @@ function sendFriendRequest(friendId) {
                     <span class="badge bg-primary">Đã gửi lời mời</span>
                 </div>
             `;
-            
             showToast('success', 'Thành công', 'Đã gửi lời mời kết bạn thành công!');
+        } else {
+            showToast('danger', 'Lỗi', data.error || 'Đã xảy ra lỗi khi gửi lời mời kết bạn');
         }
     })
     .catch(error => {
         console.error('Error:', error);
         showToast('danger', 'Lỗi', 'Đã xảy ra lỗi khi gửi lời mời kết bạn. Vui lòng thử lại sau!');
     });
-}
-
-function showToast(type, title, message) {
-    const toast = document.createElement('div');
-    toast.className = 'toast position-fixed bottom-0 end-0 m-3';
-    toast.setAttribute('role', 'alert');
-    toast.setAttribute('aria-live', 'assertive');
-    toast.setAttribute('aria-atomic', 'true');
-    toast.innerHTML = `
-        <div class="toast-header bg-${type} text-white">
-            <i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}-circle me-2"></i>
-            <strong class="me-auto">${title}</strong>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            ${message}
-        </div>
-    `;
-    document.body.appendChild(toast);
-    const bsToast = new bootstrap.Toast(toast);
-    bsToast.show();
 } 

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>UTH-TEAM - Chi tiết dự án</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link th:href="@{/img/favicon.ico}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css}" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
+    <style>
+        .project-details-container {
+            display: flex;
+            height: calc(100vh - 60px);
+            margin-top: 60px;
+        }
+
+        .project-info {
+            width: 30%;
+            background: #fff;
+            border-right: 1px solid #e9ecef;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .chat-container {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            background-color: #f8f9fa;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            background-color: #fff;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            max-width: 70%;
+        }
+
+        .message-content {
+            padding: 0.75rem;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .message.sent {
+            margin-left: auto;
+        }
+
+        .message.sent .message-content {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .message.received .message-content {
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .message-info {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+
+        .chat-input {
+            padding: 1rem;
+            background-color: #fff;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .chat-input textarea {
+            resize: none;
+            border-radius: 20px;
+            padding: 0.75rem 1rem;
+        }
+
+        .chat-input .btn-send {
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .member-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .member-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+
+        .member-info {
+            flex-grow: 1;
+        }
+
+        .member-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 0.5rem;
+        }
+
+        .status-online {
+            background-color: #28a745;
+        }
+
+        .status-offline {
+            background-color: #6c757d;
+        }
+
+        .project-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .project-section h6 {
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-section p {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+
+        .project-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .project-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e9ecef;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background-color: #0d6efd;
+            border: 2px solid #fff;
+        }
+
+        .project-files {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #495057;
+        }
+
+        .file-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .file-item i {
+            margin-right: 0.5rem;
+            color: #0d6efd;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div th:replace="master/spinner::spinner"></div>
+    <!-- Spinner End -->
+
+    <!-- Navbar Start -->
+    <div th:replace="master/navbar::navbar"></div>
+    <!-- Navbar End -->
+
+    <div class="project-details-container">
+        <!-- Project Info Sidebar -->
+        <div class="project-info">
+            <div class="project-section">
+                <h6>Tên dự án</h6>
+                <p th:text="${project.getTenProject()}"></p>
+            </div>
+
+            <div class="project-section">
+                <h6>Mô tả dự án</h6>
+                <p th:text="${project.getMoTa()}"></p>
+            </div>
+
+            <div class="project-section">
+                <h6>Trạng thái</h6>
+                <span th:text="${project.getTrangThai()}" class="badge bg-primary"></span>
+            </div>
+
+            <div class="project-section">
+                <h6>Thời gian thực hiện</h6>
+                <div class="project-timeline">
+                    <div class="timeline-item">
+                        <h6 class="mb-1">Bắt đầu</h6>
+                        <p class="mb-0" th:text="${project.getNgayBatDau()}"></p>
+                    </div>
+                    <div class="timeline-item">
+                        <h6 class="mb-1">Dự kiến kết thúc</h6>
+                        <p class="mb-0" th:text="${project.getNgayKetThuc()}"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-section">
+                <h6>Thành viên dự án</h6>
+                <div class="member-list">
+                    <div th:each="tv : ${project.thanhVienProjects}" class="member-item">
+                        <img th:src="${tv.getUserMaSo().avatar != null ? tv.getUserMaSo().avatar : '/img/avatars/NULL.jpg'}" class="member-avatar" alt="Member">
+                        <div class="member-info">
+                            <h6 class="mb-0" th:text="${tv.getUserMaSo().getHo() + ' ' + tv.getUserMaSo().getTen()}"></h6>
+                            <small class="text-muted" th:text="${tv.getVaiTro()}"></small>
+                        </div>
+                        <span class="member-status status-online"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-section">
+                <h6>Tài liệu đính kèm</h6>
+                <div class="project-files">
+                    <a href="#" class="file-item">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Yêu cầu dự án.pdf</span>
+                    </a>
+                    <a href="#" class="file-item">
+                        <i class="fas fa-file-word"></i>
+                        <span>Kế hoạch dự án.docx</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="d-flex align-items-center">
+                    <img th:src="${currentUser.avatar != null ? currentUser.avatar : '/img/avatars/NULL.jpg'}" class="avatar me-2" alt="Group Avatar">
+                    <div>
+                        <h6 class="mb-0" th:text="${project.getTenProject()}"></h6>
+                        <small class="text-muted">3 thành viên đang online</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-messages">
+                <!-- Sample messages -->
+                <div class="message received">
+                    <div class="message-content">
+                        <p class="mb-0">Chào mọi người! Dự án mới đã bắt đầu rồi.</p>
+                    </div>
+                    <div class="message-info">
+                        <span>Nguyễn Văn A</span>
+                        <span class="ms-2">10:30 AM</span>
+                    </div>
+                </div>
+
+                <div class="message sent">
+                    <div class="message-content">
+                        <p class="mb-0">Tôi đã hoàn thành phần giao diện người dùng.</p>
+                    </div>
+                    <div class="message-info text-end">
+                        <span>Bạn</span>
+                        <span class="ms-2">10:35 AM</span>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-content">
+                        <p class="mb-0">Tuyệt vời! Tôi sẽ kiểm tra ngay.</p>
+                    </div>
+                    <div class="message-info">
+                        <span>Trần Thị B</span>
+                        <span class="ms-2">10:36 AM</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <div class="input-group">
+                    <textarea class="form-control" placeholder="Nhập tin nhắn..." rows="1"></textarea>
+                    <button class="btn btn-primary btn-send">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/lib/wow/wow.min.js}"></script>
+    <script th:src="@{/lib/easing/easing.min.js}"></script>
+    <script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+    <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-resize textarea
+            const textarea = document.querySelector('.chat-input textarea');
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+
+            // Handle send message
+            const sendButton = document.querySelector('.btn-send');
+            sendButton.addEventListener('click', function() {
+                const message = textarea.value.trim();
+                if (message) {
+                    // Here you would typically send the message to your backend
+                    const messagesContainer = document.querySelector('.chat-messages');
+                    const newMessage = document.createElement('div');
+                    newMessage.className = 'message sent';
+                    newMessage.innerHTML = `
+                        <div class="message-content">
+                            <p class="mb-0">${message}</p>
+                        </div>
+                        <div class="message-info text-end">
+                            <span>Bạn</span>
+                            <span class="ms-2">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                        </div>
+                    `;
+                    messagesContainer.appendChild(newMessage);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    textarea.value = '';
+                    textarea.style.height = 'auto';
+                }
+            });
+
+            // Handle Enter key press
+            textarea.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendButton.click();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html> 

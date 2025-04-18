@@ -55,6 +55,8 @@ public class homeController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ChatGroupRepository chatGroupRepository;
 
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
@@ -199,8 +201,13 @@ public class homeController {
         tv.setUserMaSo(currentUser);
         tv.setVaiTro("Trưởng nhóm");
         project.getThanhVienProjects().add(tv);
-
         projectRepository.save(project);
+
+        ChatGroup chatGroup = new ChatGroup();
+        chatGroup.setGroupName(tenProject);
+        chatGroup.setGroupId(project.getMaProject());
+        chatGroup.addMember(currentUser);
+        chatGroupRepository.save(chatGroup);
 
         return "redirect:/project";
     }

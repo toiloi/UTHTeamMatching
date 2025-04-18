@@ -88,6 +88,13 @@ public class chatController {
         return chatMessageRepository.findConversation(senderId, receiverId);
     }
 
+    @GetMapping("/getMessagesGroup")
+    @ResponseBody
+    public List<ChatMessage> getMessagesGroup(@RequestParam Long groupId) {
+        return chatMessageRepository.findByGroupId(groupId);
+    }
+
+
 
     @EventListener
     public void handleMessageReceived(ChatMessage message) {
@@ -122,10 +129,9 @@ public class chatController {
         addFriendUsersToModel(model, currentUser);
         model.addAttribute("currentUser", currentUser);
         Project project = projectRepository.findByMaProject(projectId);
-
-        return "chat";
+        model.addAttribute("project", project);
+        return "chatProject"; // Giao diện chat nhóm
     }
-
 
 
 
@@ -141,15 +147,23 @@ public class chatController {
         message.setSenderName(sender.getTen());
         chatMessageRepository.save(message);
 
-        messagingTemplate.convertAndSend(
-                "/topic/messages.user-" + message.getReceiverId(),
-                message
-        );
+        if (message.getGroupId() != null) {
+            messagingTemplate.convertAndSend(
+                    "/topic/messages.group-" + message.getGroupId(),
+                    message
+            );
+        } else {
+            // Chat 1-1
+            messagingTemplate.convertAndSend(
+                    "/topic/messages.user-" + message.getReceiverId(),
+                    message
+            );
 
-        messagingTemplate.convertAndSend(
-                "/topic/messages.user-" + message.getSenderId(),
-                message
-        );
+            messagingTemplate.convertAndSend(
+                    "/topic/messages.user-" + message.getSenderId(),
+                    message
+            );
+        }
     }
 
 

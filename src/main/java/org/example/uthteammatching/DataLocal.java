@@ -16,7 +16,7 @@ import java.sql.Statement;
 // Nếu lỗi  Query did not return a unique result: thì drop table và chạy lại
 
 @Component
-public class DataLocal implements CommandLineRunner {
+public class    DataLocal implements CommandLineRunner {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

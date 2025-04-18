@@ -7,13 +7,17 @@ import org.example.uthteammatching.services.ArticleService;
 import org.example.uthteammatching.services.ListFriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,19 +54,16 @@ public class homeController {
     private ListFriendService listFriendService;
 
     @Autowired
-    private ChatGroupRepository chatGroupRepository;
+    private PasswordEncoder passwordEncoder;
 
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
-            String username = authentication.getName();
-            Optional<UthUser> userOptional = userRepository.findByUsername(username);
-            if (userOptional.isPresent()) {
-                UthUser currentUser = userOptional.get();
-                model.addAttribute("currentUser", currentUser);
-                return currentUser;
-            }
+        String username = authentication.getName();
+        UthUser currentUser = userRepository.findByUsername(username).orElse(null);
+        if (currentUser != null) {
+            model.addAttribute("currentUser", currentUser);
+            return currentUser;
         }
         return null; // Trả về null nếu không tìm thấy user
     }
@@ -81,6 +82,11 @@ public class homeController {
                 }
             }
             model.addAttribute("friendUsers", friendUsers);
+            
+            // Add friend request notifications
+            List<Notification> friendRequestNotifications = notificationRepository
+                .findByUserAndTypeOrderByCreatedAtDesc(currentUser, NotificationType.FRIEND_REQUEST);
+            model.addAttribute("friendRequestNotifications", friendRequestNotifications);
         }
     }
 
@@ -114,8 +120,7 @@ public class homeController {
 
 
     @PostMapping("/project/join")
-    @ResponseBody
-    public ResponseEntity<String> joinProjectAjax(@RequestParam("projectId") Long projectId, Model model) {
+    public String joinProject(@RequestParam("projectId") Long projectId, Model model, RedirectAttributes redirectAttributes) {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser);
 
@@ -130,12 +135,11 @@ public class homeController {
         tvp.setUserMaSo(currentUser);
         tvp.setProjectMaSo(project);
         tvp.setVaiTro("PENDING");
-
         thanhvienProjectRepository.save(tvp);
 
-        return ResponseEntity.ok("joined");
-    }
 
+        return "redirect:/";
+    }
 
 
     @GetMapping("/project")
@@ -188,13 +192,6 @@ public class homeController {
 
         projectRepository.save(project);
 
-        ChatGroup chatGroup = new ChatGroup();
-        chatGroup.setGroupName(tenProject);
-        chatGroup.setGroupId(-project.getMaProject());
-        chatGroup.addMember(currentUser);
-        chatGroupRepository.save(chatGroup);
-
-
         return "redirect:/project";
     }
 
@@ -213,7 +210,6 @@ public class homeController {
         model.addAttribute("results", results);
         return "home";
     }
-
     @GetMapping("project/search")
     public String searchProject1(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
@@ -361,9 +357,6 @@ public class homeController {
             notificationRepository.save(new Notification(
                     "Bạn đã được duyệt tham gia dự án " + projectRepository.findByMaProject(projectId).getTenProject(), user, currentUser, NotificationType.NOTIFICATION));
 
-            ChatGroup chatGroup = chatGroupRepository.findByGroupId(projectId);
-            chatGroup.addMember(user);
-
         } catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
         }
@@ -401,9 +394,11 @@ public class homeController {
     public String ketBan(Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser);
+        
+        // Lấy danh sách lời mời kết bạn chưa được chấp nhận
         List<Notification> friendRequestNotifications = notificationRepository
                 .findByUserAndTypeOrderByCreatedAtDesc(currentUser, NotificationType.FRIEND_REQUEST);
-
+        
         model.addAttribute("friendRequestNotifications", friendRequestNotifications);
         return "ketban";
     }
@@ -416,8 +411,10 @@ public class homeController {
     @GetMapping("/ketban/search")
     public String searchUserByPhone(@RequestParam("phone") String phone, Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
-        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
-        UthUser foundUser = userRepository.findBySdt(phone);
+        addFriendUsersToModel(model, currentUser);
+        
+        List<UthUser> users = userRepository.findBySdt(phone);
+        UthUser foundUser = users != null && !users.isEmpty() ? users.get(0) : null;
 
         if (foundUser != null && !foundUser.getMaSo().equals(currentUser.getMaSo())) {
             model.addAttribute("searchResult", foundUser);
@@ -428,40 +425,123 @@ public class homeController {
             model.addAttribute("notFound", "Không tìm thấy người dùng phù hợp.");
         }
 
-        return "master/rightSidebar";
+        return "ketban";
     }
 
     @PostMapping("/ketban/send-request")
-    public String sendFriendRequest(@RequestParam("friendId") Long friendId, Model model) {
-        UthUser currentUser = addCurrentUserToModel(model);
-        addFriendUsersToModel(model, currentUser);
+    @ResponseBody
+    public Map<String, Object> sendFriendRequest(@RequestParam("friendId") Long friendId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            UthUser currentUser = userRepository.findByUsername(username).orElse(null);
+            UthUser targetUser = userRepository.findById(friendId).orElse(null);
 
-        UthUser targetUser = userRepository.findById(friendId).orElse(null);
+            if (currentUser != null && targetUser != null) {
+                // Kiểm tra xem đã có lời mời kết bạn chưa
+                List<Notification> existingRequests = notificationRepository
+                    .findByUserAndTypeOrderByCreatedAtDesc(targetUser, NotificationType.FRIEND_REQUEST);
+                boolean hasExistingRequest = existingRequests.stream()
+                    .anyMatch(n -> n.getUserFrom() != null && n.getUserFrom().getMaSo().equals(currentUser.getMaSo()));
 
-        if (targetUser != null) {
-            notificationRepository.save(new Notification(currentUser.getHo()+' '+currentUser.getTen()+" đã gửi lời mời kết bạn!", targetUser, currentUser, NotificationType.FRIEND_REQUEST));
+                if (hasExistingRequest) {
+                    response.put("success", false);
+                    response.put("error", "Bạn đã gửi lời mời kết bạn cho người này rồi");
+                    return response;
+                }
+
+                // Kiểm tra xem đã là bạn bè chưa
+                boolean isFriend = listFriendRepository.existsByUserId1AndUserId2(currentUser, targetUser) ||
+                                 listFriendRepository.existsByUserId1AndUserId2(targetUser, currentUser);
+                
+                if (isFriend) {
+                    response.put("success", false);
+                    response.put("error", "Các bạn đã là bạn bè rồi");
+                    return response;
+                }
+
+                notificationRepository.save(new Notification(
+                    currentUser.getHo() + ' ' + currentUser.getTen() + " đã gửi lời mời kết bạn!", 
+                    targetUser, currentUser, NotificationType.FRIEND_REQUEST
+                ));
+                response.put("success", true);
+            } else {
+                response.put("success", false);
+                response.put("error", "Không tìm thấy người dùng");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("error", "Đã xảy ra lỗi khi gửi lời mời kết bạn");
         }
-
-        return "redirect:/master/rightSidebar";
+        return response;
     }
 
     @PostMapping("/ketban/accept-friend")
-    public String acceptFriend(@RequestParam("notificationId") Long notificationId, Model model) {
-        UthUser currentUser = addCurrentUserToModel(model);
-        addFriendUsersToModel(model, currentUser);
+    @ResponseBody
+    public Map<String, Object> acceptFriend(@RequestParam("notificationId") Long notificationId) {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            UthUser currentUser = userRepository.findByUsername(username).orElse(null);
+            
+            if (currentUser == null) {
+                response.put("success", false);
+                response.put("error", "Không tìm thấy người dùng hiện tại");
+                return response;
+            }
 
-        Notification notification = notificationRepository.findById(notificationId).orElse(null);
-        UthUser targetUser = notification.getUserFrom();
+            Notification notification = notificationRepository.findById(notificationId).orElse(null);
+            if (notification == null) {
+                response.put("success", false);
+                response.put("error", "Không tìm thấy lời mời kết bạn");
+                return response;
+            }
 
-        if (targetUser != null) {
-            assert currentUser != null;
-            listFriendService.createListFriend(targetUser, currentUser);
-            notificationRepository.delete(notification);
-            notificationRepository.save(new Notification("Bạn đã chấp nhận lời mời kết bạn của "+targetUser.getHo()+' '+targetUser.getTen(), currentUser, null, NotificationType.NOTIFICATION));
-            notificationRepository.save(new Notification(currentUser.getHo()+' '+currentUser.getTen()+" đã chấp nhận lời mời kết bạn!", targetUser, null, NotificationType.NOTIFICATION));
+            UthUser targetUser = notification.getUserFrom();
+            if (targetUser == null) {
+                response.put("success", false);
+                response.put("error", "Không tìm thấy người gửi lời mời");
+                return response;
+            }
 
+            // Kiểm tra xem đã là bạn bè chưa
+            boolean alreadyFriends = listFriendRepository.existsByUserId1AndUserId2(currentUser, targetUser) ||
+                                   listFriendRepository.existsByUserId1AndUserId2(targetUser, currentUser);
+            
+            if (!alreadyFriends) {
+                // Tạo mối quan hệ bạn bè mới
+                listFriendService.createListFriend(targetUser, currentUser);
+                
+                // Xóa thông báo lời mời kết bạn
+                notificationRepository.delete(notification);
+                
+                // Tạo thông báo cho cả hai người
+                notificationRepository.save(new Notification(
+                    "Bạn đã chấp nhận lời mời kết bạn của " + targetUser.getHo() + ' ' + targetUser.getTen(),
+                    currentUser, null, NotificationType.NOTIFICATION
+                ));
+                notificationRepository.save(new Notification(
+                    currentUser.getHo() + ' ' + currentUser.getTen() + " đã chấp nhận lời mời kết bạn!",
+                    targetUser, null, NotificationType.NOTIFICATION
+                ));
+                
+                response.put("success", true);
+                response.put("message", "Đã chấp nhận lời mời kết bạn thành công");
+            } else {
+                response.put("success", false);
+                response.put("error", "Các bạn đã là bạn bè rồi");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("error", "Đã xảy ra lỗi khi chấp nhận lời mời kết bạn");
         }
-        return "redirect:/ketban";
+        
+        return response;
     }
 
     @PostMapping("/ketban/reject-friend")
@@ -470,16 +550,164 @@ public class homeController {
         addFriendUsersToModel(model, currentUser);
 
         Notification notification = notificationRepository.findById(notificationId).orElse(null);
-        UthUser targetUser = notification.getUserFrom();
-
-        if (targetUser != null) {
-            assert currentUser != null;
-            listFriendService.createListFriend(targetUser, currentUser);
-            notificationRepository.delete(notification);
+        if (notification != null) {
+            UthUser targetUser = notification.getUserFrom();
+            if (targetUser != null) {
+                // Chỉ xóa thông báo, không tạo kết bạn
+                notificationRepository.delete(notification);
+                // Thêm thông báo cho cả hai người dùng
+                notificationRepository.save(new Notification(
+                    "Bạn đã từ chối lời mời kết bạn của " + targetUser.getHo() + ' ' + targetUser.getTen(),
+                    currentUser, null, NotificationType.NOTIFICATION
+                ));
+                notificationRepository.save(new Notification(
+                    currentUser.getHo() + ' ' + currentUser.getTen() + " đã từ chối lời mời kết bạn của bạn",
+                    targetUser, null, NotificationType.NOTIFICATION
+                ));
+            }
         }
         return "redirect:/ketban";
     }
 
+    @GetMapping("/ketban/search-ajax")
+    @ResponseBody
+    public Map<String, Object> searchUserByPhoneAjax(@RequestParam("phone") String searchTerm) {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            // Lấy current user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            UthUser currentUser = userRepository.findByUsername(username).orElse(null);
+            
+            if (currentUser == null) {
+                response.put("success", false);
+                response.put("error", "User not found");
+                return response;
+            }
+            
+            // Tìm user theo số điện thoại
+            UthUser foundUser = userRepository.findFirstBySdt(searchTerm).orElse(null);
+            
+            if (foundUser == null) {
+                // Nếu không tìm thấy theo số điện thoại, thử tìm theo username
+                foundUser = userRepository.findByUsername(searchTerm).orElse(null);
+            }
+            
+            if (foundUser != null && !foundUser.getMaSo().equals(currentUser.getMaSo())) {
+                boolean isFriend = listFriendRepository.existsByUserId1AndUserId2(currentUser, foundUser) ||
+                        listFriendRepository.existsByUserId1AndUserId2(foundUser, currentUser);
+                
+                List<Notification> notifications = notificationRepository.findByUserAndTypeOrderByCreatedAtDesc(foundUser, NotificationType.FRIEND_REQUEST);
+                boolean hasSentRequest = notifications.stream()
+                        .anyMatch(n -> n.getUserFrom() != null && n.getUserFrom().getMaSo().equals(currentUser.getMaSo()));
+                
+                response.put("user", foundUser);
+                response.put("isFriend", isFriend);
+                response.put("hasSentRequest", hasSentRequest);
+                response.put("success", true);
+            } else {
+                response.put("user", null);
+                response.put("success", true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("error", "Đã xảy ra lỗi khi tìm kiếm: " + e.getMessage());
+        }
+        
+        return response;
+    }
 
+    @PostMapping("/user/change-password")
+    public String changePassword(
+            @RequestParam("maSo") Long maSo,
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        Optional<UthUser> userOptional = userRepository.findById(maSo);
+        if (!userOptional.isPresent()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Người dùng không tồn tại");
+            redirectAttributes.addFlashAttribute("data-error-message", "Người dùng không tồn tại");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        UthUser user = userOptional.get();
+
+        // Kiểm tra mật khẩu hiện tại
+        if (!passwordEncoder.matches(currentPassword, user.getPass())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu hiện tại không đúng");
+            redirectAttributes.addFlashAttribute("data-error-message", "Mật khẩu hiện tại không đúng");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        // Kiểm tra mật khẩu mới và xác nhận mật khẩu
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới và xác nhận mật khẩu không khớp");
+            redirectAttributes.addFlashAttribute("data-error-message", "Mật khẩu mới và xác nhận mật khẩu không khớp");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        // Kiểm tra mật khẩu mới không được giống mật khẩu cũ
+        if (passwordEncoder.matches(newPassword, user.getPass())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới không được giống mật khẩu hiện tại");
+            redirectAttributes.addFlashAttribute("data-error-message", "Mật khẩu mới không được giống mật khẩu hiện tại");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        // Kiểm tra độ dài mật khẩu mới
+        if (newPassword.length() < 6) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới phải có ít nhất 6 ký tự");
+            redirectAttributes.addFlashAttribute("data-error-message", "Mật khẩu mới phải có ít nhất 6 ký tự");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        // Kiểm tra độ phức tạp của mật khẩu mới
+        if (!newPassword.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$")) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới phải có ít nhất 6 ký tự, bao gồm chữ hoa, chữ thường và số");
+            redirectAttributes.addFlashAttribute("data-error-message", "Mật khẩu mới phải có ít nhất 6 ký tự, bao gồm chữ hoa, chữ thường và số");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        try {
+            // Cập nhật mật khẩu mới
+            user.setPass(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+
+            // Thêm thông báo thành công
+            redirectAttributes.addFlashAttribute("successMessage", "Đổi mật khẩu thành công!");
+            redirectAttributes.addFlashAttribute("data-success-message", "Đổi mật khẩu thành công!");
+
+            // Đóng modal sau khi đổi mật khẩu thành công
+            redirectAttributes.addFlashAttribute("closeModal", true);
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Có lỗi xảy ra khi đổi mật khẩu. Vui lòng thử lại sau.");
+            redirectAttributes.addFlashAttribute("data-error-message", "Có lỗi xảy ra khi đổi mật khẩu. Vui lòng thử lại sau.");
+        }
+
+        return "redirect:/user-detail/" + maSo;
+    }
+
+    @GetMapping("/project/{id}")
+    public String projectDetails(@PathVariable("id") Long projectId, Model model) {
+        UthUser currentUser = addCurrentUserToModel(model); // Lấy người dùng hiện tại
+
+        // Tìm dự án theo ID
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Dự án không tồn tại"));
+
+        // Thêm dữ liệu dự án vào model
+        model.addAttribute("project", project);
+
+        // Thêm danh sách thành viên dự án (nếu cần)
+        List<ThanhvienProject> members = thanhvienProjectRepository.findByProjectMaSo(project);
+        model.addAttribute("members", members);
+
+        return "project-details"; // Trả về tên template project-details.html
+    }
 
 }

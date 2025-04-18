@@ -29,6 +29,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.IOException;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 @Controller
 public class homeController {
 
@@ -147,15 +152,15 @@ public class homeController {
     @GetMapping("/project")
     public String project(Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
-        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
+        addFriendUsersToModel(model, currentUser);
         List<Project> projects = projectRepository.findByThanhVienProjects_UserMaSo(currentUser);
         Iterator<Project> iterator = projects.iterator();
         while (iterator.hasNext()) {
             Project project = iterator.next();
             for (ThanhvienProject tv : project.getThanhVienProjects()) {
                 if (tv.getUserMaSo().equals(currentUser) && "PENDING".equals(tv.getVaiTro())) {
-                    iterator.remove(); // xóa project khỏi list
-                    break; // không cần kiểm tra tiếp
+                    iterator.remove();
+                    break;
                 }
             }
         }
@@ -168,6 +173,9 @@ public class homeController {
                 .filter(p -> "Đã hoàn thành".equalsIgnoreCase(p.getTrangThai()))
                 .count();
 
+        List<UthUser> giangViens = userRepository.findByRoleName("Giảng viên");
+        model.addAttribute("giangViens", giangViens);
+
         model.addAttribute("totalProjects", totalProjects);
         model.addAttribute("doingProjects", doingProjects);
         model.addAttribute("doneProjects", doneProjects);
@@ -175,14 +183,17 @@ public class homeController {
         return "project";
     }
 
-
     @PostMapping("/project")
-    public String createProject(@RequestParam("nameProject") String tenProject,
-                                @RequestParam("moTa") String moTa,
-                                @RequestParam("trangThai") String trangThai,
-                                @RequestParam("ngayBatDau") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayBatDau,
-                                @RequestParam("ngayKetThuc") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayKetThuc, Model model) {
-
+    public String createProject(
+            @RequestParam("nameProject") String tenProject,
+            @RequestParam("moTa") String moTa,
+            @RequestParam("trangThai") String trangThai,
+            @RequestParam("ngayBatDau") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayBatDau,
+            @RequestParam("ngayKetThuc") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayKetThuc,
+            @RequestParam("loai") String loai,
+            @RequestParam(value = "maGiangVien", required = false) Long maGiangVien,
+            @RequestParam(value = "taiLieuFiles", required = false) List<MultipartFile> taiLieuFiles,
+            Model model) {
 
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser);
@@ -193,6 +204,59 @@ public class homeController {
         project.setTrangThai(trangThai);
         project.setNgayBatDau(ngayBatDau);
         project.setNgayKetThuc(ngayKetThuc);
+        ProjectType projectType = ProjectType.valueOf(loai);
+        project.setLoai(projectType);
+
+        // Xử lý maGiangVien
+        if (projectType == ProjectType.HOC_THUAT) {
+            if (maGiangVien == null) {
+                model.addAttribute("error", "Dự án học thuật yêu cầu chọn giảng viên.");
+                model.addAttribute("project", project);
+                model.addAttribute("giangViens", userRepository.findByRoleName("Giảng viên"));
+                return "project";
+            }
+            UthUser giangVien = userRepository.findById(maGiangVien)
+                    .orElseThrow(() -> new IllegalArgumentException("Giảng viên không tồn tại"));
+            boolean isGiangVien = giangVien.getUserRoles().stream()
+                    .anyMatch(userRole -> "Giảng viên".equals(userRole.getRole().getTen()));
+            if (!isGiangVien) {
+                model.addAttribute("error", "Người dùng không phải là giảng viên.");
+                model.addAttribute("project", project);
+                model.addAttribute("giangViens", userRepository.findByRoleName("Giảng viên"));
+                return "project";
+            }
+            project.setMaGiangVien(giangVien);
+        } else {
+            project.setMaGiangVien(null);
+        }
+
+        // Xử lý tài liệu
+        if (taiLieuFiles != null) {
+            for (MultipartFile file : taiLieuFiles) {
+                if (!file.isEmpty()) {
+                    String fileName = file.getOriginalFilename();
+                    String duongDan = "/uploads/" + fileName;
+                    String loaiTaiLieu = determineFileType(fileName); // Hàm xác định loại file
+
+                    // Lưu tệp vào thư mục
+                    try {
+                        File uploadDir = new File("src/main/resources/static/uploads");
+                        if (!uploadDir.exists()) {
+                            uploadDir.mkdirs();
+                        }
+                        file.transferTo(new File("src/main/resources/static" + duongDan));
+                    } catch (IOException e) {
+                        model.addAttribute("error", "Lỗi khi tải tệp: " + fileName);
+                        model.addAttribute("project", project);
+                        model.addAttribute("giangViens", userRepository.findByRoleName("Giảng viên"));
+                        return "project";
+                    }
+
+                    TaiLieu taiLieu = new TaiLieu(fileName, duongDan, loaiTaiLieu, project);
+                    project.addTaiLieu(taiLieu);
+                }
+            }
+        }
 
         ThanhvienProject tv = new ThanhvienProject();
         ThanhvienProjectId tvId = new ThanhvienProjectId(currentUser.getMaSo(), project.getMaProject());
@@ -200,7 +264,8 @@ public class homeController {
         tv.setProjectMaSo(project);
         tv.setUserMaSo(currentUser);
         tv.setVaiTro("Trưởng nhóm");
-        project.getThanhVienProjects().add(tv);
+        project.addThanhVien(tv);
+
         projectRepository.save(project);
 
         ChatGroup chatGroup = new ChatGroup();
@@ -209,7 +274,26 @@ public class homeController {
         chatGroup.addMember(currentUser);
         chatGroupRepository.save(chatGroup);
 
+        model.addAttribute("success", "Dự án đã được tạo thành công!");
         return "redirect:/project";
+    }
+
+    // Hàm xác định loại tài liệu dựa trên phần mở rộng
+    private String determineFileType(String fileName) {
+        if (fileName == null) return "Khác";
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        switch (extension) {
+            case "pdf":
+                return "PDF";
+            case "doc":
+            case "docx":
+                return "Word";
+            case "xls":
+            case "xlsx":
+                return "Excel";
+            default:
+                return "Khác";
+        }
     }
 
 
@@ -687,4 +771,5 @@ public class homeController {
 
         return "redirect:/user-detail/" + maSo;
     }
+
 }

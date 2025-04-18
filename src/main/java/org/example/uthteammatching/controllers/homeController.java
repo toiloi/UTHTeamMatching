@@ -423,41 +423,6 @@ public class homeController {
     }
 
 
-    @GetMapping("/ketban")
-    public String ketBan(Model model) {
-        UthUser currentUser = addCurrentUserToModel(model);
-        addFriendUsersToModel(model, currentUser);
-        
-        // Lấy danh sách lời mời kết bạn chưa được chấp nhận
-        List<Notification> friendRequestNotifications = notificationRepository
-                .findByUserAndTypeOrderByCreatedAtDesc(currentUser, NotificationType.FRIEND_REQUEST);
-        
-        model.addAttribute("friendRequestNotifications", friendRequestNotifications);
-        return "ketban";
-    }
-
-    @PostMapping("/ketban")
-    public String ketBan1(Model model) {
-        return "ketban";
-    }
-
-    @GetMapping("/ketban/search")
-    public String searchUserByPhone(@RequestParam("phone") String phone, Model model) {
-        UthUser currentUser = addCurrentUserToModel(model);
-        addFriendUsersToModel(model, currentUser);
-        UthUser foundUser = userRepository.findBySdt(phone);
-
-        if (foundUser != null && !foundUser.getMaSo().equals(currentUser.getMaSo())) {
-            model.addAttribute("searchResult", foundUser);
-            boolean isFriend = listFriendRepository.existsByUserId1AndUserId2(currentUser, foundUser) ||
-                    listFriendRepository.existsByUserId1AndUserId2(foundUser, currentUser);
-            model.addAttribute("isFriend", isFriend);
-        } else {
-            model.addAttribute("notFound", "Không tìm thấy người dùng phù hợp.");
-        }
-
-        return "ketban";
-    }
 
     @PostMapping("/ketban/send-request")
     @ResponseBody

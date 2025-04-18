@@ -78,7 +78,8 @@
 
   function displayMessage(msg) {
     console.log("Displaying message: ", msg);
-    const formattedTime = new Date(msg.timestamp).toLocaleString('en-US', {
+    const time = msg.timestamp ? new Date(msg.timestamp) : new Date();
+    const formattedTime = time.toLocaleTimeString('vi-VN', {
       hour: '2-digit', minute: '2-digit', hour12: false
     });
 

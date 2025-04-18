@@ -142,33 +142,17 @@
                                             </div>
 
                                             <!-- Nếu chưa có trong project -->
-                                            <div class="project-join"
-                                                 th:if="${baiVietRoleMap[bv.id]} == null">
-                                                <form action="/project/join" method="post">
-                                                    <input type="hidden" name="projectId" th:value="${bv.projectMaSo.maProject}">
-                                                    <button type="submit" class="btn btn-primary">
-                                                        <i class="fas fa-user-plus me-1"></i> Tham gia ngay
-                                                    </button>
-                                                </form>
+                                            <div class="project-join" th:if="${baiVietRoleMap[bv.id] == null}" th:attr="data-project-id=${bv.getProjectMaSo().getMaProject()}, data-post-id=${bv.getId()}">
+                                                <button type="button" class="btn btn-primary" onclick="joinProject(this)">
+                                                    <i class="fas fa-user-plus me-1"></i> Tham gia ngay
+                                                </button>
                                             </div>
 
-                                            <!-- Nếu đã có trong project -->
                                             <div class="project-join"
-                                                 th:if="${baiVietRoleMap[bv.id]} != null">
-
-                                                <!-- Nếu vai trò là PENDING -->
-                                                <div th:if="${baiVietRoleMap[bv.id] == 'PENDING'}">
-                                                    <button class="btn btn-warning" disabled>
-                                                        <i class="fas fa-clock me-1"></i> Đang chờ duyệt
-                                                    </button>
-                                                </div>
-
-                                                <!-- Nếu vai trò khác PENDING -->
-                                                <div th:if="${baiVietRoleMap[bv.id] != 'PENDING'}">
-                                                    <button class="btn btn-secondary" disabled>
-                                                        <i class="fas fa-check me-1"></i> Đã tham gia
-                                                    </button>
-                                                </div>
+                                                 th:if="${baiVietRoleMap[bv.id] != null}">
+                                                <button class="btn btn-secondary" disabled>
+                                                    <i class="fas fa-check me-1"></i> Đã tham gia
+                                                </button>
                                             </div>
 
 
@@ -321,6 +305,38 @@
                 modal.show();
             });
         });
+
+
+        function joinProject(button) {
+        const container = button.closest(".project-join");
+        const projectId = container.getAttribute("data-project-id");
+        const postId = container.getAttribute("data-post-id");
+
+        fetch("/project/join", {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+        body: `projectId=${projectId}`
+    })
+        .then(response => {
+        if (!response.ok) throw new Error("Tham gia thất bại");
+        // Cập nhật UI sau khi tham gia
+        container.innerHTML = `
+            <div>
+                <button class="btn btn-warning" disabled>
+                    <i class="fas fa-clock me-1"></i> Đang chờ duyệt
+                </button>
+            </div>
+        `;
+    })
+            .catch(err => {
+            console.error(err);
+            alert("Lỗi khi tham gia dự án.");
+        });
+        }
+
+
     </script>
 
 

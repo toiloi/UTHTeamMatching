@@ -183,7 +183,7 @@ public class DataLocal implements CommandLineRunner {
             Long userId5 = user5Key.getKey().longValue();
             jdbcTemplate.update("INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)", userId5, roleIdUser);
 
-
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId2, userId3);
 
             // 2. Insert Projects và lấy ID
             KeyHolder project1Key = new GeneratedKeyHolder();
@@ -232,6 +232,15 @@ public class DataLocal implements CommandLineRunner {
                 return ps;
             }, project3Key);
             Long projectId3 = project3Key.getKey().longValue();
+
+            jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
+                    project1Key.getKey().longValue(), "Dự án quản lý sinh viên");
+
+            jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
+                    project2Key.getKey().longValue(), "Dự án thu phí tự động");
+
+            jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
+                    project3Key.getKey().longValue(), "Dự án chăm sóc khách hàng");
 
 
             // 3. Insert BaiViet dùng ID thật

@@ -1499,3 +1499,42 @@ body {
 .participant-avatar:first-child {
     margin-left: 0;
 }
+
+/* Friend Search Modal Styles */
+.result-card {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+.result-avatar {
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+}
+
+.add-friend-btn {
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.search-form .form-control {
+    border-radius: 20px 0 0 20px;
+    padding-left: 1rem;
+}
+
+.search-form .input-group-text {
+    border-radius: 20px 0 0 20px;
+    background: transparent;
+}
+
+.search-form .search-btn {
+    border-radius: 0 20px 20px 0;
+}

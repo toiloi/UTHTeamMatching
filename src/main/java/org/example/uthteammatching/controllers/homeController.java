@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,14 +55,11 @@ public class homeController {
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
-            String username = authentication.getName();
-            Optional<UthUser> userOptional = userRepository.findByUsername(username);
-            if (userOptional.isPresent()) {
-                UthUser currentUser = userOptional.get();
-                model.addAttribute("currentUser", currentUser);
-                return currentUser;
-            }
+        String username = authentication.getName();
+        UthUser currentUser = userRepository.findByUsername(username).orElse(null);
+        if (currentUser != null) {
+            model.addAttribute("currentUser", currentUser);
+            return currentUser;
         }
         return null; // Trả về null nếu không tìm thấy user
     }
@@ -402,8 +400,10 @@ public class homeController {
     @GetMapping("/ketban/search")
     public String searchUserByPhone(@RequestParam("phone") String phone, Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
-        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
-        UthUser foundUser = userRepository.findBySdt(phone);
+        addFriendUsersToModel(model, currentUser);
+        
+        List<UthUser> users = userRepository.findBySdt(phone);
+        UthUser foundUser = users != null && !users.isEmpty() ? users.get(0) : null;
 
         if (foundUser != null && !foundUser.getMaSo().equals(currentUser.getMaSo())) {
             model.addAttribute("searchResult", foundUser);
@@ -466,6 +466,54 @@ public class homeController {
         return "redirect:/ketban";
     }
 
-
+    @GetMapping("/ketban/search-ajax")
+    @ResponseBody
+    public Map<String, Object> searchUserByPhoneAjax(@RequestParam("phone") String searchTerm) {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            // Lấy current user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            UthUser currentUser = userRepository.findByUsername(username).orElse(null);
+            
+            if (currentUser == null) {
+                response.put("success", false);
+                response.put("error", "User not found");
+                return response;
+            }
+            
+            // Tìm user theo số điện thoại
+            UthUser foundUser = userRepository.findFirstBySdt(searchTerm).orElse(null);
+            
+            if (foundUser == null) {
+                // Nếu không tìm thấy theo số điện thoại, thử tìm theo username
+                foundUser = userRepository.findByUsername(searchTerm).orElse(null);
+            }
+            
+            if (foundUser != null && !foundUser.getMaSo().equals(currentUser.getMaSo())) {
+                boolean isFriend = listFriendRepository.existsByUserId1AndUserId2(currentUser, foundUser) ||
+                        listFriendRepository.existsByUserId1AndUserId2(foundUser, currentUser);
+                
+                List<Notification> notifications = notificationRepository.findByUserAndTypeOrderByCreatedAtDesc(foundUser, NotificationType.FRIEND_REQUEST);
+                boolean hasSentRequest = notifications.stream()
+                        .anyMatch(n -> n.getUserFrom() != null && n.getUserFrom().getMaSo().equals(currentUser.getMaSo()));
+                
+                response.put("user", foundUser);
+                response.put("isFriend", isFriend);
+                response.put("hasSentRequest", hasSentRequest);
+                response.put("success", true);
+            } else {
+                response.put("user", null);
+                response.put("success", true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("error", "Đã xảy ra lỗi khi tìm kiếm: " + e.getMessage());
+        }
+        
+        return response;
+    }
 
 }

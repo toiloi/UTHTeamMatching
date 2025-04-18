@@ -2,6 +2,7 @@ package org.example.uthteammatching.repositories;
 
 
 import org.example.uthteammatching.models.Project;
+import org.example.uthteammatching.models.UthUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +20,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("SELECT p FROM Project p WHERE LOWER(CAST(p.tenProject AS string)) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(CAST(p.moTa AS string)) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Project> findByTenProjectContainingIgnoreCaseOrMoTaContainingIgnoreCase(@Param("keyword") String keyword);
-
     List<Project> findByTenProjectContainingIgnoreCase(String keyword);
+    List<Project> findByThanhVienProjects_UserMaSo(UthUser userMaSo);
 }

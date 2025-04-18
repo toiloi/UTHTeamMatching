@@ -87,19 +87,41 @@ public class Project {
     @Nationalized
     @Column(name = "trangThai", length = 20)
     private String trangThai;
+
     @Column(name = "ngayTao", updatable = false)
     private LocalDateTime ngayTao = LocalDateTime.now();
 
     @OneToMany(mappedBy = "projectMaSo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ThanhvienProject> thanhVienProjects = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GiangVien")
+    private UthUser GiangVien;
+
+    @Nationalized
+    @Column(name = "loai", length = 20)
+    private String loai;
+
+    @Nationalized
+    @Column(name = "nhanXet", length = 500)
+    private String  nhanXet;
+
+    @Nationalized
+    @Column(name = "diem")
+    private Integer  diem;
+
     public Project(){}
-    public Project(String tenProject, String moTa, LocalDate ngayBatDau, LocalDate ngayKetThuc, String trangThai) {
+    public Project(String tenProject, String moTa, LocalDate ngayBatDau, LocalDate ngayKetThuc, String trangThai, UthUser GiangVien, String loai, int diem, String nhanXet, LocalDateTime ngayTao) {
         this.tenProject = tenProject;
         this.moTa = moTa;
         this.ngayBatDau = ngayBatDau;
         this.ngayKetThuc = ngayKetThuc;
         this.trangThai = trangThai;
+        this.GiangVien = GiangVien;
+        this.loai = loai;
+        this.diem = diem;
+        this.nhanXet = nhanXet;
+        this.ngayTao = ngayTao;
     }
 
     public void addThanhVien(ThanhvienProject tv) {

@@ -457,6 +457,7 @@
         </div>
 
         <!-- Chat Container -->
+
         <div class="chat-container">
             <div class="chat-header">
                 <div class="chat-header-info">
@@ -467,46 +468,20 @@
                 </div>
             </div>
 
-            <div class="chat-messages">
-                <div class="message received">
-                    <div class="message-content">
-                        <p class="mb-0">Chào mọi người! Dự án mới đã bắt đầu rồi.</p>
-                    </div>
-                    <div class="message-info">
-                        <span>Hades</span>
-                        <span class="ms-2">10:30 AM</span>
-                    </div>
-                </div>
-
-                <div class="message sent">
-                    <div class="message-content">
-                        <p class="mb-0">Tôi đã hoàn thành phần giao diện người dùng.</p>
-                    </div>
-                    <div class="message-info text-end">
-                        <span>Bạn</span>
-                        <span class="ms-2">10:35 AM</span>
-                    </div>
-                </div>
-
-                <div class="message received">
-                    <div class="message-content">
-                        <p class="mb-0">Tuyệt vời! Tôi sẽ kiểm tra ngay.</p>
-                    </div>
-                    <div class="message-info">
-                        <span>Hoàng Phi</span>
-                        <span class="ms-2">10:36 AM</span>
-                    </div>
-                </div>
+            <div class="chat-messages" id="chat-box">
+                <!-- Tin nhắn sẽ được WebSocket đẩy vào đây -->
             </div>
 
             <div class="chat-input">
                 <div class="chat-input-container">
-                    <textarea class="form-control" placeholder="Nhập tin nhắn..." rows="1"></textarea>
-                    <button class="btn btn-primary btn-send">
+                    <input type="hidden" id="groupId" th:value="${project.getMaProject()}"/>
+                    <textarea id="messageInput" class="form-control" placeholder="Nhập tin nhắn..." rows="1"></textarea>
+                    <button id="sendGroupButton" class="btn btn-primary btn-send">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -519,69 +494,192 @@
     <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="/js/main.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Auto-resize textarea
-            const textarea = document.querySelector('.chat-input textarea');
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
+    <script th:inline="javascript">
+
+        const currentUserId = [[${currentUser.getMaSo()}]];
+        const groupId = [[${project.getMaProject()}]];
+
+        let stompClient = null;
+        let isConnected = false;
+
+        function connectWebSocket(currentUserId) {
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, function (frame) {
+                isConnected = true;
+                document.getElementById("sendGroupButton").disabled = false;
+
+                console.log("✅ WebSocket connected:", frame);
+
+                // Lắng nghe kênh theo group
+                stompClient.subscribe(`/topic/messages.group-${groupId}`, function (messageOutput) {
+                    const msg = JSON.parse(messageOutput.body);
+                    displayMessage(msg);
+                });
+            });
+        }
+
+        function sendMessage(senderId, groupId) {
+            const content = document.getElementById("messageInput").value;
+            if(!content.trim()) return;
+
+            const message = {
+                senderId: senderId,
+                groupId: groupId,
+                content: content
+            };
+
+            stompClient.send("/app/chat", {}, JSON.stringify(message));
+            document.getElementById('messageInput').value = '';
+        }
+
+
+        function displayMessage(msg) {
+            const time = msg.timestamp ? new Date(msg.timestamp) : new Date();
+            const formattedTime = time.toLocaleTimeString('vi-VN', {
+                hour: '2-digit', minute: '2-digit', hour12: false
             });
 
-            // Handle send message
-            const sendButton = document.querySelector('.btn-send');
-            sendButton.addEventListener('click', function() {
-                const message = textarea.value.trim();
-                if (message) {
-                    const messagesContainer = document.querySelector('.chat-messages');
-                    const newMessage = document.createElement('div');
-                    newMessage.className = 'message sent';
-                    newMessage.innerHTML = `
-                        <div class="message-content">
-                            <p class="mb-0">${message}</p>
-                        </div>
-                        <div class="message-info text-end">
-                            <span>Bạn</span>
-                            <span class="ms-2">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                        </div>
-                    `;
-                    messagesContainer.appendChild(newMessage);
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                    textarea.value = '';
-                    textarea.style.height = 'auto';
+            const chatBox = document.getElementById("chat-box");
 
-                    // Add typing indicator
-                    setTimeout(() => {
-                        const typingIndicator = document.createElement('div');
-                        typingIndicator.className = 'message received';
-                        typingIndicator.innerHTML = `
-                            <div class="message-content">
-                                <p class="mb-0">Đã nhận tin nhắn của bạn!</p>
-                            </div>
-                            <div class="message-info">
-                                <span>Hệ thống</span>
-                                <span class="ms-2">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                            </div>
-                        `;
-                        messagesContainer.appendChild(typingIndicator);
-                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                    }, 1000);
-                }
+            // Xác định kiểu tin nhắn: của bạn hay người khác
+            const isOwnMessage = msg.senderId === currentUserId;
+
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", isOwnMessage ? "sent" : "received");
+
+            const contentDiv = document.createElement("div");
+            contentDiv.classList.add("message-content");
+
+            const p = document.createElement("p");
+            p.classList.add("mb-0");
+            p.innerText = msg.content;
+
+            contentDiv.appendChild(p);
+
+            const infoDiv = document.createElement("div");
+            infoDiv.classList.add("message-info");
+            if (isOwnMessage) {
+                infoDiv.classList.add("text-end");
+            }
+
+            const nameSpan = document.createElement("span");
+            nameSpan.innerText = isOwnMessage ? "Bạn" : msg.senderName;
+
+            const timeSpan = document.createElement("span");
+            timeSpan.classList.add("ms-2");
+            timeSpan.innerText = formattedTime;
+
+            infoDiv.appendChild(nameSpan);
+            infoDiv.appendChild(timeSpan);
+
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(infoDiv);
+
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+
+
+        function loadMessages() {
+            fetch(`/getMessagesGroup?groupId=${groupId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    messages.forEach(msg => displayMessage(msg));
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Disable nút gửi lúc đầu
+            document.getElementById("sendGroupButton").disabled = true;
+
+            // Load tin nhắn từ database
+            loadMessages();
+
+            // Kết nối WebSocket
+            connectWebSocket(currentUserId);
+
+            // Gắn sự kiện gửi khi bấm nút gửi
+            document.getElementById("sendGroupButton").addEventListener("click", function () {
+                sendMessage(currentUserId, groupId);
             });
-
-            // Handle Enter key press
-            textarea.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendButton.click();
-                }
-            });
-
-            // Add smooth scroll to chat messages
-            const messagesContainer = document.querySelector('.chat-messages');
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
         });
+
     </script>
+
+
+<!--    <script>-->
+<!--        document.addEventListener('DOMContentLoaded', function() {-->
+<!--            // Auto-resize textarea-->
+<!--            const textarea = document.querySelector('.chat-input textarea');-->
+<!--            textarea.addEventListener('input', function() {-->
+<!--                this.style.height = 'auto';-->
+<!--                this.style.height = (this.scrollHeight) + 'px';-->
+<!--            });-->
+
+<!--            // Handle send message-->
+<!--            const sendButton = document.querySelector('.btn-send');-->
+<!--            sendButton.addEventListener('click', function() {-->
+<!--                const message = textarea.value.trim();-->
+<!--                if (message) {-->
+<!--                    const messagesContainer = document.querySelector('.chat-messages');-->
+<!--                    const newMessage = document.createElement('div');-->
+<!--                    newMessage.className = 'message sent';-->
+<!--                    newMessage.innerHTML = `-->
+<!--                        <div class="message-content">-->
+<!--                            <p class="mb-0">${message}</p>-->
+<!--                        </div>-->
+<!--                        <div class="message-info text-end">-->
+<!--                            <span>Bạn</span>-->
+<!--                            <span class="ms-2">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>-->
+<!--                        </div>-->
+<!--                    `;-->
+<!--                    messagesContainer.appendChild(newMessage);-->
+<!--                    messagesContainer.scrollTop = messagesContainer.scrollHeight;-->
+<!--                    textarea.value = '';-->
+<!--                    textarea.style.height = 'auto';-->
+
+<!--                    // Add typing indicator-->
+<!--                    setTimeout(() => {-->
+<!--                        const typingIndicator = document.createElement('div');-->
+<!--                        typingIndicator.className = 'message received';-->
+<!--                        typingIndicator.innerHTML = `-->
+<!--                            <div class="message-content">-->
+<!--                                <p class="mb-0">Đã nhận tin nhắn của bạn!</p>-->
+<!--                            </div>-->
+<!--                            <div class="message-info">-->
+<!--                                <span>Hệ thống</span>-->
+<!--                                <span class="ms-2">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>-->
+<!--                            </div>-->
+<!--                        `;-->
+<!--                        messagesContainer.appendChild(typingIndicator);-->
+<!--                        messagesContainer.scrollTop = messagesContainer.scrollHeight;-->
+<!--                    }, 1000);-->
+<!--                }-->
+<!--            });-->
+
+<!--            // Handle Enter key press-->
+<!--            textarea.addEventListener('keypress', function(e) {-->
+<!--                if (e.key === 'Enter' && !e.shiftKey) {-->
+<!--                    e.preventDefault();-->
+<!--                    sendButton.click();-->
+<!--                }-->
+<!--            });-->
+
+<!--            // Add smooth scroll to chat messages-->
+<!--            const messagesContainer = document.querySelector('.chat-messages');-->
+<!--            messagesContainer.scrollTop = messagesContainer.scrollHeight;-->
+<!--        });-->
+<!--    </script>-->
+
+    <!-- SockJS -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+
+    <!-- STOMP over SockJS -->
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
 </body>
 
 </html>

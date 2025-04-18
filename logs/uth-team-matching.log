@@ -9258,3 +9258,828 @@ Caused by: com.microsoft.sqlserver.jdbc.SQLServerException: Login failed for use
 2025-04-18 20:00:23 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-04-18 20:00:23 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2025-04-18 20:00:23 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-04-18 20:07:10 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - Starting UthTeamMatchingApplication using Java 23.0.2 with PID 18860 (D:\UTHTeamMatching\target\classes started by ASUS in D:\UTHTeamMatching)
+2025-04-18 20:07:10 [restartedMain] DEBUG o.e.u.UthTeamMatchingApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-04-18 20:07:10 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - No active profile set, falling back to 1 default profile: "default"
+2025-04-18 20:07:10 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-04-18 20:07:10 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-04-18 20:07:11 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-04-18 20:07:11 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 47 ms. Found 11 JPA repository interfaces.
+2025-04-18 20:07:11 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-04-18 20:07:11 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-04-18 20:07:11 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-04-18 20:07:11 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-04-18 20:07:11 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1081 ms
+2025-04-18 20:07:11 [restartedMain] WARN  o.a.c.c.C.[Tomcat].[localhost].[/] - Cannot deserialize session attribute [SPRING_SECURITY_CONTEXT] for session [13D2B5BF911C1E90ABBF8A350B9506D6]
+2025-04-18 20:07:11 [restartedMain] ERROR o.a.catalina.session.StandardManager - Exception loading sessions from persistent storage
+java.lang.ClassCastException: class java.io.ObjectStreamClass cannot be cast to class java.lang.String (java.io.ObjectStreamClass and java.lang.String are in module java.base of loader 'bootstrap')
+	at java.base/java.io.ObjectInputStream.readTypeString(ObjectInputStream.java:1827)
+	at java.base/java.io.ObjectStreamClass.readNonProxy(ObjectStreamClass.java:715)
+	at java.base/java.io.ObjectInputStream.readClassDescriptor(ObjectInputStream.java:1002)
+	at java.base/java.io.ObjectInputStream.readNonProxyDesc(ObjectInputStream.java:2044)
+	at java.base/java.io.ObjectInputStream.readClassDesc(ObjectInputStream.java:1915)
+	at java.base/java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:2246)
+	at java.base/java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1750)
+	at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:528)
+	at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:486)
+	at org.apache.catalina.session.StandardSession.doReadObject(StandardSession.java:1198)
+	at org.apache.catalina.session.StandardSession.readObjectData(StandardSession.java:831)
+	at org.apache.catalina.session.StandardManager.doLoad(StandardManager.java:210)
+	at org.apache.catalina.session.StandardManager.load(StandardManager.java:156)
+	at org.apache.catalina.session.StandardManager.startInternal(StandardManager.java:345)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4494)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1203)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1193)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:148)
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:749)
+	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:772)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1203)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1193)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:148)
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:749)
+	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:203)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:415)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:870)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:437)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:128)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:107)
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:520)
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:222)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:193)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at org.example.uthteammatching.UthTeamMatchingApplication.main(UthTeamMatchingApplication.java:10)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+2025-04-18 20:07:11 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-04-18 20:07:11 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.8.Final
+2025-04-18 20:07:11 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-18 20:07:12 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-04-18 20:07:12 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-04-18 20:07:12 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 31a24459-b23b-4107-8a26-9442a1156bfc
+2025-04-18 20:07:12 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-04-18 20:07:12 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-18 20:07:12 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 16.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-04-18 20:07:13 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-18 20:07:13 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-04-18 20:07:13 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-04-18 20:07:14 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-04-18 20:07:14 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailService
+2025-04-18 20:07:14 [restartedMain] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Deferred [Mvc [pattern='/static/**'], Ant [pattern='/static/**']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2025-04-18 20:07:15 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-04-18 20:07:15 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-04-18 20:07:15 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7571f8b1]]
+2025-04-18 20:07:15 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-04-18 20:07:15 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-04-18 20:07:15 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - Started UthTeamMatchingApplication in 4.921 seconds (process running for 5.442)
+2025-04-18 20:07:17 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-04-18 20:07:17 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-04-18 20:07:17 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-04-18 20:07:22 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:22 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:22 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:22 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:24 [http-nio-8080-exec-2] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-2][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:24 [http-nio-8080-exec-2] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-2][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:24 [http-nio-8080-exec-2] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-2][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:24 [http-nio-8080-exec-2] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-2][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:30 [http-nio-8080-exec-1] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][project] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template project, line 283, col 6. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:30 [http-nio-8080-exec-1] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][project] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template project, line 289, col 10. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:30 [http-nio-8080-exec-1] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][project] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template project, line 295, col 14. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:30 [http-nio-8080-exec-1] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][project] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template project, line 299, col 14. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:34 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][project] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template project, line 283, col 6. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:34 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][project] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template project, line 289, col 10. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:34 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][project] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template project, line 295, col 14. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:07:34 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][project] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template project, line 299, col 14. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:08:15 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-04-18 20:09:21 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2025-04-18 20:09:21 [Thread-5] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-04-18 20:09:21 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-04-18 20:09:21 [Thread-5] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-04-18 20:09:21 [Thread-5] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7571f8b1]]
+2025-04-18 20:09:21 [Thread-5] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-04-18 20:09:21 [Thread-5] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-04-18 20:09:21 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-04-18 20:09:21 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-04-18 20:09:21 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - Starting UthTeamMatchingApplication using Java 23.0.2 with PID 18860 (D:\UTHTeamMatching\target\classes started by ASUS in D:\UTHTeamMatching)
+2025-04-18 20:09:21 [restartedMain] DEBUG o.e.u.UthTeamMatchingApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-04-18 20:09:21 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - No active profile set, falling back to 1 default profile: "default"
+2025-04-18 20:09:21 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-04-18 20:09:21 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 11 JPA repository interfaces.
+2025-04-18 20:09:21 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-04-18 20:09:21 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-04-18 20:09:21 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-04-18 20:09:21 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-04-18 20:09:21 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 321 ms
+2025-04-18 20:09:21 [restartedMain] WARN  o.a.c.c.C.[Tomcat].[localhost].[/] - Cannot deserialize session attribute [SPRING_SECURITY_CONTEXT] for session [0E55676C960CCB59E92416DFF24810EF]
+2025-04-18 20:09:21 [restartedMain] ERROR o.a.catalina.session.StandardManager - Exception loading sessions from persistent storage
+java.lang.ClassCastException: class java.io.ObjectStreamClass cannot be cast to class java.lang.String (java.io.ObjectStreamClass and java.lang.String are in module java.base of loader 'bootstrap')
+	at java.base/java.io.ObjectInputStream.readTypeString(ObjectInputStream.java:1827) ~[na:na]
+	at java.base/java.io.ObjectStreamClass.readNonProxy(ObjectStreamClass.java:715) ~[na:na]
+	at java.base/java.io.ObjectInputStream.readClassDescriptor(ObjectInputStream.java:1002) ~[na:na]
+	at java.base/java.io.ObjectInputStream.readNonProxyDesc(ObjectInputStream.java:2044) ~[na:na]
+	at java.base/java.io.ObjectInputStream.readClassDesc(ObjectInputStream.java:1915) ~[na:na]
+	at java.base/java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:2246) ~[na:na]
+	at java.base/java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1750) ~[na:na]
+	at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:528) ~[na:na]
+	at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:486) ~[na:na]
+	at org.apache.catalina.session.StandardSession.doReadObject(StandardSession.java:1198) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.session.StandardSession.readObjectData(StandardSession.java:831) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.session.StandardManager.doLoad(StandardManager.java:210) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.session.StandardManager.load(StandardManager.java:156) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.session.StandardManager.startInternal(StandardManager.java:345) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4494) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1203) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1193) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:148) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:749) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:772) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1203) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1193) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:148) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:749) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:203) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:415) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:870) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:437) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:128) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:107) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:520) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:222) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:193) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621) ~[spring-context-6.2.3.jar:6.2.3]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.4.3.jar:3.4.3]
+	at org.example.uthteammatching.UthTeamMatchingApplication.main(UthTeamMatchingApplication.java:10) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.4.3.jar:3.4.3]
+2025-04-18 20:09:21 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-04-18 20:09:21 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-18 20:09:21 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-04-18 20:09:21 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2025-04-18 20:09:21 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection ConnectionID:11 ClientConnectionId: 91560861-0e55-48f5-8f4e-c557aceb6881
+2025-04-18 20:09:21 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2025-04-18 20:09:21 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-18 20:09:21 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 16.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-04-18 20:09:21 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-18 20:09:22 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-04-18 20:09:22 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-04-18 20:09:22 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailService
+2025-04-18 20:09:22 [restartedMain] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Deferred [Mvc [pattern='/static/**'], Ant [pattern='/static/**']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2025-04-18 20:09:22 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-04-18 20:09:22 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-04-18 20:09:22 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6243dfd0]]
+2025-04-18 20:09:22 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-04-18 20:09:22 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-04-18 20:09:22 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - Started UthTeamMatchingApplication in 1.213 seconds (process running for 132.739)
+2025-04-18 20:09:22 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-04-18 20:09:23 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2025-04-18 20:09:23 [Thread-7] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-04-18 20:09:23 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-04-18 20:09:23 [Thread-7] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-04-18 20:09:23 [Thread-7] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6243dfd0]]
+2025-04-18 20:09:23 [Thread-7] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-04-18 20:09:23 [Thread-7] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-04-18 20:09:23 [Thread-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2025-04-18 20:09:23 [Thread-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+2025-04-18 20:09:23 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - Starting UthTeamMatchingApplication using Java 23.0.2 with PID 18860 (D:\UTHTeamMatching\target\classes started by ASUS in D:\UTHTeamMatching)
+2025-04-18 20:09:23 [restartedMain] DEBUG o.e.u.UthTeamMatchingApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-04-18 20:09:23 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - No active profile set, falling back to 1 default profile: "default"
+2025-04-18 20:09:23 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-04-18 20:09:24 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 15 ms. Found 11 JPA repository interfaces.
+2025-04-18 20:09:24 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-04-18 20:09:24 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-04-18 20:09:24 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-04-18 20:09:24 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-04-18 20:09:24 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 200 ms
+2025-04-18 20:09:24 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-04-18 20:09:24 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-18 20:09:24 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-04-18 20:09:24 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
+2025-04-18 20:09:24 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection ConnectionID:21 ClientConnectionId: e73b5d78-b6c6-425c-8e67-6ec190a7ac72
+2025-04-18 20:09:24 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
+2025-04-18 20:09:24 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-18 20:09:24 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-3)']
+	Database driver: undefined/unknown
+	Database version: 16.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-04-18 20:09:24 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-18 20:09:24 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-04-18 20:09:24 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-04-18 20:09:24 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailService
+2025-04-18 20:09:24 [restartedMain] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Deferred [Mvc [pattern='/static/**'], Ant [pattern='/static/**']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2025-04-18 20:09:24 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-04-18 20:09:24 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-04-18 20:09:24 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7271a005]]
+2025-04-18 20:09:24 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-04-18 20:09:24 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-04-18 20:09:24 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - Started UthTeamMatchingApplication in 0.82 seconds (process running for 135.027)
+2025-04-18 20:09:24 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-04-18 20:10:24 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-04-18 20:11:26 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-04-18 20:11:26 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-04-18 20:11:26 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-04-18 20:11:26 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2025-04-18 20:11:26 [Thread-11] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-04-18 20:11:26 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-04-18 20:11:26 [Thread-11] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-04-18 20:11:26 [Thread-11] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7271a005]]
+2025-04-18 20:11:26 [Thread-11] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-04-18 20:11:26 [Thread-11] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-04-18 20:11:26 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown initiated...
+2025-04-18 20:11:26 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown completed.
+2025-04-18 20:11:26 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - Starting UthTeamMatchingApplication using Java 23.0.2 with PID 18860 (D:\UTHTeamMatching\target\classes started by ASUS in D:\UTHTeamMatching)
+2025-04-18 20:11:26 [restartedMain] DEBUG o.e.u.UthTeamMatchingApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-04-18 20:11:26 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - No active profile set, falling back to 1 default profile: "default"
+2025-04-18 20:11:27 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-04-18 20:11:27 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 61 ms. Found 11 JPA repository interfaces.
+2025-04-18 20:11:27 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-04-18 20:11:27 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-04-18 20:11:27 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-04-18 20:11:27 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-04-18 20:11:27 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 542 ms
+2025-04-18 20:11:27 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-04-18 20:11:27 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-18 20:11:27 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-04-18 20:11:27 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Starting...
+2025-04-18 20:11:27 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-4 - Added connection ConnectionID:31 ClientConnectionId: 3ee16fb3-c953-47e6-a569-7bad5e0c18d9
+2025-04-18 20:11:27 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Start completed.
+2025-04-18 20:11:27 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-18 20:11:27 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-4)']
+	Database driver: undefined/unknown
+	Database version: 16.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-04-18 20:11:27 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-18 20:11:27 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-04-18 20:11:28 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-04-18 20:11:28 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailService
+2025-04-18 20:11:28 [restartedMain] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Deferred [Mvc [pattern='/static/**'], Ant [pattern='/static/**']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2025-04-18 20:11:28 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-04-18 20:11:28 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-04-18 20:11:28 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@77f56970]]
+2025-04-18 20:11:28 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-04-18 20:11:28 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-04-18 20:11:28 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - Started UthTeamMatchingApplication in 1.504 seconds (process running for 258.727)
+2025-04-18 20:11:28 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-04-18 20:11:29 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2025-04-18 20:11:29 [Thread-15] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-04-18 20:11:29 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-04-18 20:11:29 [Thread-15] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-04-18 20:11:29 [Thread-15] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@77f56970]]
+2025-04-18 20:11:29 [Thread-15] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-04-18 20:11:29 [Thread-15] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-04-18 20:11:29 [Thread-15] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown initiated...
+2025-04-18 20:11:29 [Thread-15] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown completed.
+2025-04-18 20:11:29 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - Starting UthTeamMatchingApplication using Java 23.0.2 with PID 18860 (D:\UTHTeamMatching\target\classes started by ASUS in D:\UTHTeamMatching)
+2025-04-18 20:11:29 [restartedMain] DEBUG o.e.u.UthTeamMatchingApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-04-18 20:11:29 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - No active profile set, falling back to 1 default profile: "default"
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 22 ms. Found 11 JPA repository interfaces.
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-04-18 20:11:30 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-04-18 20:11:30 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-04-18 20:11:30 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 263 ms
+2025-04-18 20:11:30 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-04-18 20:11:30 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-04-18 20:11:30 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Starting...
+2025-04-18 20:11:30 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Added connection ConnectionID:41 ClientConnectionId: f6825193-4420-478c-a854-2c23b9cbea03
+2025-04-18 20:11:30 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Start completed.
+2025-04-18 20:11:30 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-18 20:11:30 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-5)']
+	Database driver: undefined/unknown
+	Database version: 16.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-04-18 20:11:30 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-04-18 20:11:30 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailService
+2025-04-18 20:11:30 [restartedMain] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Deferred [Mvc [pattern='/static/**'], Ant [pattern='/static/**']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4df7935a]]
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-04-18 20:11:30 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - Started UthTeamMatchingApplication in 1.034 seconds (process running for 261.232)
+2025-04-18 20:11:30 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-04-18 20:11:30 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-04-18 20:11:30 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-04-18 20:11:30 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-04-18 20:11:31 [http-nio-8080-exec-3] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-3][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:11:31 [http-nio-8080-exec-3] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-3][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:11:31 [http-nio-8080-exec-3] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-3][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:11:31 [http-nio-8080-exec-3] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-3][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:11:35 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][user-detail] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template user-detail, line 34, col 6. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:11:39 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][project] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template project, line 283, col 6. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:11:39 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][project] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template project, line 289, col 10. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:11:39 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][project] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template project, line 295, col 14. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:11:39 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][project] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template project, line 299, col 14. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:11:42 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:11:42 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:11:42 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:11:42 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:12:30 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-04-18 20:19:51 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:19:51 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:19:51 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:19:51 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:19:51 [http-nio-8080-exec-4] ERROR org.thymeleaf.TemplateEngine - [THYMELEAF][http-nio-8080-exec-4] Exception processing template "home": An error happened during template parsing (template: "class path resource [templates/home.html]")
+org.thymeleaf.exceptions.TemplateInputException: An error happened during template parsing (template: "class path resource [templates/home.html]")
+	at org.thymeleaf.templateparser.markup.AbstractMarkupTemplateParser.parse(AbstractMarkupTemplateParser.java:241) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.templateparser.markup.AbstractMarkupTemplateParser.parseStandalone(AbstractMarkupTemplateParser.java:100) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.TemplateManager.parseAndProcess(TemplateManager.java:666) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.TemplateEngine.process(TemplateEngine.java:1103) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.TemplateEngine.process(TemplateEngine.java:1077) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.spring6.view.ThymeleafView.renderFragment(ThymeleafView.java:372) ~[thymeleaf-spring6-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.spring6.view.ThymeleafView.render(ThymeleafView.java:192) ~[thymeleaf-spring6-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.render(DispatcherServlet.java:1435) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at org.springframework.web.servlet.DispatcherServlet.processDispatchResult(DispatcherServlet.java:1167) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1105) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564) ~[tomcat-embed-core-10.1.36.jar:6.0]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.36.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238) ~[spring-security-config-6.4.3.jar:6.4.3]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at java.base/java.lang.Thread.run(Thread.java:1575) ~[na:na]
+Caused by: org.attoparser.ParseException: Exception evaluating SpringEL expression: "tv.userMaSo.id == currentUser.id and tv.vaiTro == 'PENDING'" (template: "home" - line 153, col 54)
+	at org.attoparser.MarkupParser.parseDocument(MarkupParser.java:393) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.attoparser.MarkupParser.parse(MarkupParser.java:257) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.thymeleaf.templateparser.markup.AbstractMarkupTemplateParser.parse(AbstractMarkupTemplateParser.java:230) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	... 92 common frames omitted
+Caused by: org.thymeleaf.exceptions.TemplateProcessingException: Exception evaluating SpringEL expression: "tv.userMaSo.id == currentUser.id and tv.vaiTro == 'PENDING'" (template: "home" - line 153, col 54)
+	at org.thymeleaf.spring6.expression.SPELVariableExpressionEvaluator.evaluate(SPELVariableExpressionEvaluator.java:292) ~[thymeleaf-spring6-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.expression.VariableExpression.executeVariableExpression(VariableExpression.java:166) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.expression.SimpleExpression.executeSimple(SimpleExpression.java:66) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.expression.Expression.execute(Expression.java:109) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.expression.Expression.execute(Expression.java:138) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.expression.Expression.execute(Expression.java:125) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.processor.StandardIfTagProcessor.isVisible(StandardIfTagProcessor.java:59) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.processor.AbstractStandardConditionalVisibilityTagProcessor.doProcess(AbstractStandardConditionalVisibilityTagProcessor.java:61) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.processor.element.AbstractAttributeTagProcessor.doProcess(AbstractAttributeTagProcessor.java:74) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.processor.element.AbstractElementTagProcessor.process(AbstractElementTagProcessor.java:95) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.util.ProcessorConfigurationUtils$ElementTagProcessorWrapper.process(ProcessorConfigurationUtils.java:633) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.ProcessorTemplateHandler.handleOpenElement(ProcessorTemplateHandler.java:1314) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.OpenElementTag.beHandled(OpenElementTag.java:205) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.Model.process(Model.java:282) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.Model.process(Model.java:290) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.IteratedGatheringModelProcessable.processIterationModel(IteratedGatheringModelProcessable.java:368) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.IteratedGatheringModelProcessable.process(IteratedGatheringModelProcessable.java:222) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.ProcessorTemplateHandler.handleCloseElement(ProcessorTemplateHandler.java:1640) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.CloseElementTag.beHandled(CloseElementTag.java:139) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.Model.process(Model.java:282) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.Model.process(Model.java:290) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.IteratedGatheringModelProcessable.processIterationModel(IteratedGatheringModelProcessable.java:368) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.IteratedGatheringModelProcessable.process(IteratedGatheringModelProcessable.java:222) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.ProcessorTemplateHandler.handleCloseElement(ProcessorTemplateHandler.java:1640) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.TemplateHandlerAdapterMarkupHandler.handleCloseElementEnd(TemplateHandlerAdapterMarkupHandler.java:388) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.templateparser.markup.InlinedOutputExpressionMarkupHandler$InlineMarkupAdapterPreProcessorHandler.handleCloseElementEnd(InlinedOutputExpressionMarkupHandler.java:322) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.inline.OutputExpressionInlinePreProcessorHandler.handleCloseElementEnd(OutputExpressionInlinePreProcessorHandler.java:220) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.templateparser.markup.InlinedOutputExpressionMarkupHandler.handleCloseElementEnd(InlinedOutputExpressionMarkupHandler.java:164) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.attoparser.HtmlElement.handleCloseElementEnd(HtmlElement.java:169) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.attoparser.HtmlMarkupHandler.handleCloseElementEnd(HtmlMarkupHandler.java:412) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.attoparser.MarkupEventProcessorHandler.handleCloseElementEnd(MarkupEventProcessorHandler.java:473) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.attoparser.ParsingElementMarkupUtil.parseCloseElement(ParsingElementMarkupUtil.java:201) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.attoparser.MarkupParser.parseBuffer(MarkupParser.java:725) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.attoparser.MarkupParser.parseDocument(MarkupParser.java:301) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	... 94 common frames omitted
+Caused by: org.springframework.expression.spel.SpelEvaluationException: EL1008E: Property or field 'id' cannot be found on object of type 'org.example.uthteammatching.models.UthUser' - maybe not public or not valid?
+	at org.springframework.expression.spel.ast.PropertyOrFieldReference.readProperty(PropertyOrFieldReference.java:229) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.PropertyOrFieldReference.getValueInternal(PropertyOrFieldReference.java:112) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.PropertyOrFieldReference$AccessorValueRef.getValue(PropertyOrFieldReference.java:376) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.CompoundExpression.getValueInternal(CompoundExpression.java:97) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.OpEQ.getValueInternal(OpEQ.java:42) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.OpEQ.getValueInternal(OpEQ.java:32) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.SpelNodeImpl.getValue(SpelNodeImpl.java:203) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.OpAnd.getBooleanValue(OpAnd.java:58) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.OpAnd.getValueInternal(OpAnd.java:49) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.SpelNodeImpl.getValue(SpelNodeImpl.java:116) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.standard.SpelExpression.getValue(SpelExpression.java:338) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.thymeleaf.spring6.expression.SPELVariableExpressionEvaluator.evaluate(SPELVariableExpressionEvaluator.java:265) ~[thymeleaf-spring6-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	... 127 common frames omitted
+2025-04-18 20:19:51 [http-nio-8080-exec-4] ERROR o.a.c.c.C.[.[.[.[dispatcherServlet] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.thymeleaf.exceptions.TemplateInputException: An error happened during template parsing (template: "class path resource [templates/home.html]")] with root cause
+org.springframework.expression.spel.SpelEvaluationException: EL1008E: Property or field 'id' cannot be found on object of type 'org.example.uthteammatching.models.UthUser' - maybe not public or not valid?
+	at org.springframework.expression.spel.ast.PropertyOrFieldReference.readProperty(PropertyOrFieldReference.java:229) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.PropertyOrFieldReference.getValueInternal(PropertyOrFieldReference.java:112) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.PropertyOrFieldReference$AccessorValueRef.getValue(PropertyOrFieldReference.java:376) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.CompoundExpression.getValueInternal(CompoundExpression.java:97) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.OpEQ.getValueInternal(OpEQ.java:42) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.OpEQ.getValueInternal(OpEQ.java:32) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.SpelNodeImpl.getValue(SpelNodeImpl.java:203) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.OpAnd.getBooleanValue(OpAnd.java:58) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.OpAnd.getValueInternal(OpAnd.java:49) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.ast.SpelNodeImpl.getValue(SpelNodeImpl.java:116) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.springframework.expression.spel.standard.SpelExpression.getValue(SpelExpression.java:338) ~[spring-expression-6.2.3.jar:6.2.3]
+	at org.thymeleaf.spring6.expression.SPELVariableExpressionEvaluator.evaluate(SPELVariableExpressionEvaluator.java:265) ~[thymeleaf-spring6-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.expression.VariableExpression.executeVariableExpression(VariableExpression.java:166) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.expression.SimpleExpression.executeSimple(SimpleExpression.java:66) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.expression.Expression.execute(Expression.java:109) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.expression.Expression.execute(Expression.java:138) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.expression.Expression.execute(Expression.java:125) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.processor.StandardIfTagProcessor.isVisible(StandardIfTagProcessor.java:59) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.processor.AbstractStandardConditionalVisibilityTagProcessor.doProcess(AbstractStandardConditionalVisibilityTagProcessor.java:61) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.processor.element.AbstractAttributeTagProcessor.doProcess(AbstractAttributeTagProcessor.java:74) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.processor.element.AbstractElementTagProcessor.process(AbstractElementTagProcessor.java:95) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.util.ProcessorConfigurationUtils$ElementTagProcessorWrapper.process(ProcessorConfigurationUtils.java:633) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.ProcessorTemplateHandler.handleOpenElement(ProcessorTemplateHandler.java:1314) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.OpenElementTag.beHandled(OpenElementTag.java:205) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.Model.process(Model.java:282) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.Model.process(Model.java:290) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.IteratedGatheringModelProcessable.processIterationModel(IteratedGatheringModelProcessable.java:368) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.IteratedGatheringModelProcessable.process(IteratedGatheringModelProcessable.java:222) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.ProcessorTemplateHandler.handleCloseElement(ProcessorTemplateHandler.java:1640) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.CloseElementTag.beHandled(CloseElementTag.java:139) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.Model.process(Model.java:282) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.Model.process(Model.java:290) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.IteratedGatheringModelProcessable.processIterationModel(IteratedGatheringModelProcessable.java:368) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.IteratedGatheringModelProcessable.process(IteratedGatheringModelProcessable.java:222) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.ProcessorTemplateHandler.handleCloseElement(ProcessorTemplateHandler.java:1640) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.TemplateHandlerAdapterMarkupHandler.handleCloseElementEnd(TemplateHandlerAdapterMarkupHandler.java:388) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.templateparser.markup.InlinedOutputExpressionMarkupHandler$InlineMarkupAdapterPreProcessorHandler.handleCloseElementEnd(InlinedOutputExpressionMarkupHandler.java:322) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.standard.inline.OutputExpressionInlinePreProcessorHandler.handleCloseElementEnd(OutputExpressionInlinePreProcessorHandler.java:220) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.templateparser.markup.InlinedOutputExpressionMarkupHandler.handleCloseElementEnd(InlinedOutputExpressionMarkupHandler.java:164) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.attoparser.HtmlElement.handleCloseElementEnd(HtmlElement.java:169) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.attoparser.HtmlMarkupHandler.handleCloseElementEnd(HtmlMarkupHandler.java:412) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.attoparser.MarkupEventProcessorHandler.handleCloseElementEnd(MarkupEventProcessorHandler.java:473) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.attoparser.ParsingElementMarkupUtil.parseCloseElement(ParsingElementMarkupUtil.java:201) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.attoparser.MarkupParser.parseBuffer(MarkupParser.java:725) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.attoparser.MarkupParser.parseDocument(MarkupParser.java:301) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.attoparser.MarkupParser.parse(MarkupParser.java:257) ~[attoparser-2.0.7.RELEASE.jar:2.0.7.RELEASE]
+	at org.thymeleaf.templateparser.markup.AbstractMarkupTemplateParser.parse(AbstractMarkupTemplateParser.java:230) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.templateparser.markup.AbstractMarkupTemplateParser.parseStandalone(AbstractMarkupTemplateParser.java:100) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.engine.TemplateManager.parseAndProcess(TemplateManager.java:666) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.TemplateEngine.process(TemplateEngine.java:1103) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.TemplateEngine.process(TemplateEngine.java:1077) ~[thymeleaf-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.spring6.view.ThymeleafView.renderFragment(ThymeleafView.java:372) ~[thymeleaf-spring6-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.thymeleaf.spring6.view.ThymeleafView.render(ThymeleafView.java:192) ~[thymeleaf-spring6-3.1.3.RELEASE.jar:3.1.3.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.render(DispatcherServlet.java:1435) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at org.springframework.web.servlet.DispatcherServlet.processDispatchResult(DispatcherServlet.java:1167) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1105) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564) ~[tomcat-embed-core-10.1.36.jar:6.0]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.36.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.4.3.jar:6.4.3]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243) ~[spring-webmvc-6.2.3.jar:6.2.3]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238) ~[spring-security-config-6.4.3.jar:6.4.3]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.3.jar:6.2.3]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.36.jar:10.1.36]
+	at java.base/java.lang.Thread.run(Thread.java:1575) ~[na:na]
+2025-04-18 20:19:51 [http-nio-8080-exec-4] ERROR o.s.b.a.w.s.e.ErrorMvcAutoConfiguration$StaticView - Cannot render error page for request [/] and exception [An error happened during template parsing (template: "class path resource [templates/home.html]")] as the response has already been committed. As a result, the response may have the wrong status code.
+2025-04-18 20:20:39 [http-nio-8080-exec-3] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-3][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:20:39 [http-nio-8080-exec-3] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-3][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:20:39 [http-nio-8080-exec-3] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-3][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:20:39 [http-nio-8080-exec-3] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-3][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:10 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][user-detail] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template user-detail, line 34, col 6. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:38 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][user-detail] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template user-detail, line 34, col 6. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:50 [http-nio-8080-exec-9] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-9][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:50 [http-nio-8080-exec-9] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-9][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:50 [http-nio-8080-exec-9] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-9][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:50 [http-nio-8080-exec-9] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-9][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:53 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][notification] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template notification, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:53 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][notification] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template notification, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:53 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][notification] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template notification, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:53 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][notification] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template notification, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:56 [http-nio-8080-exec-8] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-8][notification] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template notification, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:56 [http-nio-8080-exec-8] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-8][notification] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template notification, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:56 [http-nio-8080-exec-8] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-8][notification] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template notification, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:21:56 [http-nio-8080-exec-8] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-8][notification] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template notification, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:03 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:03 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:03 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:03 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:05 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][notification] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template notification, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:05 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][notification] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template notification, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:05 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][notification] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template notification, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:05 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][notification] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template notification, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:06 [http-nio-8080-exec-2] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-2][notification] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template notification, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:06 [http-nio-8080-exec-2] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-2][notification] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template notification, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:06 [http-nio-8080-exec-2] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-2][notification] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template notification, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:06 [http-nio-8080-exec-2] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-2][notification] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template notification, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:12 [http-nio-8080-exec-10] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-10][project] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template project, line 283, col 6. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:12 [http-nio-8080-exec-10] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-10][project] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template project, line 289, col 10. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:12 [http-nio-8080-exec-10] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-10][project] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template project, line 295, col 14. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:12 [http-nio-8080-exec-10] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-10][project] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template project, line 299, col 14. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:19 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:19 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:19 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:22:19 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:23:18 [http-nio-8080-exec-2] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-2][user-detail] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template user-detail, line 34, col 6. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:24:31 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-04-18 20:24:31 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-04-18 20:24:31 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-04-18 20:24:31 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4df7935a]]
+2025-04-18 20:24:31 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-04-18 20:24:31 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-04-18 20:24:31 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown initiated...
+2025-04-18 20:24:31 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown completed.
+2025-04-18 20:25:02 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - Starting UthTeamMatchingApplication using Java 23.0.2 with PID 6796 (D:\UTHTeamMatching\target\classes started by ASUS in D:\UTHTeamMatching)
+2025-04-18 20:25:02 [restartedMain] DEBUG o.e.u.UthTeamMatchingApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-04-18 20:25:02 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - No active profile set, falling back to 1 default profile: "default"
+2025-04-18 20:25:02 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-04-18 20:25:02 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-04-18 20:25:03 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-04-18 20:25:03 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 47 ms. Found 11 JPA repository interfaces.
+2025-04-18 20:25:03 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-04-18 20:25:03 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-04-18 20:25:03 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-04-18 20:25:03 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-04-18 20:25:03 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1046 ms
+2025-04-18 20:25:03 [restartedMain] WARN  o.a.c.c.C.[Tomcat].[localhost].[/] - Cannot deserialize session attribute [SPRING_SECURITY_CONTEXT] for session [E8522A8984B6808AADC884451D247BDD]
+2025-04-18 20:25:04 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-04-18 20:25:04 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.8.Final
+2025-04-18 20:25:04 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-18 20:25:04 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-04-18 20:25:04 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-04-18 20:25:04 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: ba4f446c-d5d3-4359-bc05-26affdfcbdd5
+2025-04-18 20:25:04 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-04-18 20:25:04 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: SQLServerDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-18 20:25:04 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 16.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-04-18 20:25:05 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-18 20:25:05 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-04-18 20:25:05 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-04-18 20:25:06 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-04-18 20:25:06 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailService
+2025-04-18 20:25:06 [restartedMain] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Deferred [Mvc [pattern='/static/**'], Ant [pattern='/static/**']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2025-04-18 20:25:07 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-04-18 20:25:07 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-04-18 20:25:07 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3b21daf9]]
+2025-04-18 20:25:07 [restartedMain] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-04-18 20:25:07 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-04-18 20:25:07 [restartedMain] INFO  o.e.u.UthTeamMatchingApplication - Started UthTeamMatchingApplication in 4.7 seconds (process running for 5.23)
+2025-04-18 20:25:12 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-04-18 20:25:12 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-04-18 20:25:12 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-04-18 20:25:17 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:25:17 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:25:17 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:25:17 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:26:07 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-04-18 20:28:04 [http-nio-8080-exec-9] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-9][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:04 [http-nio-8080-exec-9] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-9][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:04 [http-nio-8080-exec-9] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-9][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:04 [http-nio-8080-exec-9] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-9][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:05 [http-nio-8080-exec-9] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-9][notification] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template notification, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:05 [http-nio-8080-exec-9] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-9][notification] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template notification, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:05 [http-nio-8080-exec-9] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-9][notification] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template notification, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:05 [http-nio-8080-exec-9] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-9][notification] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template notification, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:23 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][notification] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template notification, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:23 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][notification] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template notification, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:23 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][notification] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template notification, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:23 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][notification] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template notification, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:29 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:29 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:29 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:29 [http-nio-8080-exec-4] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-4][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:30 [http-nio-8080-exec-1] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][project] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template project, line 283, col 6. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:30 [http-nio-8080-exec-1] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][project] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template project, line 289, col 10. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:30 [http-nio-8080-exec-1] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][project] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template project, line 295, col 14. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:30 [http-nio-8080-exec-1] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][project] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template project, line 299, col 14. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:33 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:33 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:33 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:33 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:35 [http-nio-8080-exec-1] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:35 [http-nio-8080-exec-1] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:35 [http-nio-8080-exec-1] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:35 [http-nio-8080-exec-1] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:36 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:36 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:36 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:36 [http-nio-8080-exec-6] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-6][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:38 [http-nio-8080-exec-3] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-3][project] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template project, line 283, col 6. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:38 [http-nio-8080-exec-3] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-3][project] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template project, line 289, col 10. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:38 [http-nio-8080-exec-3] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-3][project] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template project, line 295, col 14. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:38 [http-nio-8080-exec-3] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-3][project] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template project, line 299, col 14. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:40 [http-nio-8080-exec-10] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-10][project] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template project, line 283, col 6. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:40 [http-nio-8080-exec-10] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-10][project] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template project, line 289, col 10. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:40 [http-nio-8080-exec-10] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-10][project] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template project, line 295, col 14. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:40 [http-nio-8080-exec-10] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-10][project] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template project, line 299, col 14. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:41 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:41 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:41 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:41 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:42 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:42 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:42 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:42 [http-nio-8080-exec-7] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:53 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][home] Deprecated unwrapped fragment expression "master/spinner::spinner" found in template home, line 36, col 10. Please use the complete syntax of fragment expressions instead ("~{master/spinner::spinner}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:53 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][home] Deprecated unwrapped fragment expression "master/navbar::navbar" found in template home, line 42, col 14. Please use the complete syntax of fragment expressions instead ("~{master/navbar::navbar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:53 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][home] Deprecated unwrapped fragment expression "master/rightSidebar::rightSidebar" found in template home, line 48, col 18. Please use the complete syntax of fragment expressions instead ("~{master/rightSidebar::rightSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2025-04-18 20:28:53 [http-nio-8080-exec-5] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-5][home] Deprecated unwrapped fragment expression "master/leftSidebar::leftSidebar" found in template home, line 52, col 18. Please use the complete syntax of fragment expressions instead ("~{master/leftSidebar::leftSidebar}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.

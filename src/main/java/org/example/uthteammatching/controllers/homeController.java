@@ -147,6 +147,16 @@ public class homeController {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
         List<Project> projects = projectRepository.findByThanhVienProjects_UserMaSo(currentUser);
+        Iterator<Project> iterator = projects.iterator();
+        while (iterator.hasNext()) {
+            Project project = iterator.next();
+            for (ThanhvienProject tv : project.getThanhVienProjects()) {
+                if (tv.getUserMaSo().equals(currentUser) && "PENDING".equals(tv.getVaiTro())) {
+                    iterator.remove(); // xóa project khỏi list
+                    break; // không cần kiểm tra tiếp
+                }
+            }
+        }
         model.addAttribute("projects", projects);
         long totalProjects = projects.size();
         long doingProjects = projects.stream()

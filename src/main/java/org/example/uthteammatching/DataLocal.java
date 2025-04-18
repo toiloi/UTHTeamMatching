@@ -86,7 +86,7 @@ public class DataLocal implements CommandLineRunner {
                 ps.setString(4, "Nam");
                 ps.setString(5, "Duy");
                 ps.setString(6, passwordEncoder.encode("123")); // Mã hoá
-                ps.setString(7, "0123456789");
+                ps.setString(7, "0123429789");
                 ps.setString(8, "Bằng");
                 ps.setString(9, "bang123");
                 return ps;
@@ -153,7 +153,7 @@ public class DataLocal implements CommandLineRunner {
                 ps.setString(4, "Nam");
                 ps.setString(5, "Tài");
                 ps.setString(6, passwordEncoder.encode("123")); // Mã hoá
-                ps.setString(7, "0465856789");
+                ps.setString(7, "0123456789");
                 ps.setString(8, "Thức");
                 ps.setString(9, "thuc123");
                 return ps;

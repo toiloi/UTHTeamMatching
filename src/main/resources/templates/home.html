@@ -148,11 +148,21 @@
                                                 </button>
                                             </div>
 
-                                            <div class="project-join"
-                                                 th:if="${baiVietRoleMap[bv.id] != null}">
-                                                <button class="btn btn-secondary" disabled>
-                                                    <i class="fas fa-check me-1"></i> Đã tham gia
-                                                </button>
+                                            <div th:each="tv : ${bv.projectMaSo.thanhVienProjects}">
+                                                <div th:if="${tv.userMaSo.getMaSo() == currentUser.getMaSo() and tv.getVaiTro() == 'PENDING'}">
+                                                    <div class="project-join">
+                                                        <button class="btn btn-warning" disabled>
+                                                            <i class="fas fa-clock me-1"></i> Đang chờ duyệt
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div th:if="${tv.userMaSo.getMaSo() == currentUser.getMaSo() and tv.getVaiTro() != 'PENDING'}">
+                                                    <div class="project-join">
+                                                        <button class="btn btn-secondary" disabled>
+                                                            <i class="fas fa-check me-1"></i> Đã tham gia
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
 
 

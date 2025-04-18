@@ -299,10 +299,6 @@
         <div th:replace="master/leftSidebar::leftSidebar"></div>
         <!-- Sidebar End -->
 
-        <form th:action="@{project/search}" method="get" class="d-flex mb-3">
-            <input class="form-control me-2" type="search" name="keyword" placeholder="Đây là thanh tìm kiếm dự án" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Tìm</button>
-        </form>
 
         <!-- Chỉ hiển thị kết quả nếu keyword không null -->
         <div th:if="${keyword != null}">
@@ -322,7 +318,7 @@
                         <p th:text="${project.getMoTa()}" class="project-description mb-3"></p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div th:each="tv : ${project.thanhVienProjects}">
-                                <div class="d-flex align-items-center">
+                                <div th:if="${tv.getVaiTro()!='PENDING'}" class="d-flex align-items-center">
                                     <img src="img/user-1.jpg" class="avatar me-2">
                                     <div>
                                         <h6 th:text="${tv.getUserMaSo().getHo()+' ' +tv.getUserMaSo().getTen()}" class="mb-0"></h6>
@@ -386,7 +382,7 @@
                                                 <p th:text="${project.getMoTa()}" class="project-description mb-3"></p>
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div th:each="tv : ${project.thanhVienProjects}">
-                                                    <div class="d-flex align-items-center">
+                                                    <div th:if="${tv.getVaiTro()!='PENDING'}" class="d-flex align-items-center">
                                                         <img th:src="${tv.getUserMaSo().avatar != null ? tv.getUserMaSo().avatar : '/img/avatars/NULL.jpg'}" class="avatar me-2">
                                                     </div>
                                                     </div>

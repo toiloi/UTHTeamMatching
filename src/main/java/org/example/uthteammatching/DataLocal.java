@@ -86,7 +86,7 @@ public class DataLocal implements CommandLineRunner {
                 ps.setString(4, "Nam");
                 ps.setString(5, "Duy");
                 ps.setString(6, passwordEncoder.encode("123")); // Mã hoá
-                ps.setString(7, "0123456789");
+                ps.setString(7, "0123429789");
                 ps.setString(8, "Bằng");
                 ps.setString(9, "bang123");
                 return ps;
@@ -153,7 +153,7 @@ public class DataLocal implements CommandLineRunner {
                 ps.setString(4, "Nam");
                 ps.setString(5, "Tài");
                 ps.setString(6, passwordEncoder.encode("123")); // Mã hoá
-                ps.setString(7, "0465856789");
+                ps.setString(7, "0123456789");
                 ps.setString(8, "Thức");
                 ps.setString(9, "thuc123");
                 return ps;
@@ -183,7 +183,12 @@ public class DataLocal implements CommandLineRunner {
             Long userId5 = user5Key.getKey().longValue();
             jdbcTemplate.update("INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)", userId5, roleIdUser);
 
-
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId1, userId2);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId1, userId3);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId1, userId5);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId2, userId3);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId2, userId5);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId3, userId5);
 
             // 2. Insert Projects và lấy ID
             KeyHolder project1Key = new GeneratedKeyHolder();
@@ -232,6 +237,15 @@ public class DataLocal implements CommandLineRunner {
                 return ps;
             }, project3Key);
             Long projectId3 = project3Key.getKey().longValue();
+
+            jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
+                    project1Key.getKey().longValue(), "Dự án quản lý sinh viên");
+
+            jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
+                    project2Key.getKey().longValue(), "Dự án thu phí tự động");
+
+            jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
+                    project3Key.getKey().longValue(), "Dự án chăm sóc khách hàng");
 
 
             // 3. Insert BaiViet dùng ID thật

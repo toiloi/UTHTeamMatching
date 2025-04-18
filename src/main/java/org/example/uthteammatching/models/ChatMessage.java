@@ -32,6 +32,9 @@ public class ChatMessage {
     @Enumerated(EnumType.STRING)
     private MessageStatus status;
 
+    private Long groupId;
+
+
     public ChatMessage(Long senderId, Long receiverId, String senderName, String content) {
         this.senderId = senderId;
         this.receiverId = receiverId;

@@ -53,13 +53,23 @@
 
     <div class="profile-section">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="section-title mb-0" >Thông tin cá nhân</h2>
+            <h2 class="section-title mb-0">
+                <th:block th:with="userRole=${student.userRoles.size() > 0 ? student.userRoles.iterator().next().role.ten : 'USER'}">
+                    <span th:if="${userRole == 'USER'}">Thông tin sinh viên</span>
+                    <span th:if="${userRole == 'LECTURE'}">Thông tin giảng viên</span>
+                    <span th:if="${userRole == 'ADMIN'}">Thông tin admin</span>
+                </th:block>
+            </h2>
             <div class="action-buttons" th:if="${currentUser.maSo == student.maSo}">
                 <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                     <i class="fas fa-edit"></i> Chỉnh sửa thông tin
                 </button>
-                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                <button class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
                     <i class="fas fa-key"></i> Đổi mật khẩu
+                </button>
+                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#lecturerRequestModal" 
+                    th:if="${student.userRoles.size() > 0 and student.userRoles.iterator().next().role.ten != 'LECTURE'}">
+                    <i class="fas fa-chalkboard-teacher"></i> Xin làm giảng viên
                 </button>
             </div>
         </div>
@@ -180,6 +190,50 @@
     </div>
 </div>
 
+<!-- Lecturer Request Modal -->
+<div class="modal fade" id="lecturerRequestModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Đơn xin làm giảng viên</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="lecturerRequestForm" th:action="@{/user/request-lecturer}" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="maSo" th:value="${student.maSo}">
+                    <div class="mb-3">
+                        <label class="form-label">Chuyên môn</label>
+                        <input type="text" class="form-control" name="expertise" required>
+                        <small class="form-text text-muted">Vui lòng nhập lĩnh vực chuyên môn của bạn</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kinh nghiệm giảng dạy</label>
+                        <textarea class="form-control" name="experience" rows="3" required></textarea>
+                        <small class="form-text text-muted">Mô tả kinh nghiệm giảng dạy của bạn</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Lý do xin làm giảng viên</label>
+                        <textarea class="form-control" name="reason" rows="3" required></textarea>
+                        <small class="form-text text-muted">Giải thích lý do bạn muốn trở thành giảng viên</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tải lên chứng chỉ/bằng cấp</label>
+                        <input type="file" class="form-control" name="certificates" multiple accept="image/*,.pdf">
+                        <small class="form-text text-muted">Có thể chọn nhiều file (hình ảnh hoặc PDF)</small>
+                    </div>
+                    <div id="imagePreviewContainer" class="mb-3 d-flex flex-wrap gap-2">
+                        <!-- Image previews will be displayed here -->
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" form="lecturerRequestForm" class="btn btn-primary">Gửi đơn</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -281,6 +335,37 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.hide();
         }
     }
+});
+
+// Image preview functionality for lecturer request form
+document.querySelector('input[name="certificates"]').addEventListener('change', function(e) {
+    const container = document.getElementById('imagePreviewContainer');
+    container.innerHTML = ''; // Clear existing previews
+    
+    Array.from(this.files).forEach(file => {
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.createElement('div');
+                preview.className = 'position-relative';
+                preview.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview" style="max-width: 100px; max-height: 100px; object-fit: cover;">
+                `;
+                container.appendChild(preview);
+            }
+            reader.readAsDataURL(file);
+        } else if (file.type === 'application/pdf') {
+            const preview = document.createElement('div');
+            preview.className = 'position-relative';
+            preview.innerHTML = `
+                <div class="pdf-preview p-2 border rounded">
+                    <i class="fas fa-file-pdf text-danger"></i>
+                    <span class="ms-2">${file.name}</span>
+                </div>
+            `;
+            container.appendChild(preview);
+        }
+    });
 });
 </script>
 </body>

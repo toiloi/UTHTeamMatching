@@ -29,7 +29,7 @@
 
     <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet">
-    
+
     <!-- Project Details Stylesheet -->
     <link href="/css/project-details.css" rel="stylesheet">
 
@@ -399,17 +399,17 @@
         <div class="project-info">
             <div class="project-section">
                 <h6>Tên dự án</h6>
-                <p>Dự án Quản lý học tập trực tuyến</p>
+                <a th:text="${project.tenProject}"></a>
             </div>
 
             <div class="project-section">
                 <h6>Mô tả dự án</h6>
-                <p>Xây dựng hệ thống quản lý học tập trực tuyến với các tính năng quản lý khóa học, bài giảng, và tương tác giữa giảng viên và sinh viên.</p>
+                <a th:text="${project.moTa}"></a>
             </div>
 
             <div class="project-section">
                 <h6>Trạng thái</h6>
-                <span class="badge bg-primary">Đang thực hiện</span>
+                <span class="badge bg-primary" th:text="${project.trangThai}"></span>
             </div>
 
             <div class="project-section">
@@ -417,11 +417,11 @@
                 <div class="project-timeline">
                     <div class="timeline-item">
                         <h6 class="mb-1">Bắt đầu</h6>
-                        <p class="mb-0">01/01/2024</p>
+                        <a th:text="${project.ngayBatDau}"></a>
                     </div>
                     <div class="timeline-item">
                         <h6 class="mb-1">Dự kiến kết thúc</h6>
-                        <p class="mb-0">30/06/2024</p>
+                        <a th:text="${project.ngayKetThuc}"></a>
                     </div>
                 </div>
             </div>
@@ -429,32 +429,17 @@
             <div class="project-section">
                 <h6>Thành viên dự án</h6>
                 <div class="member-list">
-                    <div class="member-item">
-                        <img src="/img/avatars/NULL.jpg" class="member-avatar" alt="Member">
+                    <div class="member-item" th:each="member : ${members}">
+                        <img th:src="${member.userMaSo.avatar != null ? member.userMaSo.avatar : '/img/avatars/NULL.jpg'}" class="member-avatar" alt="Member">
                         <div class="member-info">
-                            <h6>Hades</h6>
-                            <small>Trưởng nhóm</small>
+                            <h6 th:text="${member.userMaSo.ho + ' ' + member.userMaSo.ten}"></h6>
+                            <small th:text="${member.vaiTro}"></small>
+
                         </div>
-                        <span class="member-status status-online"></span>
-                    </div>
-                    <div class="member-item">
-                        <img src="/img/avatars/NULL.jpg" class="member-avatar" alt="Member">
-                        <div class="member-info">
-                            <h6>Anh Toại</h6>
-                            <small>Lập trình viên</small>
-                        </div>
-                        <span class="member-status status-online"></span>
-                    </div>
-                    <div class="member-item">
-                        <img src="/img/avatars/NULL.jpg" class="member-avatar" alt="Member">
-                        <div class="member-info">
-                            <h6>Hoàng Phi</h6>
-                            <small>Thiết kế UI/UX</small>
-                        </div>
-                        <span class="member-status status-offline"></span>
                     </div>
                 </div>
             </div>
+
 
             <div class="project-section">
                 <h6>Tài liệu đính kèm</h6>
@@ -477,8 +462,7 @@
                 <div class="chat-header-info">
                     <img src="/img/avatars/NULL.jpg" class="avatar" alt="Project Avatar">
                     <div class="chat-header-text">
-                        <h6>Dự án Quản lý học tập trực tuyến</h6>
-                        <small>2 thành viên đang online</small>
+                        <h6 th:text="${project.tenProject}"></h6>
                     </div>
                 </div>
             </div>
@@ -565,7 +549,7 @@
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
                     textarea.value = '';
                     textarea.style.height = 'auto';
-                    
+
                     // Add typing indicator
                     setTimeout(() => {
                         const typingIndicator = document.createElement('div');
@@ -600,4 +584,4 @@
     </script>
 </body>
 
-</html> 
+</html>

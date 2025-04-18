@@ -29,7 +29,7 @@
 
 <!--        List chat theo dự án-->
         <div th:each="project: ${projects}">
-            <a th:href="@{/chat(projectId=${project.maProject})}" >
+            <a th:href="@{/project/{id}(id=${project.getMaProject()})}" >
                 <div th:text="${project.getTenProject()}">
                 </div>
             </a>

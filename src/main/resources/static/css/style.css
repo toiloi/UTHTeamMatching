@@ -1423,6 +1423,8 @@ body {
 .news-post {
     border-bottom: 1px solid #eee;
     padding: 20px;
+    position: relative;
+    padding-bottom: 4rem; /* Add space for the fixed button */
 }
 
 .news-post:last-child {
@@ -1467,6 +1469,8 @@ body {
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 15px;
+    position: relative;
+    min-height: 100px; /* Ensure enough space for content and button */
 }
 
 .news-project-title {
@@ -1485,19 +1489,22 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-bottom: 1rem;
 }
 
 .participant-avatar {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     object-fit: cover;
+    margin-right: 0.5rem;
     border: 2px solid #fff;
-    margin-left: -10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.participant-avatar:first-child {
-    margin-left: 0;
+.participant-avatar:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
 }
 
 /* Friend Search Modal Styles */
@@ -1537,4 +1544,77 @@ body {
 
 .search-form .search-btn {
     border-radius: 0 20px 20px 0;
+}
+
+/* Project Join Button Styles */
+.project-join {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+}
+
+.news-post {
+    position: relative;
+    padding-bottom: 4rem; /* Add space for the fixed button */
+}
+
+.news-project {
+    position: relative;
+    min-height: 100px; /* Ensure enough space for content and button */
+}
+
+.news-participants {
+    margin-bottom: 1rem;
+}
+
+/* Participant avatars */
+.participant-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.5rem;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.participant-avatar:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* Project join button states */
+.project-join .btn {
+    min-width: 140px;
+    transition: all 0.3s ease;
+}
+
+.project-join .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.project-join .btn-warning {
+    color: #fff;
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.project-join .btn-warning:hover {
+    background-color: #ffca2c;
+    border-color: #ffc720;
+}
+
+.project-join .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.project-join .btn-secondary:hover {
+    background-color: #5c636a;
+    border-color: #565e64;
+}
+
+.project-join .btn i {
+    margin-right: 0.5rem;
 }

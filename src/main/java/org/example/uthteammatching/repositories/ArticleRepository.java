@@ -8,7 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ArticleRepository extends JpaRepository<BaiViet, String> {
+public interface ArticleRepository extends JpaRepository<BaiViet, Long> {
     @EntityGraph(attributePaths = {"userMaSo", "projectMaSo"})
     List<BaiViet> findAll();
+
+    // Phương thức tìm kiếm bài viết theo tên dự án
+    @EntityGraph(attributePaths = {"userMaSo", "projectMaSo"})
+    List<BaiViet> findByProjectMaSo_TenProjectContainingIgnoreCase(String tenProject);
 }

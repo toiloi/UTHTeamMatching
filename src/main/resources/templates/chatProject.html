@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat bạn bè</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <style>
+        #chat-box {
+            height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+<!-- chat-group.html -->
+<h3>Chat nhóm: <span th:text="${project.getTenProject()}"></span></h3>
+<div id="chat-box" class="mb-3"></div>
+
+<form id="chat-form" class="d-flex">
+    <input type="text" id="messageInput" class="form-control me-2" placeholder="Nhập tin nhắn...">
+    <input type="hidden" id="groupId" th:value="${project.getMaProject()}"/>
+    <button type="button" id="send-button">Gửi</button>
+</form>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+
+<script th:inline="javascript">
+
+    const currentUserId = [[${currentUser.getMaSo()}]];
+    const groupId = [[${project.getMaProject()}]];
+
+    let stompClient = null;
+    let isConnected = false;
+
+    function connectWebSocket(currentUserId) {
+        const socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+            isConnected = true;
+            document.getElementById("send-button").disabled = false;
+
+            // Lắng nghe kênh theo group
+            stompClient.subscribe(`/topic/messages.group-${groupId}`, function (messageOutput) {
+                const msg = JSON.parse(messageOutput.body);
+                displayMessage(msg);
+            });
+        });
+    }
+
+    function sendMessage(senderId, groupId) {
+        const content = document.getElementById("messageInput").value;
+        if(!content.trim()) return;
+
+        const message = {
+            senderId: senderId,
+            groupId: groupId,
+            content: content
+        };
+
+        stompClient.send("/app/chat", {}, JSON.stringify(message));
+        document.getElementById('messageInput').value = '';
+    }
+
+
+    function displayMessage(msg) {
+        console.log("Displaying message: ", msg);
+        const time = msg.timestamp ? new Date(msg.timestamp) : new Date();
+        const formattedTime = time.toLocaleString('en-US', {
+            hour: '2-digit', minute: '2-digit', hour12: false
+        });
+
+        const chatBox = document.getElementById("chat-box");
+        const div = document.createElement("div");
+        div.innerText = `[${msg.senderName}] ${formattedTime} - ${msg.content}`;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+
+    function loadMessages() {
+        fetch(`/getMessagesGroup?groupId=${groupId}`)
+            .then(response => response.json())
+            .then(messages => {
+                messages.forEach(msg => displayMessage(msg));
+            });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Disable nút gửi lúc đầu
+        document.getElementById("send-button").disabled = true;
+
+        // Load tin nhắn từ database
+        loadMessages();
+
+        // Kết nối WebSocket
+        connectWebSocket([[${currentUser.getMaSo()}]]);
+
+        // Gắn sự kiện gửi khi bấm nút gửi
+        document.getElementById("send-button").addEventListener("click", function () {
+            sendMessage([[${currentUser.getMaSo()}]], [[${project.getMaProject()}]]);
+        });
+    });
+
+</script>
+
+</body>
+</html>

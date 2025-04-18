@@ -55,6 +55,8 @@ public class homeController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ChatGroupRepository chatGroupRepository;
 
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
@@ -147,6 +149,16 @@ public class homeController {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
         List<Project> projects = projectRepository.findByThanhVienProjects_UserMaSo(currentUser);
+        Iterator<Project> iterator = projects.iterator();
+        while (iterator.hasNext()) {
+            Project project = iterator.next();
+            for (ThanhvienProject tv : project.getThanhVienProjects()) {
+                if (tv.getUserMaSo().equals(currentUser) && "PENDING".equals(tv.getVaiTro())) {
+                    iterator.remove(); // xóa project khỏi list
+                    break; // không cần kiểm tra tiếp
+                }
+            }
+        }
         model.addAttribute("projects", projects);
         long totalProjects = projects.size();
         long doingProjects = projects.stream()
@@ -189,8 +201,13 @@ public class homeController {
         tv.setUserMaSo(currentUser);
         tv.setVaiTro("Trưởng nhóm");
         project.getThanhVienProjects().add(tv);
-
         projectRepository.save(project);
+
+        ChatGroup chatGroup = new ChatGroup();
+        chatGroup.setGroupName(tenProject);
+        chatGroup.setGroupId(project.getMaProject());
+        chatGroup.addMember(currentUser);
+        chatGroupRepository.save(chatGroup);
 
         return "redirect:/project";
     }
@@ -200,29 +217,45 @@ public class homeController {
     public String searchProject(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
-        List<Project> results = new ArrayList<>();
 
+        List<BaiViet> results = new ArrayList<>();
         if (keyword != null && !keyword.trim().isEmpty()) {
-            results = projectRepository.findByTenProjectContainingIgnoreCase(keyword);
+            results = articleService.searchArticlesByProjectName(keyword); // Tìm kiếm bài viết theo tên dự án
             model.addAttribute("keyword", keyword);
         }
 
-        model.addAttribute("results", results);
+        model.addAttribute("results", results); // Truyền danh sách bài viết tìm được
+        model.addAttribute("baiViets", articleService.getAllArticles()); // Giữ danh sách bài viết cho news feed
+
+        // Thêm vai trò người dùng trong dự án
+        Map<Long, String> baiVietRoleMap = new HashMap<>();
+        if (currentUser != null) {
+            for (BaiViet bv : results) {
+                Project project = bv.getProjectMaSo();
+                if (project != null && project.getThanhVienProjects() != null) {
+                    for (ThanhvienProject tv : project.getThanhVienProjects()) {
+                        if (tv.getUserMaSo() != null && tv.getUserMaSo().getMaSo().equals(currentUser.getMaSo())) {
+                            baiVietRoleMap.put(bv.getId(), tv.getVaiTro());
+                            break;
+                        }
+                    }
+                }
+            }
+            for (BaiViet bv : articleService.getAllArticles()) {
+                Project project = bv.getProjectMaSo();
+                if (project != null && project.getThanhVienProjects() != null) {
+                    for (ThanhvienProject tv : project.getThanhVienProjects()) {
+                        if (tv.getUserMaSo() != null && tv.getUserMaSo().getMaSo().equals(currentUser.getMaSo())) {
+                            baiVietRoleMap.put(bv.getId(), tv.getVaiTro());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        model.addAttribute("baiVietRoleMap", baiVietRoleMap);
+
         return "home";
-    }
-    @GetMapping("project/search")
-    public String searchProject1(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
-        UthUser currentUser = addCurrentUserToModel(model);
-        addFriendUsersToModel(model, currentUser); // Thêm danh sách bạn bè
-        List<Project> results = new ArrayList<>();
-
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            results = projectRepository.findByTenProjectContainingIgnoreCase(keyword);
-            model.addAttribute("keyword", keyword);
-        }
-
-        model.addAttribute("results", results);
-        return "project";
     }
 
     @GetMapping("/user-detail/{id}")
@@ -412,9 +445,7 @@ public class homeController {
     public String searchUserByPhone(@RequestParam("phone") String phone, Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser);
-        
-        List<UthUser> users = userRepository.findBySdt(phone);
-        UthUser foundUser = users != null && !users.isEmpty() ? users.get(0) : null;
+        UthUser foundUser = userRepository.findBySdt(phone);
 
         if (foundUser != null && !foundUser.getMaSo().equals(currentUser.getMaSo())) {
             model.addAttribute("searchResult", foundUser);
@@ -627,7 +658,7 @@ public class homeController {
             @RequestParam("confirmPassword") String confirmPassword,
             Model model,
             RedirectAttributes redirectAttributes) {
-        
+
         Optional<UthUser> userOptional = userRepository.findById(maSo);
         if (!userOptional.isPresent()) {
             redirectAttributes.addFlashAttribute("errorMessage", "Người dùng không tồn tại");
@@ -676,14 +707,14 @@ public class homeController {
             // Cập nhật mật khẩu mới
             user.setPass(passwordEncoder.encode(newPassword));
             userRepository.save(user);
-            
+
             // Thêm thông báo thành công
             redirectAttributes.addFlashAttribute("successMessage", "Đổi mật khẩu thành công!");
             redirectAttributes.addFlashAttribute("data-success-message", "Đổi mật khẩu thành công!");
-            
+
             // Đóng modal sau khi đổi mật khẩu thành công
             redirectAttributes.addFlashAttribute("closeModal", true);
-            
+
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Có lỗi xảy ra khi đổi mật khẩu. Vui lòng thử lại sau.");
             redirectAttributes.addFlashAttribute("data-error-message", "Có lỗi xảy ra khi đổi mật khẩu. Vui lòng thử lại sau.");
@@ -692,29 +723,22 @@ public class homeController {
         return "redirect:/user-detail/" + maSo;
     }
 
-    @GetMapping("/project-details-test")
-    public String projectDetailsTest(Model model) {
-        // Add some test data to the model
-        model.addAttribute("project", new Project() {
-            {
-                setTenProject("Dự án Quản lý học tập trực tuyến");
-                setMoTa("Xây dựng hệ thống quản lý học tập trực tuyến với các tính năng quản lý khóa học, bài giảng, và tương tác giữa giảng viên và sinh viên.");
-                setTrangThai("Đang thực hiện");
-                setNgayBatDau(LocalDate.of(2024, 1, 1));
-                setNgayKetThuc(LocalDate.of(2024, 6, 30));
-            }
-        });
+    @GetMapping("/project/{id}")
+    public String projectDetails(@PathVariable("id") Long projectId, Model model) {
+        UthUser currentUser = addCurrentUserToModel(model); // Lấy người dùng hiện tại
 
-        // Add test current user
-        model.addAttribute("currentUser", new UthUser() {
-            {
-                setHo("Nguyễn");
-                setTen("Văn A");
-                setAvatar("/img/avatars/NULL.jpg");
-            }
-        });
+        // Tìm dự án theo ID
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Dự án không tồn tại"));
 
-        return "project-details";
+        // Thêm dữ liệu dự án vào model
+        model.addAttribute("project", project);
+
+        // Thêm danh sách thành viên dự án (nếu cần)
+        List<ThanhvienProject> members = thanhvienProjectRepository.findByProjectMaSo(project);
+        model.addAttribute("members", members);
+
+        return "project-details"; // Trả về tên template project-details.html
     }
 
 }

@@ -22,29 +22,25 @@ $(document).ready(function() {
 
 // Load all roles
 function loadRoles() {
-    $.ajax({
-        url: '/api/admin/roles',
-        method: 'GET',
-        success: function(roles) {
-            const rolesList = $('#rolesList');
-            rolesList.empty();
-            
-            roles.forEach(role => {
-                rolesList.append(`
-                    <a href="#" class="list-group-item list-group-item-action" onclick="selectRole(${role.maSo})">
-                        <div class="d-flex w-100 justify-content-between align-items-center">
-                            <h6 class="mb-1">${role.ten}</h6>
-                            <button class="btn btn-sm btn-danger" onclick="deleteRole(${role.maSo}, event)">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </a>
-                `);
-            });
-        },
-        error: function(xhr) {
-            showError('Không thể tải danh sách vai trò');
-        }
+    $.get('/api/roles', function(roles) {
+        const rolesList = $('#rolesList');
+        rolesList.empty();
+        
+        roles.forEach(role => {
+            rolesList.append(`
+                <div class="list-group-item d-flex justify-content-between align-items-center" data-role-id="${role.maSo}">
+                    <div>
+                        <i class="fas fa-user-tag me-2"></i>
+                        <span>${role.ten}</span>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-danger delete-role">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `);
+        });
     });
 }
 
@@ -56,42 +52,29 @@ function selectRole(roleId) {
     
     // Update active state
     $('.list-group-item').removeClass('active');
-    $(`[onclick="selectRole(${roleId})"]`).addClass('active');
+    $(`[data-role-id="${roleId}"]`).addClass('active');
 }
 
 // Load users in a role
 function loadRoleUsers(roleId) {
-    $.ajax({
-        url: `/api/admin/roles/${roleId}/users`,
-        method: 'GET',
-        success: function(users) {
-            renderRoleUsers(users);
-        },
-        error: function(xhr) {
-            showError('Không thể tải danh sách người dùng');
-        }
-    });
-}
-
-// Render users in role
-function renderRoleUsers(users) {
-    const userList = $('#usersInRole');
-    userList.empty();
-    
-    users.forEach(user => {
-        userList.append(`
-            <div class="list-group-item">
-                <div class="d-flex w-100 justify-content-between align-items-center">
-                    <div>
-                        <h6 class="mb-1">${user.ho} ${user.ten}</h6>
-                        <small>${user.email}</small>
-                    </div>
-                    <button class="btn btn-sm btn-danger" onclick="removeUserFromRole(${user.maSo})">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-        `);
+    $.get(`/api/roles/${roleId}/users`, function(users) {
+        const usersTable = $('#usersInRole');
+        usersTable.empty();
+        
+        users.forEach(user => {
+            usersTable.append(`
+                <tr>
+                    <td>${user.maSo}</td>
+                    <td>${user.ho} ${user.ten}</td>
+                    <td>${user.email}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger remove-from-role" data-user-id="${user.maSo}">
+                            <i class="fas fa-user-minus"></i>
+                        </button>
+                    </td>
+                </tr>
+            `);
+        });
     });
 }
 
@@ -103,20 +86,11 @@ function saveRole() {
         return;
     }
     
-    $.ajax({
-        url: '/api/admin/roles',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ ten: roleName }),
-        success: function() {
-            $('#addRoleModal').modal('hide');
-            $('#roleName').val('');
-            loadRoles();
-            showSuccess('Thêm vai trò thành công');
-        },
-        error: function(xhr) {
-            showError('Không thể thêm vai trò');
-        }
+    $.post('/api/roles', { ten: roleName }, function() {
+        $('#addRoleModal').modal('hide');
+        $('#roleName').val('');
+        loadRoles();
+        showSuccess('Thêm vai trò thành công');
     });
 }
 
@@ -128,8 +102,8 @@ function deleteRole(roleId, event) {
     }
     
     $.ajax({
-        url: `/api/admin/roles/${roleId}`,
-        method: 'DELETE',
+        url: `/api/roles/${roleId}`,
+        type: 'DELETE',
         success: function() {
             loadRoles();
             if (currentRoleId === roleId) {
@@ -155,37 +129,24 @@ function showAddUserModal() {
 
 // Load available users
 function loadAvailableUsers() {
-    $.ajax({
-        url: '/api/admin/users/available',
-        method: 'GET',
-        success: function(users) {
-            renderAvailableUsers(users);
-        },
-        error: function(xhr) {
-            showError('Không thể tải danh sách người dùng');
-        }
-    });
-}
-
-// Render available users
-function renderAvailableUsers(users) {
-    const userList = $('#availableUsers');
-    userList.empty();
-    
-    users.forEach(user => {
-        userList.append(`
-            <div class="list-group-item">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="${user.maSo}">
-                    <label class="form-check-label">
-                        <div>
-                            <h6 class="mb-1">${user.ho} ${user.ten}</h6>
-                            <small>${user.email}</small>
-                        </div>
-                    </label>
-                </div>
-            </div>
-        `);
+    $.get('/api/users', function(users) {
+        const availableUsers = $('#availableUsers');
+        availableUsers.empty();
+        
+        users.forEach(user => {
+            availableUsers.append(`
+                <tr>
+                    <td>${user.maSo}</td>
+                    <td>${user.ho} ${user.ten}</td>
+                    <td>${user.email}</td>
+                    <td>
+                        <button class="btn btn-sm btn-success add-to-role" data-user-id="${user.maSo}">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </td>
+                </tr>
+            `);
+        });
     });
 }
 
@@ -194,8 +155,10 @@ function saveUsersToRole() {
     if (!currentRoleId) return;
     
     const selectedUsers = [];
-    $('#availableUsers input[type="checkbox"]:checked').each(function() {
-        selectedUsers.push($(this).val());
+    $('#availableUsers tr').each(function() {
+        if ($(this).find('input[type="checkbox"]:checked').length > 0) {
+            selectedUsers.push($(this).find('td:eq(0)').text());
+        }
     });
     
     if (selectedUsers.length === 0) {
@@ -203,19 +166,10 @@ function saveUsersToRole() {
         return;
     }
     
-    $.ajax({
-        url: `/api/admin/roles/${currentRoleId}/users`,
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(selectedUsers),
-        success: function() {
-            $('#addUserToRoleModal').modal('hide');
-            loadRoleUsers(currentRoleId);
-            showSuccess('Thêm người dùng vào vai trò thành công');
-        },
-        error: function(xhr) {
-            showError('Không thể thêm người dùng vào vai trò');
-        }
+    $.post(`/api/roles/${currentRoleId}/users`, { userIds: selectedUsers }, function() {
+        $('#addUserToRoleModal').modal('hide');
+        loadRoleUsers(currentRoleId);
+        showSuccess('Thêm người dùng vào vai trò thành công');
     });
 }
 
@@ -228,8 +182,8 @@ function removeUserFromRole(userId) {
     }
     
     $.ajax({
-        url: `/api/admin/roles/${currentRoleId}/users/${userId}`,
-        method: 'DELETE',
+        url: `/api/roles/${currentRoleId}/users/${userId}`,
+        type: 'DELETE',
         success: function() {
             loadRoleUsers(currentRoleId);
             showSuccess('Xóa người dùng khỏi vai trò thành công');
@@ -245,7 +199,7 @@ function searchRoleUsers(term) {
     if (!currentRoleId) return;
     
     $.ajax({
-        url: `/api/admin/roles/${currentRoleId}/users/search?term=${encodeURIComponent(term)}`,
+        url: `/api/roles/${currentRoleId}/users/search?term=${encodeURIComponent(term)}`,
         method: 'GET',
         success: function(users) {
             renderRoleUsers(users);
@@ -259,7 +213,7 @@ function searchRoleUsers(term) {
 // Search available users
 function searchAvailableUsers(term) {
     $.ajax({
-        url: `/api/admin/users/available/search?term=${encodeURIComponent(term)}`,
+        url: `/api/users/available/search?term=${encodeURIComponent(term)}`,
         method: 'GET',
         success: function(users) {
             renderAvailableUsers(users);

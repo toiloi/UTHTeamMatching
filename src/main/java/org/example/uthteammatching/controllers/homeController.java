@@ -66,6 +66,12 @@ public class homeController {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private LecturerRequestRepository lecturerRequestRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -763,6 +769,166 @@ public class homeController {
         }
 
         return "redirect:/user-detail/" + maSo;
+    }
+
+    @PostMapping("/user/request-lecturer")
+    public String submitLecturerRequest(
+            @RequestParam("maSo") Long maSo,
+            @RequestParam("expertise") String expertise,
+            @RequestParam("experience") String experience,
+            @RequestParam("reason") String reason,
+            @RequestParam(value = "certificates", required = false) List<MultipartFile> certificates,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        UthUser user = userRepository.findById(maSo)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // Kiểm tra xem user đã có đơn xin đang chờ duyệt chưa
+        if (lecturerRequestRepository.existsByUserAndStatus(user, "PENDING")) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Bạn đã có đơn xin làm giảng viên đang chờ duyệt");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        // Kiểm tra xem user đã là giảng viên chưa
+        if (user.getUserRoles().stream().anyMatch(ur -> ur.getRole().getTen().equals("LECTURE"))) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Bạn đã là giảng viên");
+            return "redirect:/user-detail/" + maSo;
+        }
+
+        LecturerRequest request = new LecturerRequest();
+        request.setUser(user);
+        request.setExpertise(expertise);
+        request.setExperience(experience);
+        request.setReason(reason);
+
+        // Xử lý upload chứng chỉ
+        if (certificates != null && !certificates.isEmpty()) {
+            try {
+                String uploadDir = "src/main/resources/static/uploads/certificates/";
+                StringBuilder fileNames = new StringBuilder();
+                
+                for (MultipartFile file : certificates) {
+                    if (!file.isEmpty()) {
+                        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                        Path filePath = Paths.get(uploadDir, fileName);
+                        Files.createDirectories(filePath.getParent());
+                        Files.write(filePath, file.getBytes());
+                        
+                        if (fileNames.length() > 0) {
+                            fileNames.append(",");
+                        }
+                        fileNames.append("/uploads/certificates/").append(fileName);
+                    }
+                }
+                
+                request.setCertificatesPath(fileNames.toString());
+            } catch (IOException e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi upload chứng chỉ: " + e.getMessage());
+                return "redirect:/user-detail/" + maSo;
+            }
+        }
+
+        lecturerRequestRepository.save(request);
+        redirectAttributes.addFlashAttribute("successMessage", "Đơn xin làm giảng viên đã được gửi thành công!");
+        return "redirect:/user-detail/" + maSo;
+    }
+
+    @GetMapping("/admin/lecturer-requests")
+    public String viewLecturerRequests(Model model) {
+        UthUser currentUser = addCurrentUserToModel(model);
+        if (currentUser == null || !currentUser.getUserRoles().stream()
+                .anyMatch(ur -> ur.getRole().getTen().equals("ADMIN"))) {
+            return "redirect:/";
+        }
+
+        List<LecturerRequest> pendingRequests = lecturerRequestRepository.findByStatusOrderByCreatedAtDesc("PENDING");
+        model.addAttribute("pendingRequests", pendingRequests);
+        return "admin/lecturer-requests";
+    }
+
+    @PostMapping("/admin/lecturer-requests/{id}/approve")
+    public String approveLecturerRequest(
+            @PathVariable("id") Long requestId,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        UthUser currentUser = addCurrentUserToModel(model);
+        if (currentUser == null || !currentUser.getUserRoles().stream()
+                .anyMatch(ur -> ur.getRole().getTen().equals("ADMIN"))) {
+            return "redirect:/";
+        }
+
+        LecturerRequest request = lecturerRequestRepository.findById(requestId)
+                .orElseThrow(() -> new IllegalArgumentException("Request not found"));
+
+        UthUser user = request.getUser();
+        
+        // Thêm role giảng viên cho user
+        Role lecturerRole = roleRepository.findByTen("LECTURE")
+                .orElseThrow(() -> new IllegalArgumentException("Lecturer role not found"));
+        
+        UserRole userRole = new UserRole();
+        userRole.setUser(user);
+        userRole.setRole(lecturerRole);
+        user.getUserRoles().add(userRole);
+
+        // Cập nhật trạng thái đơn
+        request.setStatus("APPROVED");
+        request.setProcessedAt(LocalDateTime.now());
+        request.setProcessedBy(currentUser);
+
+        userRepository.save(user);
+        lecturerRequestRepository.save(request);
+
+        // Tạo thông báo cho user
+        notificationRepository.save(new Notification(
+            "Đơn xin làm giảng viên của bạn đã được phê duyệt",
+            user,
+            currentUser,
+            NotificationType.NOTIFICATION
+        ));
+
+        redirectAttributes.addFlashAttribute("successMessage", "Đã phê duyệt đơn xin làm giảng viên");
+        return "redirect:/admin/lecturer-requests";
+    }
+
+    @PostMapping("/admin/lecturer-requests/{id}/reject")
+    public String rejectLecturerRequest(
+            @PathVariable("id") Long requestId,
+            @RequestParam(value = "rejectionReason", required = false) String rejectionReason,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        UthUser currentUser = addCurrentUserToModel(model);
+        if (currentUser == null || !currentUser.getUserRoles().stream()
+                .anyMatch(ur -> ur.getRole().getTen().equals("ADMIN"))) {
+            return "redirect:/";
+        }
+
+        LecturerRequest request = lecturerRequestRepository.findById(requestId)
+                .orElseThrow(() -> new IllegalArgumentException("Request not found"));
+
+        request.setStatus("REJECTED");
+        request.setProcessedAt(LocalDateTime.now());
+        request.setProcessedBy(currentUser);
+        lecturerRequestRepository.save(request);
+
+        // Tạo thông báo cho user
+        String message = "Đơn xin làm giảng viên của bạn đã bị từ chối";
+        if (rejectionReason != null && !rejectionReason.trim().isEmpty()) {
+            message += ". Lý do: " + rejectionReason;
+        }
+        
+        notificationRepository.save(new Notification(
+            message,
+            request.getUser(),
+            currentUser,
+            NotificationType.NOTIFICATION
+        ));
+
+        redirectAttributes.addFlashAttribute("successMessage", "Đã từ chối đơn xin làm giảng viên");
+        return "redirect:/admin/lecturer-requests";
     }
 
 }

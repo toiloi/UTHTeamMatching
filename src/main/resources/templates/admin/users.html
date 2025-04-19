@@ -2,94 +2,114 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - User Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .sidebar {
-            min-height: 100vh;
-            background-color: #343a40;
-            color: white;
-        }
-        .nav-link {
-            color: rgba(255,255,255,.8);
-        }
-        .nav-link:hover {
-            color: white;
-        }
-        .nav-link.active {
-            background-color: rgba(255,255,255,.1);
-            color: white;
-        }
-        .main-content {
-            padding: 20px;
-        }
-        .card {
-            margin-bottom: 20px;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="/css/admin-theme.css" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-2 sidebar p-3">
-                <h4 class="mb-4">Admin Panel</h4>
+            <div class="sidebar">
+                <div class="sidebar-brand">
+                    <i class="fas fa-university me-2"></i>UTH Team Matching
+                </div>
                 <div class="nav flex-column">
                     <a class="nav-link" href="/admin">
-                        <i class="fas fa-users-cog me-2"></i>Quản lý vai trò
+                        <i class="fas fa-users-cog"></i>Quản lý vai trò
                     </a>
                     <a class="nav-link active" href="/admin/users">
-                        <i class="fas fa-user-shield me-2"></i>Quản lý người dùng
+                        <i class="fas fa-user-shield"></i>Quản lý người dùng
+                    </a>
+                    <a class="nav-link" href="/admin/lecturer-requests">
+                        <i class="fas fa-chalkboard-teacher"></i>Đơn xin làm giảng viên
+                    </a>
+                    <a class="nav-link" href="/logout">
+                        <i class="fas fa-sign-out-alt"></i>Đăng xuất
                     </a>
                 </div>
             </div>
 
             <!-- Main Content -->
-            <div class="col-md-10 main-content">
-                <h2 class="mb-4">Quản lý người dùng</h2>
+            <div class="main-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="h3 mb-0 text-gray-800">Quản lý người dùng</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                        <i class="fas fa-user-plus me-2"></i>Thêm người dùng mới
+                    </button>
+                </div>
                 
                 <!-- User Management Section -->
-                <div class="row">
-                    <!-- Users List -->
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">Danh sách người dùng</h5>
-                                <div>
-                                    <input type="text" class="form-control" id="searchUser" placeholder="Tìm kiếm người dùng...">
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Mã số</th>
-                                                <th>Họ</th>
-                                                <th>Tên</th>
-                                                <th>Email</th>
-                                                <th>Số điện thoại</th>
-                                                <th>Chuyên ngành</th>
-                                                <th>Trạng thái</th>
-                                                <th>Vai trò</th>
-                                                <th>Thao tác</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="usersList">
-                                        <tr th:each="user : ${users}">
-                                            <td th:text="${user.maSo}"></td>
-                                            <td th:text="${user.ho}"></td>
-                                            <td th:text="${user.ten}"></td>
-                                            <td th:text="${user.email}"></td>
-                                            <td th:text="${user.sdt}"></td>
-                                            <td th:text="${user.chuyenNganh}"></td>
-                                            <td th:text="${user.enabled}"></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                <div class="card fade-in">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-users me-2"></i>Danh sách người dùng
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" class="form-control" id="searchUser" placeholder="Tìm kiếm người dùng...">
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Mã số</th>
+                                        <th>Họ tên</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Chuyên ngành</th>
+                                        <th>Trạng thái</th>
+                                        <th>Vai trò</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersList">
+                                    <tr th:each="user : ${users}">
+                                        <td th:text="${user.maSo}"></td>
+                                        <td th:text="${user.ho + ' ' + user.ten}"></td>
+                                        <td th:text="${user.email}"></td>
+                                        <td th:text="${user.sdt}"></td>
+                                        <td th:text="${user.chuyenNganh}"></td>
+                                        <td>
+                                            <span th:if="${user.enabled}" class="badge bg-success">
+                                                <i class="fas fa-check-circle me-1"></i>Hoạt động
+                                            </span>
+                                            <span th:unless="${user.enabled}" class="badge bg-danger">
+                                                <i class="fas fa-times-circle me-1"></i>Khóa
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div th:each="userRole : ${user.userRoles}" class="badge bg-info me-1">
+                                                <i class="fas fa-user-tag me-1"></i>
+                                                <span th:text="${userRole.role.ten}"></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-primary" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#editUserModal"
+                                                        th:attr="data-user-id=${user.maSo}">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#deleteUserModal"
+                                                        th:attr="data-user-id=${user.maSo}">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -102,7 +122,9 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Chỉnh sửa người dùng</h5>
+                    <h5 class="modal-title">
+                        <i class="fas fa-user-edit me-2"></i>Chỉnh sửa người dùng
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -110,31 +132,43 @@
                         <input type="hidden" id="editUserId">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editHo" class="form-label">Họ</label>
+                                <label for="editHo" class="form-label">
+                                    <i class="fas fa-user me-2"></i>Họ
+                                </label>
                                 <input type="text" class="form-control" id="editHo" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editTen" class="form-label">Tên</label>
+                                <label for="editTen" class="form-label">
+                                    <i class="fas fa-user me-2"></i>Tên
+                                </label>
                                 <input type="text" class="form-control" id="editTen" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editEmail" class="form-label">Email</label>
+                                <label for="editEmail" class="form-label">
+                                    <i class="fas fa-envelope me-2"></i>Email
+                                </label>
                                 <input type="email" class="form-control" id="editEmail" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editSdt" class="form-label">Số điện thoại</label>
+                                <label for="editSdt" class="form-label">
+                                    <i class="fas fa-phone me-2"></i>Số điện thoại
+                                </label>
                                 <input type="text" class="form-control" id="editSdt" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editChuyenNganh" class="form-label">Chuyên ngành</label>
+                                <label for="editChuyenNganh" class="form-label">
+                                    <i class="fas fa-graduation-cap me-2"></i>Chuyên ngành
+                                </label>
                                 <input type="text" class="form-control" id="editChuyenNganh" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editGioiTinh" class="form-label">Giới tính</label>
+                                <label for="editGioiTinh" class="form-label">
+                                    <i class="fas fa-venus-mars me-2"></i>Giới tính
+                                </label>
                                 <select class="form-select" id="editGioiTinh" required>
                                     <option value="Nam">Nam</option>
                                     <option value="Nữ">Nữ</option>
@@ -142,14 +176,18 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="editEnabled" class="form-label">Trạng thái</label>
+                            <label for="editEnabled" class="form-label">
+                                <i class="fas fa-power-off me-2"></i>Trạng thái
+                            </label>
                             <select class="form-select" id="editEnabled" required>
                                 <option value="true">Hoạt động</option>
                                 <option value="false">Khóa</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Vai trò</label>
+                            <label class="form-label">
+                                <i class="fas fa-user-tag me-2"></i>Vai trò
+                            </label>
                             <div id="editRoles" class="border p-2 rounded">
                                 <!-- Roles will be loaded here dynamically -->
                             </div>
@@ -157,8 +195,40 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" id="saveUserBtn">Lưu</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Đóng
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveUserBtn">
+                        <i class="fas fa-save me-2"></i>Lưu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete User Modal -->
+    <div class="modal fade" id="deleteUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-triangle text-danger me-2"></i>Xác nhận xóa
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">
+                        <i class="fas fa-question-circle text-primary me-2"></i>
+                        Bạn có chắc chắn muốn xóa người dùng này?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Hủy
+                    </button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                        <i class="fas fa-trash me-2"></i>Xóa
+                    </button>
                 </div>
             </div>
         </div>

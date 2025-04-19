@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class homeController {
@@ -929,6 +931,163 @@ public class homeController {
 
         redirectAttributes.addFlashAttribute("successMessage", "Đã từ chối đơn xin làm giảng viên");
         return "redirect:/admin/lecturer-requests";
+    }
+
+
+
+    @PostMapping("/chat/invite")
+    @ResponseBody
+    public Map<String, Object> inviteToGroupChat(
+            @RequestParam("userId") Long userId,
+            @RequestParam("groupId") Long groupId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            UthUser currentUser = addCurrentUserToModel(new ConcurrentModel());
+            UthUser targetUser = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            ChatGroup chatGroup = chatGroupRepository.findById(groupId)
+                    .orElseThrow(() -> new IllegalArgumentException("Chat group not found"));
+
+            // Kiểm tra xem user đã trong group chưa
+            if (chatGroup.getMembers().contains(targetUser)) {
+                response.put("success", false);
+                response.put("error", "Người dùng đã là thành viên của nhóm chat");
+                return response;
+            }
+
+            // Kiểm tra xem đã gửi lời mời chưa
+            List<Notification> existingInvites = notificationRepository
+                    .findByUserAndTypeOrderByCreatedAtDesc(targetUser, NotificationType.CHAT_INVITE);
+            boolean hasExistingInvite = existingInvites.stream()
+                    .anyMatch(n -> n.getUserFrom() != null && n.getUserFrom().getMaSo().equals(currentUser.getMaSo())
+                            && n.getGroupId() != null && n.getGroupId().equals(groupId));
+
+            if (hasExistingInvite) {
+                response.put("success", false);
+                response.put("error", "Bạn đã gửi lời mời cho người này vào nhóm chat này rồi");
+                return response;
+            }
+
+            // Tạo thông báo lời mời
+            Notification notification = new Notification(
+                    currentUser.getHo() + " " + currentUser.getTen() + " đã mời bạn tham gia nhóm chat của dự án " + chatGroup.getGroupName(),
+                    targetUser, currentUser, NotificationType.CHAT_INVITE);
+            notification.setGroupId(groupId);
+            notificationRepository.save(notification);
+
+            response.put("success", true);
+            response.put("message", "Đã gửi lời mời thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("error", "Đã xảy ra lỗi khi gửi lời mời: " + e.getMessage());
+        }
+        return response;
+    }
+
+    @PostMapping("/chat/accept-invite")
+    @ResponseBody
+    public Map<String, Object> acceptChatInvite(@RequestParam("notificationId") Long notificationId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            UthUser currentUser = addCurrentUserToModel(new ConcurrentModel());
+            Notification notification = notificationRepository.findById(notificationId)
+                    .orElseThrow(() -> new IllegalArgumentException("Notification not found"));
+
+            if (!notification.getUser().equals(currentUser)) {
+                response.put("success", false);
+                response.put("error", "Bạn không có quyền chấp nhận lời mời này");
+                return response;
+            }
+
+            if (!notification.getType().equals(NotificationType.CHAT_INVITE)) {
+                response.put("success", false);
+                response.put("error", "Đây không phải lời mời tham gia nhóm chat");
+                return response;
+            }
+
+            Long groupId = notification.getGroupId();
+            ChatGroup chatGroup = chatGroupRepository.findById(groupId)
+                    .orElseThrow(() -> new IllegalArgumentException("Chat group not found"));
+
+            // Kiểm tra xem user đã trong group chưa
+            if (chatGroup.getMembers().contains(currentUser)) {
+                response.put("success", false);
+                response.put("error", "Bạn đã là thành viên của nhóm chat này");
+                return response;
+            }
+
+            // Thêm user vào group chat
+            chatGroup.addMember(currentUser);
+            chatGroupRepository.save(chatGroup);
+
+            // Xóa thông báo
+            notificationRepository.delete(notification);
+
+            // Tạo thông báo cho cả hai
+            notificationRepository.save(new Notification(
+                    "Bạn đã chấp nhận lời mời tham gia nhóm chat " + chatGroup.getGroupName(),
+                    currentUser, null, NotificationType.NOTIFICATION));
+            notificationRepository.save(new Notification(
+                    currentUser.getHo() + " " + currentUser.getTen() + " đã chấp nhận lời mời tham gia nhóm chat " + chatGroup.getGroupName(),
+                    notification.getUserFrom(), null, NotificationType.NOTIFICATION));
+
+            response.put("success", true);
+            response.put("message", "Đã tham gia nhóm chat thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("error", "Đã xảy ra lỗi khi chấp nhận lời mời: " + e.getMessage());
+        }
+        return response;
+    }
+
+    @PostMapping("/chat/reject-invite")
+    public String rejectChatInvite(@RequestParam("notificationId") Long notificationId, RedirectAttributes redirectAttributes) {
+        try {
+            UthUser currentUser = addCurrentUserToModel(new ConcurrentModel());
+            Notification notification = notificationRepository.findById(notificationId)
+                    .orElseThrow(() -> new IllegalArgumentException("Notification not found"));
+
+            if (!notification.getUser().equals(currentUser)) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Bạn không có quyền từ chối lời mời này");
+                return "redirect:/notification";
+            }
+
+            if (!notification.getType().equals(NotificationType.CHAT_INVITE)) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Đây không phải lời mời tham gia nhóm chat");
+                return "redirect:/notification";
+            }
+
+            // Xóa thông báo
+            notificationRepository.delete(notification);
+
+            // Tạo thông báo cho cả hai
+            notificationRepository.save(new Notification(
+                    "Bạn đã từ chối lời mời tham gia nhóm chat " + chatGroupRepository.findById(notification.getGroupId()).get().getGroupName(),
+                    currentUser, null, NotificationType.NOTIFICATION));
+            notificationRepository.save(new Notification(
+                    currentUser.getHo() + " " + currentUser.getTen() + " đã từ chối lời mời tham gia nhóm chat",
+                    notification.getUserFrom(), null, NotificationType.NOTIFICATION));
+
+            redirectAttributes.addFlashAttribute("successMessage", "Đã từ chối lời mời thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Đã xảy ra lỗi khi từ chối lời mời: " + e.getMessage());
+        }
+        return "redirect:/notification";
+    }
+
+    @GetMapping("/api/users/search")
+    @ResponseBody
+    public List<UthUser> searchUsers(@RequestParam("term") String term) {
+        if (term == null || term.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+        return userRepository.findByHoContainingIgnoreCaseOrTenContainingIgnoreCaseOrSdtContainingIgnoreCase(term.trim())
+                .stream()
+                .filter(user -> !user.getUserRoles().stream().anyMatch(ur -> ur.getRole().getTen().equals("ADMIN")))
+                .collect(Collectors.toList());
     }
 
 }

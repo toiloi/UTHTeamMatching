@@ -283,67 +283,55 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Add Member Modal - Enhanced -->
-            <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content border-0 shadow">
-                        <div class="modal-header bg-success text-white">
-                            <h5 class="modal-title" id="addMemberModalLabel">
-                                <i class="fas fa-user-plus me-2"></i>Thêm thành viên
-                            </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body p-4">
-                            <form id="addMemberForm">
-                                <div class="mb-4">
-                                    <label for="memberSearch" class="form-label fw-bold">
-                                        <i class="fas fa-users me-2 text-primary"></i>Tìm kiếm thành viên
-                                    </label>
-                                    <div class="input-group input-group-lg">
-                                        <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
-                                        <input type="text" class="form-control" id="memberSearch" placeholder="Nhập mã số hoặc tên...">
-                                        <button class="btn btn-primary" type="button" onclick="searchMembers()">
-                                            Tìm
-                                        </button>
+                <!-- Add Member Modal - Enhanced -->
+                <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 shadow">
+                            <div class="modal-header bg-success text-white">
+                                <h5 class="modal-title" id="addMemberModalLabel">
+                                    <i class="fas fa-user-plus me-2"></i>Mời thành viên vào nhóm chat
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-4">
+                                <form id="addMemberForm">
+                                    <div class="mb-4">
+                                        <label for="memberSearch" class="form-label fw-bold">
+                                            <i class="fas fa-users me-2 text-primary"></i>Tìm kiếm thành viên
+                                        </label>
+                                        <div class="input-group input-group-lg">
+                                            <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
+                                            <input type="text" class="form-control" id="memberSearch" placeholder="Nhập tên hoặc số điện thoại...">
+                                            <button class="btn btn-primary" type="button" onclick="searchMembers()">
+                                                Tìm
+                                            </button>
+                                        </div>
+                                        <div class="form-text text-muted">Tìm kiếm theo tên hoặc số điện thoại của thành viên</div>
                                     </div>
-                                    <div class="form-text text-muted">Tìm kiếm theo mã số hoặc tên thành viên</div>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label fw-bold">
-                                        <i class="fas fa-list me-2 text-info"></i>Kết quả tìm kiếm
-                                    </label>
-                                    <div id="searchResults" class="list-group shadow-sm rounded" style="max-height: 200px; overflow-y: auto; border: 1px solid rgba(0,0,0,.125);">
-                                        <!-- Search results will be populated here -->
-                                        <div class="list-group-item text-center text-muted py-3">
-                                            <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
-                                            <p class="mb-0">Kết quả tìm kiếm sẽ hiển thị ở đây</p>
+                                    <div class="mb-4">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-list me-2 text-info"></i>Kết quả tìm kiếm
+                                        </label>
+                                        <div id="searchResults" class="list-group shadow-sm rounded" style="max-height: 200px; overflow-y: auto; border: 1px solid rgba(0,0,0,.125);">
+                                            <div class="list-group-item text-center text-muted py-3">
+                                                <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
+                                                <p class="mb-0">Kết quả tìm kiếm sẽ hiển thị ở đây</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="memberRole" class="form-label fw-bold">
-                                        <i class="fas fa-user-tag me-2 text-warning"></i>Vai trò
-                                    </label>
-                                    <select class="form-select form-select-lg" id="memberRole" required>
-                                        <option value="">Chọn vai trò...</option>
-                                        <option value="Member">Thành viên</option>
-                                        <option value="Leader">Trưởng nhóm</option>
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer border-0 pt-0">
-                            <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-dismiss="modal">
-                                <i class="fas fa-times me-2"></i>Hủy
-                            </button>
-                            <button type="button" class="btn btn-success btn-lg px-4" onclick="addMember()">
-                                <i class="fas fa-plus me-2"></i>Thêm
-                            </button>
+                                </form>
+                            </div>
+                            <div class="modal-footer border-0 pt-0">
+                                <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-dismiss="modal">
+                                    <i class="fas fa-times me-2"></i>Hủy
+                                </button>
+                                <button type="button" class="btn btn-success btn-lg px-4" onclick="inviteMember()">
+                                    <i class="fas fa-paper-plane me-2"></i>Gửi lời mời
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
             <div class="chat-messages" id="chat-box">
                 <!-- Tin nhắn sẽ được WebSocket đẩy vào đây -->
@@ -576,27 +564,47 @@
 
         function searchMembers() {
             const searchTerm = document.getElementById('memberSearch').value;
-            const projectId = groupId; // Using the existing groupId
+            const projectId = groupId;
 
-            // Call API to search for members
+            if (!searchTerm.trim()) {
+                const resultsDiv = document.getElementById('searchResults');
+                resultsDiv.innerHTML = `
+            <div class="list-group-item text-center text-muted py-3">
+                <i class="fas fa-exclamation-circle fa-2x mb-2 opacity-50"></i>
+                <p class="mb-0">Vui lòng nhập tên hoặc số điện thoại</p>
+            </div>
+        `;
+                return;
+            }
+
             fetch(`/api/users/search?term=${encodeURIComponent(searchTerm)}`)
                 .then(response => response.json())
                 .then(users => {
                     const resultsDiv = document.getElementById('searchResults');
                     resultsDiv.innerHTML = '';
 
+                    if (users.length === 0) {
+                        resultsDiv.innerHTML = `
+                    <div class="list-group-item text-center text-muted py-3">
+                        <i class="fas fa-exclamation-circle fa-2x mb-2 opacity-50"></i>
+                        <p class="mb-0">Không tìm thấy thành viên nào</p>
+                    </div>
+                `;
+                        return;
+                    }
+
                     users.forEach(user => {
                         const item = document.createElement('a');
                         item.className = 'list-group-item list-group-item-action';
                         item.innerHTML = `
-                            <div class="d-flex align-items-center">
-                                <img src="${user.avatar || '/img/avatars/NULL.jpg'}" class="rounded-circle me-2" style="width: 32px; height: 32px;">
-                                <div>
-                                    <div class="fw-bold">${user.ho} ${user.ten}</div>
-                                    <small class="text-muted">Mã số: ${user.maSo}</small>
-                                </div>
-                            </div>
-                        `;
+                    <div class="d-flex align-items-center">
+                        <img src="${user.avatar || '/img/avatars/NULL.jpg'}" class="rounded-circle me-2" style="width: 32px; height: 32px;">
+                        <div>
+                            <div class="fw-bold">${user.ho} ${user.ten}</div>
+                            <small class="text-muted">SĐT: ${user.sdt || 'N/A'}</small>
+                        </div>
+                    </div>
+                `;
                         item.onclick = () => selectUser(user.maSo, item);
                         resultsDiv.appendChild(item);
                     });
@@ -618,53 +626,92 @@
             selectedUserId = userId;
         }
 
-        function addMember() {
+        function inviteMember() {
             if (!selectedUserId) {
-                alert('Vui lòng chọn thành viên');
-                return;
-            }
-
-            const role = document.getElementById('memberRole').value;
-            if (!role) {
-                alert('Vui lòng chọn vai trò');
+                alert('Vui lòng chọn thành viên để mời');
                 return;
             }
 
             const projectId = groupId; // Using the existing groupId
 
-            // Call API to add member
-            fetch('/api/projects/members/add', {
+            // Call API to send invite
+            fetch('/chat/invite', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    projectId: projectId,
                     userId: selectedUserId,
-                    role: role
+                    groupId: projectId
                 })
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Lỗi khi thêm thành viên');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Close the modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('addMemberModal'));
-                modal.hide();
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Close the modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('addMemberModal'));
+                        modal.hide();
 
-                // Show success message
-                alert('Đã thêm thành viên thành công!');
+                        // Show success message
+                        alert(data.message || 'Đã gửi lời mời thành công!');
+                    } else {
+                        alert(data.error || 'Có lỗi xảy ra khi gửi lời mời');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi gửi lời mời. Vui lòng thử lại!');
+                });
+        }
+        }
 
-                // Refresh the page to show new member
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi thêm thành viên. Vui lòng thử lại!');
+        function selectUser(userId, element) {
+            // Remove selection from all items
+            document.querySelectorAll('#searchResults .list-group-item').forEach(item => {
+                item.classList.remove('selected');
             });
+
+            // Add selection to clicked item
+            element.classList.add('selected');
+            selectedUserId = userId;
+        }
+
+        function inviteMember() {
+            if (!selectedUserId) {
+                alert('Vui lòng chọn thành viên để mời');
+                return;
+            }
+
+            const projectId = groupId; // Using the existing groupId
+
+            // Call API to send invite
+            fetch('/chat/invite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: selectedUserId,
+                    groupId: projectId
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Close the modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('addMemberModal'));
+                        modal.hide();
+
+                        // Show success message
+                        alert(data.message || 'Đã gửi lời mời thành công!');
+                    } else {
+                        alert(data.error || 'Có lỗi xảy ra khi gửi lời mời');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi gửi lời mời. Vui lòng thử lại!');
+                });
         }
     </script>
 

@@ -33,6 +33,17 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     private NotificationType type;
 
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
+    private Long groupId;
+
+
     public Notification(String message, UthUser userId, UthUser userFrom, NotificationType type) {
         this.message = message;
         this.user = userId;

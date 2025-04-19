@@ -1,43 +1,124 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Chat bạn bè</title>
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-  <style>
-    #chat-box {
-      height: 400px;
-      overflow-y: scroll;
-      border: 1px solid #ccc;
-      padding: 10px;
-      background-color: #f8f9fa;
-    }
-  </style>
+  <meta charset="utf-8">
+  <title>Chat bạn bè - UTH-TEAM</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Favicon -->
+  <link th:href="@{/img/favicon.ico}" rel="icon">
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Icon Font Stylesheet -->
+  <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css}" rel="stylesheet">
+  <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css}" rel="stylesheet">
+
+  <!-- Libraries Stylesheet -->
+  <link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet">
+  <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+
+  <!-- Customized Bootstrap Stylesheet -->
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+  <!-- Template Stylesheet -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <link th:href="@{/css/chat.css}" rel="stylesheet">
 </head>
 <body>
-<div class="container mt-4">
-  <h3>Chat với <span th:text="${friend.getHo() + ' '+friend.getTen()}"></span></h3>
+<!-- Spinner Start -->
+<div th:replace="master/spinner::spinner"></div>
+<!-- Spinner End -->
 
-  <div id="chat-box" class="mb-3"></div>
+<!-- Main Container Start -->
+<div class="main-container d-flex flex-column min-vh-100">
+  <!-- Navbar Start -->
+  <div th:replace="master/navbar::navbar"></div>
+  <!-- Navbar End -->
 
-  <form id="chat-form" class="d-flex">
-    <input type="text" id="messageInput" class="form-control me-2" placeholder="Nhập tin nhắn...">
-    <input type="hidden" name="friendId" th:value="${friend.getMaSo()}" />
-    <button type="button" id="send-button">Gửi</button>
-  </form>
+  <!-- Content Container Start -->
+  <div class="content-container flex-grow-1">
+    <!-- Right Sidebar Start -->
+    <div th:replace="master/rightSidebar::rightSidebar"></div>
+    <!-- Right Sidebar End -->
 
+    <!-- Sidebar Start -->
+    <div th:replace="master/leftSidebar::leftSidebar"></div>
+    <!-- Sidebar End -->
+
+    <!-- Chat Content Start -->
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <div class="chat-container">
+            <div class="chat-header">
+              <img th:src="${friend.avatar != null ? friend.avatar : '/img/avatars/NULL.jpg'}" alt="Avatar">
+              <div class="chat-header-info">
+                <h3 th:text="${friend.getHo() + ' '+friend.getTen()}"></h3>
+                <p class="online-status">
+                  <i class="fas fa-circle text-success"></i> Đang hoạt động
+                </p>
+              </div>
+              <div class="chat-actions">
+                <button class="btn btn-outline-secondary btn-sm">
+                  <i class="fas fa-phone"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm ms-2">
+                  <i class="fas fa-video"></i>
+                </button>
+              </div>
+            </div>
+            <div id="chat-box"></div>
+            <div class="chat-input-container">
+              <input type="text" id="messageInput" class="form-control" placeholder="Nhập tin nhắn...">
+              <input type="hidden" name="friendId" th:value="${friend.getMaSo()}" />
+              <button type="button" id="send-button" class="btn btn-primary">
+                <i class="fas fa-paper-plane me-2"></i>Gửi
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Chat Content End -->
+  </div>
+  <!-- Content Container End -->
 </div>
+<!-- Main Container End -->
 
+<!-- Back to Top -->
+<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+<!-- JavaScript Libraries -->
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js}"></script>
+<script th:src="@{https://code.jquery.com/jquery-3.4.1.min.js}"></script>
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/lib/wow/wow.min.js}"></script>
+<script th:src="@{/lib/easing/easing.min.js}"></script>
+<script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+<script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
 
-<script th:inline="javascript">
+<!-- Template Javascript -->
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/animations.js}"></script>
 
+<script th:inline="javascript">
   const currentUserId = [[${currentUser.getMaSo()}]];
   const friendId = [[${friend.getMaSo()}]];
+  const currentUserName = [[${currentUser.getHo() + ' ' + currentUser.getTen()}]];
+  const friendName = [[${friend.getHo() + ' ' + friend.getTen()}]];
 
   let stompClient = null;
   let isConnected = false;
+  let isTyping = false;
+  let typingTimeout;
 
   function connectWebSocket(currentUserId) {
     const socket = new SockJS('/ws');
@@ -45,17 +126,18 @@
 
     stompClient.connect({}, function (frame) {
       isConnected = true;
-
-      // Phải enable nút gửi sau khi kết nối
       document.getElementById("send-button").disabled = false;
 
       stompClient.subscribe(`/topic/messages.user-${currentUserId}`, function (messageOutput) {
         const msg = JSON.parse(messageOutput.body);
         displayMessage(msg);
       });
+
+      stompClient.subscribe(`/topic/typing.user-${currentUserId}`, function (typingOutput) {
+        const typing = JSON.parse(typingOutput.body);
+        showTypingIndicator(typing.isTyping);
+      });
     });
-
-
   }
 
   function sendMessage(senderId, receiverId) {
@@ -66,18 +148,22 @@
 
     const content = document.getElementById("messageInput").value;
     if(!content.trim()) return;
+
     const message = {
       senderId: senderId,
       receiverId: receiverId,
-      content: content
+      content: content,
+      senderName: currentUserName
     };
 
     stompClient.send("/app/chat", {}, JSON.stringify(message));
     document.getElementById('messageInput').value = '';
+
+    // Send typing stopped
+    sendTypingStatus(false);
   }
 
   function displayMessage(msg) {
-    console.log("Displaying message: ", msg);
     const time = msg.timestamp ? new Date(msg.timestamp) : new Date();
     const formattedTime = time.toLocaleTimeString('vi-VN', {
       hour: '2-digit', minute: '2-digit', hour12: false
@@ -85,11 +171,62 @@
 
     const chatBox = document.getElementById("chat-box");
     const div = document.createElement("div");
-    div.innerText = `[${msg.senderName}] ${formattedTime} - ${msg.content}`;
+    div.className = `message ${msg.senderId === currentUserId ? 'sent' : 'received'}`;
+
+    const messageContent = document.createElement("div");
+    messageContent.className = "message-content";
+    messageContent.textContent = msg.content;
+
+    const messageTime = document.createElement("div");
+    messageTime.className = "message-time";
+    messageTime.textContent = formattedTime;
+
+    const messageStatus = document.createElement("div");
+    messageStatus.className = "message-status";
+    if (msg.senderId === currentUserId) {
+      messageStatus.innerHTML = '<i class="fas fa-check-double"></i>';
+    }
+
+    div.appendChild(messageContent);
+    div.appendChild(messageTime);
+    div.appendChild(messageStatus);
+
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 
+  function showTypingIndicator(isTyping) {
+    let typingIndicator = document.querySelector('.typing-indicator');
+
+    if (isTyping) {
+      if (!typingIndicator) {
+        typingIndicator = document.createElement('div');
+        typingIndicator.className = 'typing-indicator';
+        typingIndicator.innerHTML = `
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                `;
+        document.getElementById('chat-box').appendChild(typingIndicator);
+      }
+    } else {
+      if (typingIndicator) {
+        typingIndicator.remove();
+      }
+    }
+  }
+
+  function sendTypingStatus(isTyping) {
+    if (!isConnected || !stompClient) return;
+
+    const typingStatus = {
+      senderId: currentUserId,
+      receiverId: friendId,
+      isTyping: isTyping
+    };
+
+    stompClient.send("/app/typing", {}, JSON.stringify(typingStatus));
+  }
 
   function loadMessages() {
     fetch(`/getMessages?senderId=${currentUserId}&receiverId=${friendId}`)
@@ -103,22 +240,34 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    // Disable nút gửi lúc đầu
     document.getElementById("send-button").disabled = true;
-
-    // Load tin nhắn từ database
     loadMessages();
-
-    // Kết nối WebSocket
     connectWebSocket(currentUserId);
 
-    // Gắn sự kiện gửi khi bấm nút gửi
     document.getElementById("send-button").addEventListener("click", function () {
       sendMessage(currentUserId, friendId);
     });
+
+    document.getElementById("messageInput").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        sendMessage(currentUserId, friendId);
+      }
+    });
+
+    // Typing indicator
+    document.getElementById("messageInput").addEventListener("input", function() {
+      if (!isTyping) {
+        isTyping = true;
+        sendTypingStatus(true);
+      }
+
+      clearTimeout(typingTimeout);
+      typingTimeout = setTimeout(() => {
+        isTyping = false;
+        sendTypingStatus(false);
+      }, 1000);
+    });
   });
-
 </script>
-
 </body>
 </html>

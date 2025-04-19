@@ -434,9 +434,14 @@
                                                         <img th:src="${tv.getUserMaSo().avatar != null ? tv.getUserMaSo().avatar : '/img/avatars/NULL.jpg'}" class="avatar me-2">
                                                     </div>
                                                 </div>
-                                                <a th:href="@{/project/{id}(id=${project.getMaProject()})}" class="btn btn-outline-primary btn-sm">
-                                                    <i class="fas fa-eye me-2"></i>Xem chi tiết
-                                                </a>
+                                                <div class="d-flex align-items-center">
+                                                    <span th:if="${project.loai == 'HOC_THUAT'}" class="badge bg-warning me-2">
+                                                        <i class="fas fa-clock me-1"></i>Đang chờ phê duyệt
+                                                    </span>
+                                                    <a th:href="@{/project/{id}(id=${project.getMaProject()})}" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fas fa-eye me-2"></i>Xem chi tiết
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -713,10 +718,14 @@
             if (loaiSelect.value === 'HOC_THUAT') {
                 maGiangVienContainer.style.display = 'block';
                 maGiangVienSelect.required = true;
+                // Set status to "Đang chờ duyệt" for academic projects
+                document.getElementById('trangThai').value = 'Đang chờ duyệt';
             } else {
                 maGiangVienContainer.style.display = 'none';
                 maGiangVienSelect.required = false;
                 maGiangVienSelect.value = '';
+                // Reset status to default for non-academic projects
+                document.getElementById('trangThai').value = '';
             }
         }
 

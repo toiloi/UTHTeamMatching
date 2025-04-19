@@ -103,10 +103,10 @@ public class accountController {
 //        }
 
         // Tìm hoặc tạo role USER
-        Role userRole = roleRepository.findByTen("sinhvien")
+        Role userRole = roleRepository.findByTen("USER")
                 .orElseGet(() -> {
                     Role newRole = new Role();
-                    newRole.setTen("sinhvien");
+                    newRole.setTen("USER");
                     return roleRepository.save(newRole);
                 });
 

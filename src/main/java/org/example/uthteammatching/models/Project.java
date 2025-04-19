@@ -41,9 +41,8 @@ public class Project {
     @Column(name = "ngayTao", updatable = false)
     private LocalDateTime ngayTao = LocalDateTime.now();
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maGiangVien")
-    private UthUser maGiangVien;
+    private Long maGiangVien;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "loai", nullable = false)
@@ -64,7 +63,7 @@ public class Project {
 
     public Project() {}
 
-    public Project(String tenProject, String moTa, LocalDate ngayBatDau, LocalDate ngayKetThuc, String trangThai, UthUser maGiangVien, ProjectType loai, Integer diem, String nhanXet, LocalDateTime ngayTao) {
+    public Project(String tenProject, String moTa, LocalDate ngayBatDau, LocalDate ngayKetThuc, String trangThai, Long maGiangVien, ProjectType loai, Integer diem, String nhanXet, LocalDateTime ngayTao) {
         this.tenProject = tenProject;
         this.moTa = moTa;
         this.ngayBatDau = ngayBatDau;

@@ -454,6 +454,44 @@
                     </a>
                 </div>
             </div>
+
+            <div class="project-section">
+                <h6>Hoàn thành dự án</h6>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#evaluationModal">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Đánh dấu hoàn thành
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evaluation Modal -->
+        <div class="modal fade" id="evaluationModal" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="evaluationModalLabel">Đánh giá dự án</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="evaluationForm">
+                            <div class="mb-3">
+                                <label for="projectScore" class="form-label">Điểm số (0-10)</label>
+                                <input type="number" class="form-control" id="projectScore" min="0" max="10" step="0.5" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="projectFeedback" class="form-label">Nhận xét</label>
+                                <textarea class="form-control" id="projectFeedback" rows="4" required></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-primary" onclick="submitEvaluation()">Xác nhận</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Chat Container -->
@@ -581,6 +619,32 @@
             const messagesContainer = document.querySelector('.chat-messages');
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         });
+
+        function submitEvaluation() {
+            const score = document.getElementById('projectScore').value;
+            const feedback = document.getElementById('projectFeedback').value;
+
+            if (!score || !feedback) {
+                alert('Vui lòng điền đầy đủ thông tin đánh giá!');
+                return;
+            }
+
+            if (score < 0 || score > 10) {
+                alert('Điểm số phải nằm trong khoảng từ 0 đến 10!');
+                return;
+            }
+
+            // Here you would typically send the data to your backend
+            console.log('Điểm số:', score);
+            console.log('Nhận xét:', feedback);
+
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
+            modal.hide();
+
+            // Show success message
+            alert('Đã lưu đánh giá thành công!');
+        }
     </script>
 </body>
 

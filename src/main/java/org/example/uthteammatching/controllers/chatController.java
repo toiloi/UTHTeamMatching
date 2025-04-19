@@ -1,13 +1,15 @@
 package org.example.uthteammatching.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.example.uthteammatching.dto.FriendDTO;
 import org.example.uthteammatching.models.*;
 import org.example.uthteammatching.repositories.*;
+import org.example.uthteammatching.services.ChatMessageService;
+import org.example.uthteammatching.services.ListFriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.security.Principal;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -43,8 +44,16 @@ public class chatController {
     private ChatMessageRepository chatMessageRepository;
     @Autowired
     private ProjectRepository projectRepository;
+
     @Autowired
     private ThanhvienProjectRepository thanhvienProjectRepository;
+
+    @Autowired
+    private ListFriendService listFriendService;
+
+    @Autowired
+    private ChatMessageService chatMessageService;
+
 
 
     private UthUser addCurrentUserToModel(Model model) {
@@ -77,6 +86,9 @@ public class chatController {
             model.addAttribute("friendUsers", friendUsers);
         }
     }
+
+
+
 
 
     @GetMapping("/getMessages")
@@ -112,6 +124,18 @@ public class chatController {
         model.addAttribute("currentUser", currentUser);
 
         Optional<UthUser> friend = userRepository.findById(friendId);
+        List<FriendDTO> friendDTOs = new ArrayList<>();
+        List<UthUser> listFriend = listFriendService.getFriendsOfUser(currentUser);
+        for(UthUser u : listFriend) {
+            FriendDTO friendDTO = new FriendDTO();
+            friendDTO.setHo(u.getHo());
+            friendDTO.setTen(u.getTen());
+            friendDTO.setAvatar(u.getAvatar());
+            ChatMessage lastMsg = chatMessageService.getLastMessageBetween(currentUser.getMaSo(), u.getMaSo());
+            friendDTO.setLastMessage(lastMsg != null ? lastMsg : new ChatMessage());
+            friendDTOs.add(friendDTO);
+        }
+        model.addAttribute("listFriend", friendDTOs);
 
         if(friend.isPresent()) {
             UthUser friendUser = friend.get();

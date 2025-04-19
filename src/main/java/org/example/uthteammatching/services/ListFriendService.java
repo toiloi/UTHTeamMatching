@@ -8,6 +8,9 @@ import org.example.uthteammatching.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ListFriendService {
     @Autowired
@@ -22,4 +25,20 @@ public class ListFriendService {
         // Lưu vào cơ sở dữ liệu
         listFriendRepository.save(listFriend);
     }
+
+
+    public List<UthUser> getFriendsOfUser(UthUser currentUser) {
+        List<ListFriend> friendships = listFriendRepository.findByUserId1OrUserId2WithFetch(currentUser);
+
+        List<UthUser> friends = new ArrayList<>();
+        for (ListFriend lf : friendships) {
+            if (lf.getUserId1().equals(currentUser)) {
+                friends.add(lf.getUserId2());
+            } else {
+                friends.add(lf.getUserId1());
+            }
+        }
+        return friends;
+    }
+
 }

@@ -105,10 +105,26 @@
                                 </div>
                                 <div class="card-body">
                                     <div th:each="nt : ${notifications}" class="notification-item mb-3 p-3 border-bottom">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fas fa-info-circle text-primary me-3"></i>
-                                            <div class="notification-content">
-                                                <p class="mb-0" th:text="${nt.getMessage()}"></p>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-info-circle text-primary me-3"></i>
+                                                <div class="notification-content">
+                                                    <p class="mb-0" th:text="${nt.getMessage()}"></p>
+                                                </div>
+                                            </div>
+                                            <div class="notification-actions" th:if="${nt.getType() == 'CHAT_INVITE'}">
+                                                <form th:action="@{/chat/accept-invite}" method="post" class="d-inline me-2">
+                                                    <input type="hidden" name="notificationId" th:value="${nt.getId()}" />
+                                                    <button type="submit" class="btn btn-success btn-sm">
+                                                        <i class="fas fa-check me-1"></i>Chấp nhận
+                                                    </button>
+                                                </form>
+                                                <form th:action="@{/chat/reject-invite}" method="post" class="d-inline">
+                                                    <input type="hidden" name="notificationId" th:value="${nt.getId()}" />
+                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                        <i class="fas fa-times me-1"></i>Từ chối
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -117,7 +133,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
                         <!-- Sidebar -->
                         <div class="col-lg-4">

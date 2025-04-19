@@ -5,5 +5,6 @@ public enum NotificationType {
     FRIEND_REQUEST,
     FRIEND_ACCEPTED,
     MESSAGE,
-    SYSTEM
+    SYSTEM,
+    CHAT_INVITE
 }

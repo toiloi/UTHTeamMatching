@@ -201,7 +201,6 @@ public class homeController {
     public String createProject(
             @RequestParam("nameProject") String tenProject,
             @RequestParam("moTa") String moTa,
-            @RequestParam("trangThai") String trangThai,
             @RequestParam("ngayBatDau") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayBatDau,
             @RequestParam("ngayKetThuc") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngayKetThuc,
             @RequestParam("loai") String loai,
@@ -218,11 +217,17 @@ public class homeController {
         Project project = new Project();
         project.setTenProject(tenProject);
         project.setMoTa(moTa);
-        project.setTrangThai(trangThai);
         project.setNgayBatDau(ngayBatDau);
         project.setNgayKetThuc(ngayKetThuc);
         ProjectType projectType = ProjectType.valueOf(loai);
         project.setLoai(projectType);
+
+        // Gán trạng thái dựa trên loại dự án
+        if (projectType == ProjectType.HOC_THUAT) {
+            project.setTrangThai("Đang chờ duyệt");
+        } else {
+            project.setTrangThai("Đang thực hiện");
+        }
 
         // Xử lý maGiangVien
         if (projectType == ProjectType.HOC_THUAT) {
@@ -242,7 +247,7 @@ public class homeController {
                 model.addAttribute("giangViens", userRepository.findByRoleName("LECTURE"));
                 return "project";
             }
-            project.setMaGiangVien(giangVien.getMaSo()); // Sử dụng maSo (Long)
+            project.setMaGiangVien(giangVien.getMaSo());
         } else {
             project.setMaGiangVien(null);
         }

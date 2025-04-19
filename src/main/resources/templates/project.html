@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
@@ -436,7 +437,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <span th:if="${project.loai == 'HOC_THUAT'}" class="badge bg-warning me-2">
-                                                        <i class="fas fa-clock me-1"></i>Đang chờ phê duyệt
+                                                        <i class="fas fa-clock me-1"></i>Đang chờ duyệt
                                                     </span>
                                                     <a th:href="@{/project/{id}(id=${project.getMaProject()})}" class="btn btn-outline-primary btn-sm">
                                                         <i class="fas fa-eye me-2"></i>Xem chi tiết
@@ -518,15 +519,6 @@
                                   th:text="${moTa != null ? moTa : project?.moTa}" placeholder="Mô tả chi tiết về dự án" required></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="trangThai" class="form-label">Trạng thái</label>
-                        <select class="form-select" id="trangThai" name="trangThai" required>
-                            <option value="" th:selected="${trangThai == null and project?.trangThai == null}">Chọn trạng thái</option>
-                            <option value="Đang lập kế hoạch" th:selected="${trangThai == 'Đang lập kế hoạch' or project?.trangThai == 'Đang lập kế hoạch'}">Đang lập kế hoạch</option>
-                            <option value="Đang thực hiện" th:selected="${trangThai == 'Đang thực hiện' or project?.trangThai == 'Đang thực hiện'}">Đang thực hiện</option>
-                            <option value="Đã hoàn thành" th:selected="${trangThai == 'Đã hoàn thành' or project?.trangThai == 'Đã hoàn thành'}">Đã hoàn thành</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
                         <label for="loai" class="form-label">Loại dự án</label>
                         <select class="form-select" id="loai" name="loai" required>
                             <option value="" th:selected="${loai == null and project?.loai == null}">Chọn loại dự án</option>
@@ -588,8 +580,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="project-details-header">
-                    <h5 class="modal-title" id="projectDetailsModalLabel">Dự án 1</h5>
-                    <span class="badge bg-primary project-status-badge">Đang thực hiện</span>
+                    <h5 class="modal-title" id="projectDetailsModalLabel">Dự án</h5>
+                    <span class="badge bg-primary project-status-badge" th:text="${project?.trangThai}">Trạng thái</span>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -597,7 +589,7 @@
                 <div class="project-details-content">
                     <div class="project-details-section">
                         <h6>Mô tả dự án</h6>
-                        <p>Mô tả chi tiết về dự án và các mục tiêu cần đạt được. Bao gồm các thông tin về phạm vi dự án, các yêu cầu kỹ thuật và các mốc thời gian quan trọng.</p>
+                        <p th:text="${project?.moTa}">Mô tả chi tiết về dự án và các mục tiêu cần đạt được.</p>
                     </div>
 
                     <div class="project-details-section">
@@ -605,11 +597,11 @@
                         <div class="project-timeline">
                             <div class="timeline-item">
                                 <h6 class="mb-1">Bắt đầu</h6>
-                                <p class="mb-0">01/01/2024</p>
+                                <p class="mb-0" th:text="${#temporals.format(project?.ngayBatDau, 'dd/MM/yyyy')}"></p>
                             </div>
                             <div class="timeline-item">
                                 <h6 class="mb-1">Dự kiến kết thúc</h6>
-                                <p class="mb-0">31/12/2024</p>
+                                <p class="mb-0" th:text="${#temporals.format(project?.ngayKetThuc, 'dd/MM/yyyy')}"></p>
                             </div>
                         </div>
                     </div>
@@ -617,18 +609,11 @@
                     <div class="project-details-section">
                         <h6>Thành viên dự án</h6>
                         <div class="project-members">
-                            <div class="member-item">
-                                <img src="img/user-1.jpg" alt="Member">
+                            <div class="member-item" th:each="tv : ${project?.thanhVienProjects}">
+                                <img th:src="${tv.userMaSo.avatar != null ? tv.userMaSo.avatar : '/img/avatars/NULL.jpg'}" alt="Member">
                                 <div>
-                                    <h6 class="mb-0">Nguyễn Văn A</h6>
-                                    <small class="text-muted">Quản lý dự án</small>
-                                </div>
-                            </div>
-                            <div class="member-item">
-                                <img src="img/user-2.jpg" alt="Member">
-                                <div>
-                                    <h6 class="mb-0">Trần Thị B</h6>
-                                    <small class="text-muted">Developer</small>
+                                    <h6 class="mb-0" th:text="${tv.userMaSo.ho + ' ' + tv.userMaSo.ten}"></h6>
+                                    <small class="text-muted" th:text="${tv.vaiTro}"></small>
                                 </div>
                             </div>
                         </div>
@@ -637,13 +622,9 @@
                     <div class="project-details-section">
                         <h6>Tài liệu đính kèm</h6>
                         <div class="project-files">
-                            <a href="#" class="file-item">
-                                <i class="fas fa-file-pdf"></i>
-                                <span>Yêu cầu dự án.pdf</span>
-                            </a>
-                            <a href="#" class="file-item">
-                                <i class="fas fa-file-word"></i>
-                                <span>Kế hoạch dự án.docx</span>
+                            <a th:each="taiLieu : ${project?.taiLieus}" th:href="@{'/uploads/TaiLieu/' + ${taiLieu.duongDan}}" class="file-item">
+                                <i th:class="${taiLieu.loai == 'PDF' ? 'fas fa-file-pdf' : taiLieu.loai == 'WORD' ? 'fas fa-file-word' : 'fas fa-file-excel'}"></i>
+                                <span th:text="${taiLieu.ten}"></span>
                             </a>
                         </div>
                     </div>
@@ -666,7 +647,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <textarea class="form-control" rows="3" placeholder="Thọ ơi, bạn đang nghĩ gì thế?"></textarea>
+                <textarea class="form-control" rows="3" placeholder="Bạn đang nghĩ gì thế?"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -718,14 +699,10 @@
             if (loaiSelect.value === 'HOC_THUAT') {
                 maGiangVienContainer.style.display = 'block';
                 maGiangVienSelect.required = true;
-                // Set status to "Đang chờ duyệt" for academic projects
-                document.getElementById('trangThai').value = 'Đang chờ duyệt';
             } else {
                 maGiangVienContainer.style.display = 'none';
                 maGiangVienSelect.required = false;
                 maGiangVienSelect.value = '';
-                // Reset status to default for non-academic projects
-                document.getElementById('trangThai').value = '';
             }
         }
 

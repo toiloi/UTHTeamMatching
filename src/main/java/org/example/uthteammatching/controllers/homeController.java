@@ -72,6 +72,9 @@ public class homeController {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private UserRoleRepository userRoleRepository;
+
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -182,7 +185,7 @@ public class homeController {
                 .filter(p -> "Đã hoàn thành".equalsIgnoreCase(p.getTrangThai()))
                 .count();
 
-        List<UthUser> giangViens = userRepository.findByRoleName("giangvien");
+        List<UthUser> giangViens = userRepository.findByRoleName("LECTURE");
         model.addAttribute("giangViens", giangViens);
 
         model.addAttribute("totalProjects", totalProjects);
@@ -224,17 +227,17 @@ public class homeController {
             if (maGiangVien == null) {
                 model.addAttribute("error", "Dự án học thuật yêu cầu chọn giảng viên.");
                 model.addAttribute("project", project);
-                model.addAttribute("giangViens", userRepository.findByRoleName("giangvien"));
+                model.addAttribute("giangViens", userRepository.findByRoleName("LECTURE"));
                 return "project";
             }
             UthUser giangVien = userRepository.findById(maGiangVien)
                     .orElseThrow(() -> new IllegalArgumentException("Giảng viên không tồn tại"));
             boolean isGiangVien = giangVien.getUserRoles().stream()
-                    .anyMatch(userRole -> "giangvien".equals(userRole.getRole().getTen()));
+                    .anyMatch(userRole -> "LECTURE".equals(userRole.getRole().getTen()));
             if (!isGiangVien) {
                 model.addAttribute("error", "Người dùng không phải là giảng viên.");
                 model.addAttribute("project", project);
-                model.addAttribute("giangViens", userRepository.findByRoleName("giangvien"));
+                model.addAttribute("giangViens", userRepository.findByRoleName("LECTURE"));
                 return "project";
             }
             project.setMaGiangVien(giangVien.getMaSo()); // Sử dụng maSo (Long)
@@ -269,12 +272,12 @@ public class homeController {
                     } catch (IllegalArgumentException e) {
                         model.addAttribute("error", e.getMessage());
                         model.addAttribute("project", project);
-                        model.addAttribute("giangViens", userRepository.findByRoleName("giangvien"));
+                        model.addAttribute("giangViens", userRepository.findByRoleName("LECTURE"));
                         return "project";
                     } catch (IOException e) {
                         model.addAttribute("error", "Lỗi khi tải tệp: " + file.getOriginalFilename());
                         model.addAttribute("project", project);
-                        model.addAttribute("giangViens", userRepository.findByRoleName("giangvien"));
+                        model.addAttribute("giangViens", userRepository.findByRoleName("LECTURE"));
                         return "project";
                     }
                 }
@@ -807,21 +810,21 @@ public class homeController {
             try {
                 String uploadDir = "src/main/resources/static/uploads/certificates/";
                 StringBuilder fileNames = new StringBuilder();
-                
+
                 for (MultipartFile file : certificates) {
                     if (!file.isEmpty()) {
                         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
                         Path filePath = Paths.get(uploadDir, fileName);
                         Files.createDirectories(filePath.getParent());
                         Files.write(filePath, file.getBytes());
-                        
+
                         if (fileNames.length() > 0) {
                             fileNames.append(",");
                         }
                         fileNames.append("/uploads/certificates/").append(fileName);
                     }
                 }
-                
+
                 request.setCertificatesPath(fileNames.toString());
             } catch (IOException e) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi upload chứng chỉ: " + e.getMessage());
@@ -863,30 +866,41 @@ public class homeController {
                 .orElseThrow(() -> new IllegalArgumentException("Request not found"));
 
         UthUser user = request.getUser();
-        
-        // Thêm role giảng viên cho user
+
+        // Kiểm tra xem user đã có vai trò LECTURE chưa
+        boolean isAlreadyLecturer = user.getUserRoles().stream()
+                .anyMatch(ur -> ur.getRole().getTen().equals("LECTURE"));
+        if (isAlreadyLecturer) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Người dùng đã là giảng viên.");
+            return "redirect:/admin/lecturer-requests";
+        }
+
+        // Tìm hoặc tạo vai trò LECTURE
         Role lecturerRole = roleRepository.findByTen("LECTURE")
-                .orElseThrow(() -> new IllegalArgumentException("Lecturer role not found"));
-        
+                .orElseGet(() -> {
+                    Role newRole = new Role();
+                    newRole.setTen("LECTURE");
+                    return roleRepository.save(newRole);
+                });
+
+        // Thêm vai trò LECTURE
         UserRole userRole = new UserRole();
         userRole.setUser(user);
         userRole.setRole(lecturerRole);
-        user.getUserRoles().add(userRole);
+        userRoleRepository.save(userRole);
 
         // Cập nhật trạng thái đơn
         request.setStatus("APPROVED");
         request.setProcessedAt(LocalDateTime.now());
         request.setProcessedBy(currentUser);
-
-        userRepository.save(user);
         lecturerRequestRepository.save(request);
 
-        // Tạo thông báo cho user
+        // Tạo thông báo
         notificationRepository.save(new Notification(
-            "Đơn xin làm giảng viên của bạn đã được phê duyệt",
-            user,
-            currentUser,
-            NotificationType.NOTIFICATION
+                "Đơn xin làm giảng viên của bạn đã được phê duyệt",
+                user,
+                currentUser,
+                NotificationType.NOTIFICATION
         ));
 
         redirectAttributes.addFlashAttribute("successMessage", "Đã phê duyệt đơn xin làm giảng viên");
@@ -909,22 +923,23 @@ public class homeController {
         LecturerRequest request = lecturerRequestRepository.findById(requestId)
                 .orElseThrow(() -> new IllegalArgumentException("Request not found"));
 
+        // Cập nhật trạng thái đơn
         request.setStatus("REJECTED");
         request.setProcessedAt(LocalDateTime.now());
         request.setProcessedBy(currentUser);
         lecturerRequestRepository.save(request);
 
-        // Tạo thông báo cho user
+        // Tạo thông báo
         String message = "Đơn xin làm giảng viên của bạn đã bị từ chối";
         if (rejectionReason != null && !rejectionReason.trim().isEmpty()) {
             message += ". Lý do: " + rejectionReason;
         }
-        
+
         notificationRepository.save(new Notification(
-            message,
-            request.getUser(),
-            currentUser,
-            NotificationType.NOTIFICATION
+                message,
+                request.getUser(),
+                currentUser,
+                NotificationType.NOTIFICATION
         ));
 
         redirectAttributes.addFlashAttribute("successMessage", "Đã từ chối đơn xin làm giảng viên");

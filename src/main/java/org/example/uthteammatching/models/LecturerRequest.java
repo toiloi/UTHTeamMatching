@@ -16,13 +16,13 @@ public class LecturerRequest {
     @JoinColumn(name = "user_id", nullable = false)
     private UthUser user;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "NVARCHAR(1000)", nullable = false)
     private String expertise;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "NVARCHAR(1000)")
     private String experience;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "NVARCHAR(1000)")
     private String reason;
 
     @Column(nullable = false)

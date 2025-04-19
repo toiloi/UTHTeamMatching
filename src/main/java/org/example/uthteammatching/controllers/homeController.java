@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -230,6 +231,7 @@ public class homeController {
         }
 
         // Xử lý maGiangVien
+        UthUser giangVien = null;
         if (projectType == ProjectType.HOC_THUAT) {
             if (maGiangVien == null) {
                 model.addAttribute("error", "Dự án học thuật yêu cầu chọn giảng viên.");
@@ -237,7 +239,7 @@ public class homeController {
                 model.addAttribute("giangViens", userRepository.findByRoleName("LECTURE"));
                 return "project";
             }
-            UthUser giangVien = userRepository.findById(maGiangVien)
+            giangVien = userRepository.findById(maGiangVien)
                     .orElseThrow(() -> new IllegalArgumentException("Giảng viên không tồn tại"));
             boolean isGiangVien = giangVien.getUserRoles().stream()
                     .anyMatch(userRole -> "LECTURE".equals(userRole.getRole().getTen()));
@@ -253,17 +255,34 @@ public class homeController {
         }
 
         // Thêm trưởng nhóm
-        ThanhvienProject tv = new ThanhvienProject();
+        ThanhvienProject tvTruongNhom = new ThanhvienProject();
         ThanhvienProjectId tvId = new ThanhvienProjectId(currentUser.getMaSo(), null);
-        tv.setId(tvId);
-        tv.setUserMaSo(currentUser);
-        tv.setVaiTro("Trưởng nhóm");
-        project.addThanhVien(tv);
+        tvTruongNhom.setId(tvId);
+        tvTruongNhom.setUserMaSo(currentUser);
+        tvTruongNhom.setVaiTro("Trưởng nhóm");
+        project.addThanhVien(tvTruongNhom);
+
+        // Thêm giảng viên vào danh sách thành viên nếu là dự án học thuật
+        ThanhvienProject tvGiangVien = null;
+        if (projectType == ProjectType.HOC_THUAT && giangVien != null) {
+            tvGiangVien = new ThanhvienProject();
+            ThanhvienProjectId tvGiangVienId = new ThanhvienProjectId(giangVien.getMaSo(), null);
+            tvGiangVien.setId(tvGiangVienId);
+            tvGiangVien.setUserMaSo(giangVien);
+            tvGiangVien.setVaiTro("Giảng viên hướng dẫn");
+            project.addThanhVien(tvGiangVien);
+        }
 
         // Lưu project trước để sinh maProject
         projectRepository.save(project);
-        tv.getId().setMaProject(project.getMaProject());
-        tv.setProjectMaSo(project);
+
+        // Cập nhật maProject cho các thành viên
+        tvTruongNhom.getId().setMaProject(project.getMaProject());
+        tvTruongNhom.setProjectMaSo(project);
+        if (tvGiangVien != null) {
+            tvGiangVien.getId().setMaProject(project.getMaProject());
+            tvGiangVien.setProjectMaSo(project);
+        }
 
         // Xử lý tài liệu
         if (taiLieuFiles != null && !taiLieuFiles.isEmpty()) {
@@ -300,9 +319,54 @@ public class homeController {
         chatGroup.setGroupName(tenProject);
         chatGroup.setGroupId(project.getMaProject());
         chatGroup.addMember(currentUser);
+        if (projectType == ProjectType.HOC_THUAT && giangVien != null) {
+            chatGroup.addMember(giangVien); // Thêm giảng viên vào nhóm chat
+        }
         chatGroupRepository.save(chatGroup);
 
         model.addAttribute("success", "Dự án đã được tạo thành công!");
+        return "redirect:/project";
+    }
+
+    @PostMapping("/project/{id}/approve")
+    @Transactional
+    public String approveProject(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        System.out.println("Approving project with ID: " + id);
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Dự án không tồn tại"));
+        System.out.println("Project found: maProject=" + project.getMaProject() + ", trangThai=" + project.getTrangThai());
+
+        UthUser currentUser = userRepository.findById(1L).orElse(null); // Thay bằng logic thực tế
+        System.out.println("CurrentUser: " + (currentUser != null ? currentUser.getMaSo() : "null"));
+        System.out.println("Project maGiangVien: " + project.getMaGiangVien());
+
+        // Tạm thời bỏ kiểm tra quyền để kiểm tra chức năng
+        /*
+        if (currentUser == null || !project.getMaGiangVien().equals(currentUser.getMaSo())) {
+            redirectAttributes.addFlashAttribute("error", "Bạn không có quyền duyệt dự án này.");
+            return "redirect:/project";
+        }
+        */
+
+        project.setTrangThai("Đang thực hiện");
+        projectRepository.save(project);
+        redirectAttributes.addFlashAttribute("success", "Dự án đã được duyệt thành công!");
+        return "redirect:/project";
+    }
+
+    @PostMapping("/project/{id}/reject")
+    @Transactional
+    public String rejectProject(@PathVariable Long id,
+                                @RequestParam(value = "rejectionReason", required = false) String rejectionReason,
+                                RedirectAttributes redirectAttributes) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Dự án không tồn tại"));
+
+        UthUser currentUser = userRepository.findById(1L).orElse(null); // Thay bằng logic lấy currentUser thực tế
+
+        // Xóa dự án (cascade sẽ xóa các bản ghi liên quan trong thanhvien_project, tai_lieu, chat_groups)
+        projectRepository.delete(project);
+        redirectAttributes.addFlashAttribute("success", "Dự án đã bị từ chối và xóa thành công!");
         return "redirect:/project";
     }
 

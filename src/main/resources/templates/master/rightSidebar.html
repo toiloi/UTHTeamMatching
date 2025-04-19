@@ -29,9 +29,11 @@
 
 <!--        List chat theo dự án-->
         <div th:each="project: ${projects}">
-            <a th:href="@{'/project/' + ${project.maProject}}">
-                <div th:text="${project.getTenProject()}"></div>
-            </a>
+            <th:block th:if="${project.trangThai == 'Đang thực hiện'}">
+                <a th:href="@{'/project/' + ${project.maProject}}">
+                    <div th:text="${project.getTenProject()}"></div>
+                </a>
+            </th:block>
         </div>
 
 

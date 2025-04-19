@@ -32,363 +32,56 @@
 
     <!-- Project Details Stylesheet -->
     <link href="/css/project-details.css" rel="stylesheet">
-
-    <style>
-        :root {
-            --primary-color: #0d6efd;
-            --secondary-color: #6c757d;
-            --success-color: #28a745;
-            --light-bg: #f8f9fa;
-            --border-color: #e9ecef;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .project-details-container {
-            display: flex;
-            height: calc(100vh - 60px);
-            margin-top: 60px;
-            background-color: var(--light-bg);
-        }
-
-        .project-info {
-            width: 30%;
-            background: #fff;
-            border-right: 1px solid var(--border-color);
-            padding: 1.5rem;
-            overflow-y: auto;
-            box-shadow: 0 2px 4px var(--shadow-color);
-            transition: all 0.3s ease;
-        }
-
-        .chat-container {
-            width: 70%;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--light-bg);
-        }
-
-        .chat-header {
-            padding: 1rem 1.5rem;
-            background-color: #fff;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px var(--shadow-color);
-            position: relative;
-            z-index: 1;
-        }
-
-        .chat-messages {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .message {
-            margin-bottom: 1rem;
-            max-width: 70%;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message-content {
-            padding: 0.75rem 1rem;
-            border-radius: 12px;
-            position: relative;
-            box-shadow: 0 1px 2px var(--shadow-color);
-            transition: transform 0.2s ease;
-        }
-
-        .message-content:hover {
-            transform: translateY(-2px);
-        }
-
-        .message.sent {
-            margin-left: auto;
-        }
-
-        .message.sent .message-content {
-            background-color: var(--primary-color);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-
-        .message.received .message-content {
-            background-color: white;
-            border: 1px solid var(--border-color);
-            border-bottom-left-radius: 4px;
-        }
-
-        .message-info {
-            font-size: 0.75rem;
-            color: var(--secondary-color);
-            margin-top: 0.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .chat-input {
-            padding: 1rem 1.5rem;
-            background-color: #fff;
-            border-top: 1px solid var(--border-color);
-            box-shadow: 0 -2px 4px var(--shadow-color);
-        }
-
-        .chat-input textarea {
-            resize: none;
-            border-radius: 20px;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .chat-input textarea:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-        }
-
-        .chat-input .btn-send {
-            border-radius: 20px;
-            padding: 0.5rem 1.5rem;
-            background-color: var(--primary-color);
-            border: none;
-            transition: all 0.3s ease;
-        }
-
-        .chat-input .btn-send:hover {
-            background-color: #0b5ed7;
-            transform: translateY(-2px);
-        }
-
-        .member-list {
-            max-height: 300px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary-color) var(--light-bg);
-        }
-
-        .member-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .member-list::-webkit-scrollbar-track {
-            background: var(--light-bg);
-        }
-
-        .member-list::-webkit-scrollbar-thumb {
-            background-color: var(--primary-color);
-            border-radius: 3px;
-        }
-
-        .member-item {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .member-item:hover {
-            background-color: var(--light-bg);
-            transform: translateX(5px);
-        }
-
-        .member-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 1rem;
-            object-fit: cover;
-            border: 2px solid #fff;
-            box-shadow: 0 2px 4px var(--shadow-color);
-        }
-
-        .member-info {
-            flex-grow: 1;
-        }
-
-        .member-status {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-left: 0.5rem;
-            box-shadow: 0 0 0 2px #fff;
-        }
-
-        .status-online {
-            background-color: var(--success-color);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        .status-offline {
-            background-color: var(--secondary-color);
-        }
-
-        .project-section {
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px var(--shadow-color);
-            transition: all 0.3s ease;
-        }
-
-        .project-section:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px var(--shadow-color);
-        }
-
-        .project-section h6 {
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .project-section p {
-            color: var(--secondary-color);
-            margin-bottom: 0;
-            line-height: 1.5;
-        }
-
-        .project-timeline {
-            position: relative;
-            padding-left: 2rem;
-        }
-
-        .project-timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background-color: var(--border-color);
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-bottom: 1.5rem;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -2rem;
-            top: 0.5rem;
-            width: 1rem;
-            height: 1rem;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            border: 2px solid #fff;
-            box-shadow: 0 0 0 2px var(--primary-color);
-        }
-
-        .project-files {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .file-item {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            background-color: var(--light-bg);
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--secondary-color);
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
-        }
-
-        .file-item:hover {
-            background-color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px var(--shadow-color);
-            color: var(--primary-color);
-        }
-
-        .file-item i {
-            margin-right: 0.5rem;
-            color: var(--primary-color);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .project-details-container {
-                flex-direction: column;
-                height: auto;
-            }
-
-            .project-info, .chat-container {
-                width: 100%;
-            }
-
-            .project-info {
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-            }
-        }
-
-        @media (max-width: 576px) {
-            .message {
-                max-width: 85%;
-            }
-
-            .chat-input {
-                padding: 0.75rem;
-            }
-
-            .chat-input textarea {
-                padding: 0.5rem;
-            }
-
-            .project-section {
-                padding: 0.75rem;
-            }
-        }
-    </style>
 </head>
 
 <body>
     <!-- Spinner Start -->
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <div class="spinner-border text-primary" role="status">
             <span class="sr-only">Loading...</span>
         </div>
     </div>
     <!-- Spinner End -->
 
     <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>UTH-TEAM</h2>
-        </a>
-        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="/" class="nav-item nav-link">Trang chủ</a>
-                <a href="/project" class="nav-item nav-link active">Dự án</a>
-                <a href="/ketban" class="nav-item nav-link">Kết bạn</a>
-                <a href="/notification" class="nav-item nav-link">Thông báo</a>
+    <nav class="custom-navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fa fa-book"></i>
+                UTH-TEAM
+            </a>
+            
+            <button class="navbar-toggle" id="navbarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="navbar-menu" id="navbarMenu">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/project" class="nav-link active">Dự án</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/ketban" class="nav-link">Kết bạn</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/notification" class="nav-link">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge bg-danger" th:if="${notificationCount > 0}" th:text="${notificationCount}"></span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="navbar-actions">
+                <button class="navbar-btn secondary" onclick="location.href='/profile'">
+                    <i class="fas fa-user me-2"></i>Hồ sơ
+                </button>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <button type="submit" class="navbar-btn primary">
+                        <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                    </button>
+                </form>
             </div>
         </div>
     </nav>
@@ -466,35 +159,53 @@
             </div>
         </div>
 
-        <!-- Evaluation Modal -->
+        <!-- Evaluation Modal - Enhanced -->
         <div class="modal fade" id="evaluationModal" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="evaluationModalLabel">Đánh giá dự án</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="evaluationModalLabel">
+                            <i class="fas fa-clipboard-check me-2"></i>Đánh giá dự án
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body p-4">
                         <form id="evaluationForm">
-                            <div class="mb-3">
-                                <label for="projectScore" class="form-label">Điểm số (0-10)</label>
-                                <input type="number" class="form-control" id="projectScore" min="0" max="10" step="0.5" required>
+                            <div class="mb-4">
+                                <label for="projectScore" class="form-label fw-bold">
+                                    <i class="fas fa-star me-2 text-warning"></i>Điểm số (0-10)
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-award"></i></span>
+                                    <input type="number" class="form-control form-control-lg" id="projectScore" min="0" max="10" step="0.5" required>
+                                </div>
+                                <div class="form-text text-muted">Đánh giá dự án từ 0 (không đạt) đến 10 (xuất sắc)</div>
                             </div>
-                            <div class="mb-3">
-                                <label for="projectFeedback" class="form-label">Nhận xét</label>
-                                <textarea class="form-control" id="projectFeedback" rows="4" required></textarea>
+                            <div class="mb-4">
+                                <label for="projectFeedback" class="form-label fw-bold">
+                                    <i class="fas fa-comment-dots me-2 text-info"></i>Nhận xét
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-edit"></i></span>
+                                    <textarea class="form-control form-control-lg" id="projectFeedback" rows="4" required placeholder="Nhập nhận xét về dự án..."></textarea>
+                                </div>
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="button" class="btn btn-primary" onclick="submitEvaluation()">Xác nhận</button>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Hủy
+                        </button>
+                        <button type="button" class="btn btn-primary btn-lg px-4" onclick="submitEvaluation()">
+                            <i class="fas fa-check me-2"></i>Xác nhận
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Chat Container -->
+
         <div class="chat-container">
             <div class="chat-header">
                 <div class="chat-header-info">
@@ -503,48 +214,89 @@
                         <h6 th:text="${project.tenProject}"></h6>
                     </div>
                 </div>
+                <!-- Add Member Button -->
+                <div class="chat-header-actions">
+                    <button class="btn btn-primary rounded-circle" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
             </div>
 
-            <div class="chat-messages">
-                <div class="message received">
-                    <div class="message-content">
-                        <p class="mb-0">Chào mọi người! Dự án mới đã bắt đầu rồi.</p>
-                    </div>
-                    <div class="message-info">
-                        <span>Hades</span>
-                        <span class="ms-2">10:30 AM</span>
+            <!-- Add Member Modal - Enhanced -->
+            <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-success text-white">
+                            <h5 class="modal-title" id="addMemberModalLabel">
+                                <i class="fas fa-user-plus me-2"></i>Thêm thành viên
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <form id="addMemberForm">
+                                <div class="mb-4">
+                                    <label for="memberSearch" class="form-label fw-bold">
+                                        <i class="fas fa-users me-2 text-primary"></i>Tìm kiếm thành viên
+                                    </label>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
+                                        <input type="text" class="form-control" id="memberSearch" placeholder="Nhập mã số hoặc tên...">
+                                        <button class="btn btn-primary" type="button" onclick="searchMembers()">
+                                            Tìm
+                                        </button>
+                                    </div>
+                                    <div class="form-text text-muted">Tìm kiếm theo mã số hoặc tên thành viên</div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-list me-2 text-info"></i>Kết quả tìm kiếm
+                                    </label>
+                                    <div id="searchResults" class="list-group shadow-sm rounded" style="max-height: 200px; overflow-y: auto; border: 1px solid rgba(0,0,0,.125);">
+                                        <!-- Search results will be populated here -->
+                                        <div class="list-group-item text-center text-muted py-3">
+                                            <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
+                                            <p class="mb-0">Kết quả tìm kiếm sẽ hiển thị ở đây</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="memberRole" class="form-label fw-bold">
+                                        <i class="fas fa-user-tag me-2 text-warning"></i>Vai trò
+                                    </label>
+                                    <select class="form-select form-select-lg" id="memberRole" required>
+                                        <option value="">Chọn vai trò...</option>
+                                        <option value="Member">Thành viên</option>
+                                        <option value="Leader">Trưởng nhóm</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer border-0 pt-0">
+                            <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-2"></i>Hủy
+                            </button>
+                            <button type="button" class="btn btn-success btn-lg px-4" onclick="addMember()">
+                                <i class="fas fa-plus me-2"></i>Thêm
+                            </button>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="message sent">
-                    <div class="message-content">
-                        <p class="mb-0">Tôi đã hoàn thành phần giao diện người dùng.</p>
-                    </div>
-                    <div class="message-info text-end">
-                        <span>Bạn</span>
-                        <span class="ms-2">10:35 AM</span>
-                    </div>
-                </div>
-
-                <div class="message received">
-                    <div class="message-content">
-                        <p class="mb-0">Tuyệt vời! Tôi sẽ kiểm tra ngay.</p>
-                    </div>
-                    <div class="message-info">
-                        <span>Hoàng Phi</span>
-                        <span class="ms-2">10:36 AM</span>
-                    </div>
-                </div>
+            <div class="chat-messages" id="chat-box">
+                <!-- Tin nhắn sẽ được WebSocket đẩy vào đây -->
             </div>
 
             <div class="chat-input">
                 <div class="chat-input-container">
-                    <textarea class="form-control" placeholder="Nhập tin nhắn..." rows="1"></textarea>
-                    <button class="btn btn-primary btn-send">
+                    <input type="hidden" id="groupId" th:value="${project.getMaProject()}"/>
+                    <textarea id="messageInput" class="form-control" placeholder="Nhập tin nhắn..." rows="1"></textarea>
+                    <button id="sendGroupButton" class="btn btn-primary btn-send">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -557,72 +309,127 @@
     <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="/js/main.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Auto-resize textarea
-            const textarea = document.querySelector('.chat-input textarea');
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
+    <script th:inline="javascript">
+
+    const currentUserId = /*[[${currentUser.getMaSo()}]]*/ 'default';
+    const groupId = /*[[${project.getMaProject()}]]*/ 'default';
+
+        let stompClient = null;
+        let isConnected = false;
+
+        function connectWebSocket(currentUserId) {
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, function (frame) {
+                isConnected = true;
+                document.getElementById("sendGroupButton").disabled = false;
+
+                console.log("✅ WebSocket connected:", frame);
+
+                // Lắng nghe kênh theo group
+                stompClient.subscribe(`/topic/messages.group-${groupId}`, function (messageOutput) {
+                    const msg = JSON.parse(messageOutput.body);
+                    displayMessage(msg);
+                });
+            });
+        }
+
+        function sendMessage(senderId, groupId) {
+            const content = document.getElementById("messageInput").value;
+            if(!content.trim()) return;
+
+            const message = {
+                senderId: senderId,
+                groupId: groupId,
+                content: content
+            };
+
+            stompClient.send("/app/chat", {}, JSON.stringify(message));
+            document.getElementById('messageInput').value = '';
+        }
+
+
+        function displayMessage(msg) {
+            const time = msg.timestamp ? new Date(msg.timestamp) : new Date();
+            const formattedTime = time.toLocaleTimeString('vi-VN', {
+                hour: '2-digit', minute: '2-digit', hour12: false
             });
 
-            // Handle send message
-            const sendButton = document.querySelector('.btn-send');
-            sendButton.addEventListener('click', function() {
-                const message = textarea.value.trim();
-                if (message) {
-                    const messagesContainer = document.querySelector('.chat-messages');
-                    const newMessage = document.createElement('div');
-                    newMessage.className = 'message sent';
-                    newMessage.innerHTML = `
-                        <div class="message-content">
-                            <p class="mb-0">${message}</p>
-                        </div>
-                        <div class="message-info text-end">
-                            <span>Bạn</span>
-                            <span class="ms-2">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                        </div>
-                    `;
-                    messagesContainer.appendChild(newMessage);
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                    textarea.value = '';
-                    textarea.style.height = 'auto';
+            const chatBox = document.getElementById("chat-box");
 
-                    // Add typing indicator
-                    setTimeout(() => {
-                        const typingIndicator = document.createElement('div');
-                        typingIndicator.className = 'message received';
-                        typingIndicator.innerHTML = `
-                            <div class="message-content">
-                                <p class="mb-0">Đã nhận tin nhắn của bạn!</p>
-                            </div>
-                            <div class="message-info">
-                                <span>Hệ thống</span>
-                                <span class="ms-2">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                            </div>
-                        `;
-                        messagesContainer.appendChild(typingIndicator);
-                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                    }, 1000);
-                }
+            // Xác định kiểu tin nhắn: của bạn hay người khác
+            const isOwnMessage = msg.senderId === currentUserId;
+
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", isOwnMessage ? "sent" : "received");
+
+            const contentDiv = document.createElement("div");
+            contentDiv.classList.add("message-content");
+
+            const p = document.createElement("p");
+            p.classList.add("mb-0");
+            p.innerText = msg.content;
+
+            contentDiv.appendChild(p);
+
+            const infoDiv = document.createElement("div");
+            infoDiv.classList.add("message-info");
+            if (isOwnMessage) {
+                infoDiv.classList.add("text-end");
+            }
+
+            const nameSpan = document.createElement("span");
+            nameSpan.innerText = isOwnMessage ? "Bạn" : msg.senderName;
+
+            const timeSpan = document.createElement("span");
+            timeSpan.classList.add("ms-2");
+            timeSpan.innerText = formattedTime;
+
+            infoDiv.appendChild(nameSpan);
+            infoDiv.appendChild(timeSpan);
+
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(infoDiv);
+
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+
+
+        function loadMessages() {
+            fetch(`/getMessagesGroup?groupId=${groupId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    messages.forEach(msg => displayMessage(msg));
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Disable nút gửi lúc đầu
+            document.getElementById("sendGroupButton").disabled = true;
+
+            // Load tin nhắn từ database
+            loadMessages();
+
+            // Kết nối WebSocket
+            connectWebSocket(currentUserId);
+
+            // Gắn sự kiện gửi khi bấm nút gửi
+            document.getElementById("sendGroupButton").addEventListener("click", function () {
+                sendMessage(currentUserId, groupId);
             });
-
-            // Handle Enter key press
-            textarea.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendButton.click();
-                }
-            });
-
-            // Add smooth scroll to chat messages
-            const messagesContainer = document.querySelector('.chat-messages');
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
         });
 
+    </script>
+
+    <!-- Add this before the SockJS scripts -->
+    <script>
         function submitEvaluation() {
             const score = document.getElementById('projectScore').value;
             const feedback = document.getElementById('projectFeedback').value;
+            const projectId = groupId; // Using the groupId from chat context
 
             if (!score || !feedback) {
                 alert('Vui lòng điền đầy đủ thông tin đánh giá!');
@@ -634,18 +441,179 @@
                 return;
             }
 
-            // Here you would typically send the data to your backend
-            console.log('Điểm số:', score);
-            console.log('Nhận xét:', feedback);
+            // Create evaluation object
+            const evaluation = {
+                projectId: projectId,
+                score: parseFloat(score),
+                feedback: feedback
+            };
 
-            // Close the modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
-            modal.hide();
+            // Send evaluation to server
+            fetch('/api/projects/evaluate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(evaluation)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Lỗi khi gửi đánh giá');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Close the modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
+                modal.hide();
 
-            // Show success message
-            alert('Đã lưu đánh giá thành công!');
+                // Show success message
+                alert('Đã lưu đánh giá thành công!');
+
+                // Optionally refresh the page or update UI
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại!');
+            });
         }
     </script>
+
+    <!-- SockJS -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+
+    <!-- STOMP over SockJS -->
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+    <!-- Enhanced Modal Animations and Styling -->
+    <style>
+        .modal.fade .modal-dialog {
+            transform: scale(0.8);
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal.show .modal-dialog {
+            transform: scale(1);
+        }
+        
+        /* Modal styling */
+        .modal-content {
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        /* Custom form styling */
+        .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            border-color: #86b7fe;
+        }
+    </style>
+
+    <script>
+        let selectedUserId = null;
+
+        function searchMembers() {
+            const searchTerm = document.getElementById('memberSearch').value;
+            const projectId = groupId; // Using the existing groupId
+
+            // Call API to search for members
+            fetch(`/api/users/search?term=${encodeURIComponent(searchTerm)}`)
+                .then(response => response.json())
+                .then(users => {
+                    const resultsDiv = document.getElementById('searchResults');
+                    resultsDiv.innerHTML = '';
+
+                    users.forEach(user => {
+                        const item = document.createElement('a');
+                        item.className = 'list-group-item list-group-item-action';
+                        item.innerHTML = `
+                            <div class="d-flex align-items-center">
+                                <img src="${user.avatar || '/img/avatars/NULL.jpg'}" class="rounded-circle me-2" style="width: 32px; height: 32px;">
+                                <div>
+                                    <div class="fw-bold">${user.ho} ${user.ten}</div>
+                                    <small class="text-muted">Mã số: ${user.maSo}</small>
+                                </div>
+                            </div>
+                        `;
+                        item.onclick = () => selectUser(user.maSo, item);
+                        resultsDiv.appendChild(item);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi tìm kiếm thành viên');
+                });
+        }
+
+        function selectUser(userId, element) {
+            // Remove selection from all items
+            document.querySelectorAll('#searchResults .list-group-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+
+            // Add selection to clicked item
+            element.classList.add('selected');
+            selectedUserId = userId;
+        }
+
+        function addMember() {
+            if (!selectedUserId) {
+                alert('Vui lòng chọn thành viên');
+                return;
+            }
+
+            const role = document.getElementById('memberRole').value;
+            if (!role) {
+                alert('Vui lòng chọn vai trò');
+                return;
+            }
+
+            const projectId = groupId; // Using the existing groupId
+
+            // Call API to add member
+            fetch('/api/projects/members/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    projectId: projectId,
+                    userId: selectedUserId,
+                    role: role
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Lỗi khi thêm thành viên');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Close the modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addMemberModal'));
+                modal.hide();
+
+                // Show success message
+                alert('Đã thêm thành viên thành công!');
+
+                // Refresh the page to show new member
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi thêm thành viên. Vui lòng thử lại!');
+            });
+        }
+    </script>
+
+    <!-- Add this before your existing scripts -->
+    <script>
+        // Toggle mobile menu
+        document.getElementById('navbarToggle').addEventListener('click', function() {
+            document.getElementById('navbarMenu').classList.toggle('show');
+        });
+    </script>
+
 </body>
 
 </html>

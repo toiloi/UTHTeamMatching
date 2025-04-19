@@ -10,7 +10,7 @@
         <!-- Lặp qua danh sách bạn bè đã lọc -->
         <div th:each="friend : ${friendUsers}">
             <!-- Hiển thị avatar của bạn bè -->
-            <a th:href="@{/chatFriend(friendId=${friend.maSo})}">
+            <a th:href="@{'/chatFriend/' + ${friend.maSo}}">
                 <div class="friend-item">
                     <img th:src="${friend.avatar != null} ? ${friend.avatar} : '/img/avatars/NULL.jpg'" class="friend-avatar">
                     <div class="friend-info">
@@ -29,9 +29,8 @@
 
 <!--        List chat theo dự án-->
         <div th:each="project: ${projects}">
-            <a th:href="@{/project/{id}(id=${project.getMaProject()})}" >
-                <div th:text="${project.getTenProject()}">
-                </div>
+            <a th:href="@{'/project/' + ${project.maProject}}">
+                <div th:text="${project.getTenProject()}"></div>
             </a>
         </div>
 

@@ -1,14 +1,8 @@
 package org.example.uthteammatching.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.example.uthteammatching.models.ChatMessage;
-import org.example.uthteammatching.models.ListFriend;
-import org.example.uthteammatching.models.Project;
-import org.example.uthteammatching.models.UthUser;
-import org.example.uthteammatching.repositories.ChatMessageRepository;
-import org.example.uthteammatching.repositories.ListFriendRepository;
-import org.example.uthteammatching.repositories.ProjectRepository;
-import org.example.uthteammatching.repositories.UserRepository;
+import org.example.uthteammatching.models.*;
+import org.example.uthteammatching.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -20,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -48,6 +43,8 @@ public class chatController {
     private ChatMessageRepository chatMessageRepository;
     @Autowired
     private ProjectRepository projectRepository;
+    @Autowired
+    private ThanhvienProjectRepository thanhvienProjectRepository;
 
 
     private UthUser addCurrentUserToModel(Model model) {
@@ -108,8 +105,8 @@ public class chatController {
 
 
 
-    @GetMapping("/chatFriend")
-    public String chatFriend(@RequestParam("friendId") Long friendId, Model model) {
+    @GetMapping("/chatFriend/{friendId}")
+    public String chatFriend(@PathVariable("friendId") Long friendId, Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser);
         model.addAttribute("currentUser", currentUser);
@@ -123,14 +120,17 @@ public class chatController {
         return "chat";
     }
 
-    @GetMapping("/chatProject")
-    public String chatProject(@RequestParam("projectId") Long projectId, Model model) {
+
+    @GetMapping("/project/{projectId}")
+    public String chatProject(@PathVariable("projectId") Long projectId, Model model) {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser);
         model.addAttribute("currentUser", currentUser);
         Project project = projectRepository.findByMaProject(projectId);
         model.addAttribute("project", project);
-        return "chatProject"; // Giao diện chat nhóm
+        List<ThanhvienProject> members = thanhvienProjectRepository.findByProjectMaSo(project);
+        model.addAttribute("members", members);
+        return "project-details";
     }
 
 

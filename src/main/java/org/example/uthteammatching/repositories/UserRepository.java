@@ -3,6 +3,7 @@ package org.example.uthteammatching.repositories;
 import org.example.uthteammatching.models.UthUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,4 +17,6 @@ public interface UserRepository extends JpaRepository<UthUser, Long> {
     UthUser findBySdt(String sdt);
     Optional<UthUser> findFirstBySdt(String sdt);
     boolean existsBySdt(String sdt);
+    @Query("SELECT u FROM UthUser u JOIN u.userRoles ur JOIN ur.role r WHERE r.ten = :roleName")
+    List<UthUser> findByRoleName(String roleName);
 }

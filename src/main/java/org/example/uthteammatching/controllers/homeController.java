@@ -5,6 +5,7 @@ import org.example.uthteammatching.models.*;
 import org.example.uthteammatching.repositories.*;
 import org.example.uthteammatching.services.ArticleService;
 import org.example.uthteammatching.services.ListFriendService;
+import org.example.uthteammatching.services.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
@@ -62,6 +63,8 @@ public class homeController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private ChatGroupRepository chatGroupRepository;
+    @Autowired
+    private FileStorageService fileStorageService;
 
     // Phương thức chung để lấy currentUser và thêm vào model
     private UthUser addCurrentUserToModel(Model model) {
@@ -198,6 +201,9 @@ public class homeController {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser);
 
+        // Log để kiểm tra
+        System.out.println("taiLieuFiles: " + (taiLieuFiles == null ? "null" : taiLieuFiles.size()));
+
         Project project = new Project();
         project.setTenProject(tenProject);
         project.setMoTa(moTa);
@@ -230,42 +236,48 @@ public class homeController {
             project.setMaGiangVien(null);
         }
 
-        // Xử lý tài liệu
-        if (taiLieuFiles != null) {
-            for (MultipartFile file : taiLieuFiles) {
-                if (!file.isEmpty()) {
-                    String fileName = file.getOriginalFilename();
-                    String duongDan = "/uploads/" + fileName;
-                    String loaiTaiLieu = determineFileType(fileName); // Hàm xác định loại file
-
-                    // Lưu tệp vào thư mục
-                    try {
-                        File uploadDir = new File("src/main/resources/static/uploads");
-                        if (!uploadDir.exists()) {
-                            uploadDir.mkdirs();
-                        }
-                        file.transferTo(new File("src/main/resources/static" + duongDan));
-                    } catch (IOException e) {
-                        model.addAttribute("error", "Lỗi khi tải tệp: " + fileName);
-                        model.addAttribute("project", project);
-                        model.addAttribute("giangViens", userRepository.findByRoleName("Giảng viên"));
-                        return "project";
-                    }
-
-                    TaiLieu taiLieu = new TaiLieu(fileName, duongDan, loaiTaiLieu, project);
-                    project.addTaiLieu(taiLieu);
-                }
-            }
-        }
-
+        // Thêm trưởng nhóm
         ThanhvienProject tv = new ThanhvienProject();
-        ThanhvienProjectId tvId = new ThanhvienProjectId(currentUser.getMaSo(), project.getMaProject());
+        ThanhvienProjectId tvId = new ThanhvienProjectId(currentUser.getMaSo(), null);
         tv.setId(tvId);
-        tv.setProjectMaSo(project);
         tv.setUserMaSo(currentUser);
         tv.setVaiTro("Trưởng nhóm");
         project.addThanhVien(tv);
 
+        // Lưu project trước để sinh maProject
+        projectRepository.save(project);
+        tv.getId().setMaProject(project.getMaProject());
+        tv.setProjectMaSo(project);
+
+        // Xử lý tài liệu
+        if (taiLieuFiles != null && !taiLieuFiles.isEmpty()) {
+            for (MultipartFile file : taiLieuFiles) {
+                if (!file.isEmpty()) {
+                    try {
+                        String duongDan = fileStorageService.saveFile(file);
+                        String fileName = file.getOriginalFilename();
+                        String loaiTaiLieu = fileStorageService.determineFileType(fileName);
+
+                        TaiLieu taiLieu = new TaiLieu(fileName, duongDan, loaiTaiLieu, project);
+                        project.addTaiLieu(taiLieu);
+                    } catch (IllegalArgumentException e) {
+                        model.addAttribute("error", e.getMessage());
+                        model.addAttribute("project", project);
+                        model.addAttribute("giangViens", userRepository.findByRoleName("Giảng viên"));
+                        return "project";
+                    } catch (IOException e) {
+                        model.addAttribute("error", "Lỗi khi tải tệp: " + file.getOriginalFilename());
+                        model.addAttribute("project", project);
+                        model.addAttribute("giangViens", userRepository.findByRoleName("Giảng viên"));
+                        return "project";
+                    }
+                }
+            }
+        } else {
+            System.out.println("No files uploaded");
+        }
+
+        // Lưu lại project sau khi thêm tài liệu
         projectRepository.save(project);
 
         ChatGroup chatGroup = new ChatGroup();
@@ -277,25 +289,6 @@ public class homeController {
         model.addAttribute("success", "Dự án đã được tạo thành công!");
         return "redirect:/project";
     }
-
-    // Hàm xác định loại tài liệu dựa trên phần mở rộng
-    private String determineFileType(String fileName) {
-        if (fileName == null) return "Khác";
-        String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-        switch (extension) {
-            case "pdf":
-                return "PDF";
-            case "doc":
-            case "docx":
-                return "Word";
-            case "xls":
-            case "xlsx":
-                return "Excel";
-            default:
-                return "Khác";
-        }
-    }
-
 
     @GetMapping("/search")
     public String searchProject(@RequestParam(value = "keyword", required = false) String keyword, Model model) {

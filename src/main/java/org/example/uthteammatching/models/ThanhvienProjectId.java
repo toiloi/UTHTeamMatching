@@ -44,4 +44,7 @@ public class ThanhvienProjectId implements java.io.Serializable {
         return Objects.hash(userMaSo, projectMaSo);
     }
 
+    public void setMaProject(Long maProject) {
+
+    }
 }

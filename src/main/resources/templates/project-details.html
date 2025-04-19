@@ -137,14 +137,18 @@
             <div class="project-section">
                 <h6>Tài liệu đính kèm</h6>
                 <div class="project-files">
-                    <a href="#" class="file-item">
-                        <i class="fas fa-file-pdf"></i>
-                        <span>Yêu cầu dự án.pdf</span>
-                    </a>
-                    <a href="#" class="file-item">
-                        <i class="fas fa-file-word"></i>
-                        <span>Kế hoạch dự án.docx</span>
-                    </a>
+                    <div th:if="${project.taiLieus.isEmpty()}">
+                        <p class="text-muted">Chưa có tài liệu đính kèm.</p>
+                    </div>
+                    <div th:each="taiLieu : ${project.taiLieus}">
+                        <a th:href="@{${taiLieu.duongDan}}" class="file-item" target="_blank">
+                            <i class="fas fa-file-pdf" th:if="${taiLieu.loaiTaiLieu == 'PDF'}"></i>
+                            <i class="fas fa-file-word" th:if="${taiLieu.loaiTaiLieu == 'Word'}"></i>
+                            <i class="fas fa-file-excel" th:if="${taiLieu.loaiTaiLieu == 'Excel'}"></i>
+                            <i class="fas fa-file" th:if="${taiLieu.loaiTaiLieu != 'PDF' and taiLieu.loaiTaiLieu != 'Word' and taiLieu.loaiTaiLieu != 'Excel'}"></i>
+                            <span th:text="${taiLieu.tenTaiLieu}"></span>
+                        </a>
+                    </div>
                 </div>
             </div>
 

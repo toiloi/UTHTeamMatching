@@ -499,81 +499,65 @@
             </div>
             <form th:action="@{/project}" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
-                    <!-- Hiển thị lỗi nếu có -->
                     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-                    <!-- Hiển thị thông báo thành công nếu có -->
                     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
-                    <!-- Tên dự án -->
                     <div class="mb-3">
                         <label for="nameProject" class="form-label">Tên dự án</label>
                         <input type="text" class="form-control" id="nameProject" name="nameProject"
-                               th:value="${project?.tenProject}" placeholder="Nhập tên dự án" required>
+                               th:value="${tenProject != null ? tenProject : project?.tenProject}" placeholder="Nhập tên dự án" required>
                     </div>
-
-                    <!-- Mô tả dự án -->
                     <div class="mb-3">
                         <label for="moTa" class="form-label">Mô tả dự án</label>
                         <textarea class="form-control" id="moTa" name="moTa" rows="4"
-                                  th:text="${project?.moTa}" placeholder="Mô tả chi tiết về dự án" required></textarea>
+                                  th:text="${moTa != null ? moTa : project?.moTa}" placeholder="Mô tả chi tiết về dự án" required></textarea>
                     </div>
-
-                    <!-- Trạng thái -->
                     <div class="mb-3">
                         <label for="trangThai" class="form-label">Trạng thái</label>
                         <select class="form-select" id="trangThai" name="trangThai" required>
-                            <option value="" th:selected="${project?.trangThai == null}">Chọn trạng thái</option>
-                            <option value="Đang lập kế hoạch" th:selected="${project?.trangThai == 'Đang lập kế hoạch'}">Đang lập kế hoạch</option>
-                            <option value="Đang thực hiện" th:selected="${project?.trangThai == 'Đang thực hiện'}">Đang thực hiện</option>
-                            <option value="Đã hoàn thành" th:selected="${project?.trangThai == 'Đã hoàn thành'}">Đã hoàn thành</option>
+                            <option value="" th:selected="${trangThai == null and project?.trangThai == null}">Chọn trạng thái</option>
+                            <option value="Đang lập kế hoạch" th:selected="${trangThai == 'Đang lập kế hoạch' or project?.trangThai == 'Đang lập kế hoạch'}">Đang lập kế hoạch</option>
+                            <option value="Đang thực hiện" th:selected="${trangThai == 'Đang thực hiện' or project?.trangThai == 'Đang thực hiện'}">Đang thực hiện</option>
+                            <option value="Đã hoàn thành" th:selected="${trangThai == 'Đã hoàn thành' or project?.trangThai == 'Đã hoàn thành'}">Đã hoàn thành</option>
                         </select>
                     </div>
-
-                    <!-- Loại dự án -->
                     <div class="mb-3">
                         <label for="loai" class="form-label">Loại dự án</label>
                         <select class="form-select" id="loai" name="loai" required>
-                            <option value="" th:selected="${project?.loai == null}">Chọn loại dự án</option>
-                            <option value="HOC_THUAT" th:selected="${project?.loai == 'HOC_THUAT'}">Học thuật</option>
-                            <option value="BEN_NGOAI" th:selected="${project?.loai == 'BEN_NGOAI'}">Bên ngoài</option>
+                            <option value="" th:selected="${loai == null and project?.loai == null}">Chọn loại dự án</option>
+                            <option value="HOC_THUAT" th:selected="${loai == 'HOC_THUAT' or project?.loai == 'HOC_THUAT'}">Học thuật</option>
+                            <option value="BEN_NGOAI" th:selected="${loai == 'BEN_NGOAI' or project?.loai == 'BEN_NGOAI'}">Bên ngoài</option>
                         </select>
                     </div>
-
-                    <!-- Giảng viên hướng dẫn -->
                     <div class="mb-3" id="maGiangVienContainer">
                         <label for="maGiangVien" class="form-label">Giảng viên hướng dẫn</label>
                         <select class="form-select" id="maGiangVien" name="maGiangVien">
-                            <option value="" th:selected="${project?.maGiangVien == null}">Chọn giảng viên</option>
+                            <option value="" th:selected="${maGiangVien == null and project?.maGiangVien == null}">Chọn giảng viên</option>
                             <th:block th:each="giangVien : ${giangViens}">
                                 <option th:value="${giangVien.maSo}"
                                         th:text="${giangVien.ho + ' ' + giangVien.ten}"
-                                        th:selected="${project?.maGiangVien?.maSo == giangVien.maSo}"></option>
+                                        th:selected="${maGiangVien == giangVien.maSo or project?.maGiangVien?.maSo == giangVien.maSo}"></option>
                             </th:block>
                         </select>
                     </div>
-
-                    <!-- Ngày bắt đầu -->
                     <div class="mb-3">
                         <label for="ngayBatDau" class="form-label">Ngày bắt đầu</label>
                         <input type="date" class="form-control" id="ngayBatDau" name="ngayBatDau"
-                               th:value="${project?.ngayBatDau}" required>
+                               th:value="${ngayBatDau != null ? ngayBatDau : project?.ngayBatDau}" required>
                     </div>
-
-                    <!-- Ngày kết thúc -->
                     <div class="mb-3">
                         <label for="ngayKetThuc" class="form-label">Ngày kết thúc</label>
                         <input type="date" class="form-control" id="ngayKetThuc" name="ngayKetThuc"
-                               th:value="${project?.ngayKetThuc}" required>
+                               th:value="${ngayKetThuc != null ? ngayKetThuc : project?.ngayKetThuc}" required>
                     </div>
-
-                    <!-- Tài liệu đính kèm -->
                     <div class="mb-3">
                         <label class="form-label">Tài liệu đính kèm (tùy chọn)</label>
                         <div id="taiLieuContainer">
                             <div class="taiLieuRow mb-2">
                                 <div class="row">
                                     <div class="col-md-11">
-                                        <input type="file" class="form-control" name="taiLieuFiles" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                                        <input type="file" class="form-control" name="taiLieuFiles" multiple
+                                               accept=".pdf,.doc,.docx,.xls,.xlsx">
                                     </div>
                                     <div class="col-md-1">
                                         <button type="button" class="btn btn-danger btn-sm" onclick="removeTaiLieuRow(this)">Xóa</button>

@@ -28,9 +28,6 @@ public class LecturerRequest {
     @Column(nullable = false)
     private String status = "PENDING"; // PENDING, APPROVED, REJECTED
 
-    @Column
-    private String certificatesPath;
-
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 

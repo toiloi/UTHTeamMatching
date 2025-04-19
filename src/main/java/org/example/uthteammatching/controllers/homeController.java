@@ -782,7 +782,6 @@ public class homeController {
             @RequestParam("expertise") String expertise,
             @RequestParam("experience") String experience,
             @RequestParam("reason") String reason,
-            @RequestParam(value = "certificates", required = false) List<MultipartFile> certificates,
             Model model,
             RedirectAttributes redirectAttributes) {
 
@@ -806,33 +805,6 @@ public class homeController {
         request.setExpertise(expertise);
         request.setExperience(experience);
         request.setReason(reason);
-
-        // Xử lý upload chứng chỉ
-        if (certificates != null && !certificates.isEmpty()) {
-            try {
-                String uploadDir = "src/main/resources/static/uploads/certificates/";
-                StringBuilder fileNames = new StringBuilder();
-
-                for (MultipartFile file : certificates) {
-                    if (!file.isEmpty()) {
-                        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                        Path filePath = Paths.get(uploadDir, fileName);
-                        Files.createDirectories(filePath.getParent());
-                        Files.write(filePath, file.getBytes());
-
-                        if (fileNames.length() > 0) {
-                            fileNames.append(",");
-                        }
-                        fileNames.append("/uploads/certificates/").append(fileName);
-                    }
-                }
-
-                request.setCertificatesPath(fileNames.toString());
-            } catch (IOException e) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi upload chứng chỉ: " + e.getMessage());
-                return "redirect:/user-detail/" + maSo;
-            }
-        }
 
         lecturerRequestRepository.save(request);
         redirectAttributes.addFlashAttribute("successMessage", "Đơn xin làm giảng viên đã được gửi thành công!");

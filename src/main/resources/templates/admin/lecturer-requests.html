@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
@@ -10,201 +11,187 @@
     <link href="/css/admin-theme.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="sidebar-brand">
-                    <i class="fas fa-university me-2"></i>UTH Team Matching
-                </div>
-                <div class="nav flex-column">
-                    <a class="nav-link" href="/admin">
-                        <i class="fas fa-users-cog"></i>Quản lý vai trò
-                    </a>
-                    <a class="nav-link" href="/admin/users">
-                        <i class="fas fa-user-shield"></i>Quản lý người dùng
-                    </a>
-                    <a class="nav-link active" href="/admin/lecturer-requests">
-                        <i class="fas fa-chalkboard-teacher"></i>Đơn xin làm giảng viên
-                    </a>
-                    <a class="nav-link" href="/logout">
-                        <i class="fas fa-sign-out-alt"></i>Đăng xuất
-                    </a>
-                </div>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-university me-2"></i>UTH Team Matching
+            </div>
+            <div class="nav flex-column">
+                <a class="nav-link" href="/admin">
+                    <i class="fas fa-users-cog"></i>Quản lý vai trò
+                </a>
+                <a class="nav-link" href="/admin/users">
+                    <i class="fas fa-user-shield"></i>Quản lý người dùng
+                </a>
+                <a class="nav-link active" href="/admin/lecturer-requests">
+                    <i class="fas fa-chalkboard-teacher"></i>Đơn xin làm giảng viên
+                </a>
+                <a class="nav-link" href="/logout">
+                    <i class="fas fa-sign-out-alt"></i>Đăng xuất
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2 class="h3 mb-4 text-gray-800">Quản lý đơn xin làm giảng viên</h2>
+
+            <!-- Success Message -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
-            <!-- Main Content -->
-            <div class="main-content">
-                <h2 class="h3 mb-4 text-gray-800">Quản lý đơn xin làm giảng viên</h2>
+            <!-- Error Message -->
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
 
-                <!-- Success Message -->
-                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <span th:text="${successMessage}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="card fade-in">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>Đơn xin đang chờ duyệt
+                    </h5>
                 </div>
-
-                <!-- Error Message -->
-                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <span th:text="${errorMessage}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-
-                <div class="card fade-in">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <i class="fas fa-clock me-2"></i>Đơn xin đang chờ duyệt
-                        </h5>
+                <div class="card-body">
+                    <div th:if="${pendingRequests.empty}" class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Không có đơn xin nào đang chờ duyệt.
                     </div>
-                    <div class="card-body">
-                        <div th:if="${pendingRequests.empty}" class="alert alert-info">
-                            <i class="fas fa-info-circle me-2"></i>
-                            Không có đơn xin nào đang chờ duyệt.
-                        </div>
-                        <div th:unless="${pendingRequests.empty}" class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Người gửi</th>
-                                        <th>Chuyên môn</th>
-                                        <th>Kinh nghiệm</th>
-                                        <th>Lý do</th>
-                                        <th>Chứng chỉ</th>
-                                        <th>Ngày gửi</th>
-                                        <th>Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="request : ${pendingRequests}">
-                                        <td>
-                                            <a th:href="@{/user-detail/{id}(id=${request.user.maSo})}" 
-                                               class="text-decoration-none text-primary"
-                                               th:text="${request.user.ho + ' ' + request.user.ten}">
-                                            </a>
-                                        </td>
-                                        <td th:text="${request.expertise}"></td>
-                                        <td th:text="${request.experience}"></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-info" 
-                                                    data-bs-toggle="tooltip" 
-                                                    data-bs-placement="top" 
-                                                    th:title="${request.reason}">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <div th:if="${request.certificatesPath != null}">
-                                                <div th:each="cert : ${#strings.arraySplit(request.certificatesPath, ',')}">
-                                                    <a th:href="@{${cert}}" target="_blank" 
-                                                       class="btn btn-sm btn-outline-primary mb-1">
-                                                        <i class="fas fa-file-pdf"></i> Xem
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <span th:unless="${request.certificatesPath != null}" class="text-muted">
-                                                <i class="fas fa-times-circle"></i> Không có
-                                            </span>
-                                        </td>
-                                        <td th:text="${#temporals.format(request.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <button class="btn btn-success btn-sm" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#approveModal"
-                                                        th:attr="data-request-id=${request.id}">
-                                                    <i class="fas fa-check"></i>
-                                                </button>
-                                                <button class="btn btn-danger btn-sm" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#rejectModal"
-                                                        th:attr="data-request-id=${request.id}">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div th:unless="${pendingRequests.empty}" class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Người gửi</th>
+                                <th>Chuyên môn</th>
+                                <th>Kinh nghiệm</th>
+                                <th>Lý do</th>
+                                <th>Ngày gửi</th>
+                                <th>Thao tác</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="request : ${pendingRequests}">
+                                <td>
+                                    <a th:href="@{/user-detail/{id}(id=${request.user.maSo})}"
+                                       class="text-decoration-none text-primary"
+                                       th:text="${request.user.ho + ' ' + request.user.ten}">
+                                    </a>
+                                </td>
+                                <td th:text="${request.expertise}"></td>
+                                <td th:text="${request.experience}"></td>
+                                <td>
+                                    <button class="btn btn-sm btn-info"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            th:title="${request.reason}">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                                <td th:text="${#temporals.format(request.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-success btn-sm"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#approveModal"
+                                                th:attr="data-request-id=${request.id}">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#rejectModal"
+                                                th:attr="data-request-id=${request.id}">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Approve Modal -->
-    <div class="modal fade" id="approveModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="fas fa-check-circle text-success me-2"></i>Xác nhận duyệt đơn
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p class="mb-0">
-                        <i class="fas fa-question-circle text-primary me-2"></i>
-                        Bạn có chắc chắn muốn duyệt đơn xin làm giảng viên này?
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-2"></i>Hủy
+<!-- Approve Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-check-circle text-success me-2"></i>Xác nhận duyệt đơn
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">
+                    <i class="fas fa-question-circle text-primary me-2"></i>
+                    Bạn có chắc chắn muốn duyệt đơn xin làm giảng viên này?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Hủy
+                </button>
+                <form id="approveForm" method="POST">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check me-2"></i>Xác nhận duyệt
                     </button>
-                    <form th:action="@{/admin/lecturer-requests/{id}/approve(id=${requestId})}" method="POST">
-                        <button type="submit" class="btn btn-success">
-                            <i class="fas fa-check me-2"></i>Xác nhận duyệt
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-times-circle text-danger me-2"></i>Từ chối đơn
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="rejectForm" method="POST">
+                    <div class="mb-3">
+                        <label for="rejectionReason" class="form-label">
+                            <i class="fas fa-comment-alt me-2"></i>Lý do từ chối (không bắt buộc)
+                        </label>
+                        <textarea class="form-control" id="rejectionReason" name="rejectionReason" rows="3"
+                                  placeholder="Nhập lý do từ chối..."></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Hủy
                         </button>
-                    </form>
-                </div>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-ban me-2"></i>Xác nhận từ chối
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Reject Modal -->
-    <div class="modal fade" id="rejectModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="fas fa-times-circle text-danger me-2"></i>Từ chối đơn
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form th:action="@{/admin/lecturer-requests/{id}/reject(id=${requestId})}" method="POST">
-                        <div class="mb-3">
-                            <label for="rejectionReason" class="form-label">
-                                <i class="fas fa-comment-alt me-2"></i>Lý do từ chối (không bắt buộc)
-                            </label>
-                            <textarea class="form-control" id="rejectionReason" name="rejectionReason" rows="3" 
-                                      placeholder="Nhập lý do từ chối..."></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                <i class="fas fa-times me-2"></i>Hủy
-                            </button>
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-ban me-2"></i>Xác nhận từ chối
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
+            return new bootstrap.Tooltip(tooltipTriggerEl);
         });
 
         // Xử lý modal duyệt
@@ -212,7 +199,7 @@
         approveModal.addEventListener('show.bs.modal', function(event) {
             const button = event.relatedTarget;
             const requestId = button.getAttribute('data-request-id');
-            const form = approveModal.querySelector('form');
+            const form = approveModal.querySelector('#approveForm');
             form.action = `/admin/lecturer-requests/${requestId}/approve`;
         });
 
@@ -221,10 +208,10 @@
         rejectModal.addEventListener('show.bs.modal', function(event) {
             const button = event.relatedTarget;
             const requestId = button.getAttribute('data-request-id');
-            const form = rejectModal.querySelector('form');
+            const form = rejectModal.querySelector('#rejectForm');
             form.action = `/admin/lecturer-requests/${requestId}/reject`;
         });
     });
-    </script>
+</script>
 </body>
-</html> 
+</html>

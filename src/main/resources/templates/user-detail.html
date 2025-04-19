@@ -199,7 +199,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="lecturerRequestForm" th:action="@{/user/request-lecturer}" method="POST" enctype="multipart/form-data">
+                <form id="lecturerRequestForm" th:action="@{/user/request-lecturer}" method="POST">
                     <input type="hidden" name="maSo" th:value="${student.maSo}">
                     <div class="mb-3">
                         <label class="form-label">Chuyên môn</label>
@@ -215,14 +215,6 @@
                         <label class="form-label">Lý do xin làm giảng viên</label>
                         <textarea class="form-control" name="reason" rows="3" required></textarea>
                         <small class="form-text text-muted">Giải thích lý do bạn muốn trở thành giảng viên</small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Tải lên chứng chỉ/bằng cấp</label>
-                        <input type="file" class="form-control" name="certificates" multiple accept="image/*,.pdf">
-                        <small class="form-text text-muted">Có thể chọn nhiều file (hình ảnh hoặc PDF)</small>
-                    </div>
-                    <div id="imagePreviewContainer" class="mb-3 d-flex flex-wrap gap-2">
-                        <!-- Image previews will be displayed here -->
                     </div>
                 </form>
             </div>

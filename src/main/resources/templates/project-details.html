@@ -135,10 +135,15 @@
 
 
             <div class="project-section">
-                <h6>Tài liệu đính kèm</h6>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0">Tài liệu đính kèm</h6>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#uploadFileModal">
+                        <i class="fas fa-plus me-2"></i>Thêm tài liệu
+                    </button>
+                </div>
                 <div class="project-files">
                     <div th:if="${project.taiLieus.isEmpty()}">
-                        <p class="text-muted">Chưa có tài liệu đính kèm.</p>
+                        <p class="text-muted mb-0">Chưa có tài liệu đính kèm.</p>
                     </div>
                     <div th:each="taiLieu : ${project.taiLieus}">
                         <a th:href="@{${taiLieu.duongDan}}" class="file-item" target="_blank">
@@ -148,6 +153,59 @@
                             <i class="fas fa-file" th:if="${taiLieu.loaiTaiLieu != 'PDF' and taiLieu.loaiTaiLieu != 'Word' and taiLieu.loaiTaiLieu != 'Excel'}"></i>
                             <span th:text="${taiLieu.tenTaiLieu}"></span>
                         </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload File Modal -->
+            <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title" id="uploadFileModalLabel">
+                                <i class="fas fa-file-upload me-2"></i>Thêm tài liệu mới
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <form id="uploadFileForm" enctype="multipart/form-data">
+                                <div class="mb-4">
+                                    <label for="fileInput" class="form-label fw-bold">
+                                        <i class="fas fa-file me-2 text-primary"></i>Chọn tài liệu
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="file" class="form-control" id="fileInput" accept=".pdf,.doc,.docx,.xls,.xlsx" required>
+                                    </div>
+                                    <div class="form-text text-muted">Hỗ trợ các định dạng: PDF, Word, Excel</div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="fileName" class="form-label fw-bold">
+                                        <i class="fas fa-tag me-2 text-warning"></i>Tên tài liệu
+                                    </label>
+                                    <input type="text" class="form-control" id="fileName" placeholder="Nhập tên tài liệu..." required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="fileType" class="form-label fw-bold">
+                                        <i class="fas fa-file-alt me-2 text-info"></i>Loại tài liệu
+                                    </label>
+                                    <select class="form-select" id="fileType" required>
+                                        <option value="">Chọn loại tài liệu...</option>
+                                        <option value="PDF">PDF</option>
+                                        <option value="Word">Word</option>
+                                        <option value="Excel">Excel</option>
+                                        <option value="Other">Khác</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer border-0 pt-0">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-2"></i>Hủy
+                            </button>
+                            <button type="button" class="btn btn-info" onclick="uploadFile()">
+                                <i class="fas fa-upload me-2"></i>Tải lên
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -615,6 +673,94 @@
         // Toggle mobile menu
         document.getElementById('navbarToggle').addEventListener('click', function() {
             document.getElementById('navbarMenu').classList.toggle('show');
+        });
+    </script>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const fileName = document.getElementById('fileName').value;
+            const fileType = document.getElementById('fileType').value;
+            const projectId = groupId; // Using the existing groupId
+
+            if (!fileInput.files[0] || !fileName || !fileType) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('fileName', fileName);
+            formData.append('fileType', fileType);
+            formData.append('projectId', projectId);
+
+            // Show loading state
+            const uploadButton = document.querySelector('#uploadFileModal .btn-info');
+            const originalText = uploadButton.innerHTML;
+            uploadButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang tải lên...';
+            uploadButton.disabled = true;
+
+            fetch('/api/projects/files/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Lỗi khi tải lên tài liệu');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Close the modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('uploadFileModal'));
+                modal.hide();
+
+                // Show success message
+                alert('Đã tải lên tài liệu thành công!');
+
+                // Refresh the page to show new file
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi tải lên tài liệu. Vui lòng thử lại!');
+            })
+            .finally(() => {
+                // Reset button state
+                uploadButton.innerHTML = originalText;
+                uploadButton.disabled = false;
+            });
+        }
+
+        // Auto-fill file name from selected file
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const fileName = document.getElementById('fileName');
+            if (e.target.files[0] && !fileName.value) {
+                fileName.value = e.target.files[0].name.split('.')[0];
+            }
+        });
+
+        // Auto-detect file type from selected file
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const fileType = document.getElementById('fileType');
+            if (e.target.files[0]) {
+                const extension = e.target.files[0].name.split('.').pop().toLowerCase();
+                switch(extension) {
+                    case 'pdf':
+                        fileType.value = 'PDF';
+                        break;
+                    case 'doc':
+                    case 'docx':
+                        fileType.value = 'Word';
+                        break;
+                    case 'xls':
+                    case 'xlsx':
+                        fileType.value = 'Excel';
+                        break;
+                    default:
+                        fileType.value = 'Other';
+                }
+            }
         });
     </script>
 

@@ -176,7 +176,7 @@ public class homeController {
                 .filter(p -> "Đã hoàn thành".equalsIgnoreCase(p.getTrangThai()))
                 .count();
 
-        List<UthUser> giangViens = userRepository.findByRoleName("Giảng viên");
+        List<UthUser> giangViens = userRepository.findByRoleName("giangvien");
         model.addAttribute("giangViens", giangViens);
 
         model.addAttribute("totalProjects", totalProjects);
@@ -218,20 +218,20 @@ public class homeController {
             if (maGiangVien == null) {
                 model.addAttribute("error", "Dự án học thuật yêu cầu chọn giảng viên.");
                 model.addAttribute("project", project);
-                model.addAttribute("giangViens", userRepository.findByRoleName("Giảng viên"));
+                model.addAttribute("giangViens", userRepository.findByRoleName("giangvien"));
                 return "project";
             }
             UthUser giangVien = userRepository.findById(maGiangVien)
                     .orElseThrow(() -> new IllegalArgumentException("Giảng viên không tồn tại"));
             boolean isGiangVien = giangVien.getUserRoles().stream()
-                    .anyMatch(userRole -> "Giảng viên".equals(userRole.getRole().getTen()));
+                    .anyMatch(userRole -> "giangvien".equals(userRole.getRole().getTen()));
             if (!isGiangVien) {
                 model.addAttribute("error", "Người dùng không phải là giảng viên.");
                 model.addAttribute("project", project);
-                model.addAttribute("giangViens", userRepository.findByRoleName("Giảng viên"));
+                model.addAttribute("giangViens", userRepository.findByRoleName("giangvien"));
                 return "project";
             }
-            project.setMaGiangVien(giangVien);
+            project.setMaGiangVien(giangVien.getMaSo()); // Sử dụng maSo (Long)
         } else {
             project.setMaGiangVien(null);
         }
@@ -263,12 +263,12 @@ public class homeController {
                     } catch (IllegalArgumentException e) {
                         model.addAttribute("error", e.getMessage());
                         model.addAttribute("project", project);
-                        model.addAttribute("giangViens", userRepository.findByRoleName("Giảng viên"));
+                        model.addAttribute("giangViens", userRepository.findByRoleName("giangvien"));
                         return "project";
                     } catch (IOException e) {
                         model.addAttribute("error", "Lỗi khi tải tệp: " + file.getOriginalFilename());
                         model.addAttribute("project", project);
-                        model.addAttribute("giangViens", userRepository.findByRoleName("Giảng viên"));
+                        model.addAttribute("giangViens", userRepository.findByRoleName("giangvien"));
                         return "project";
                     }
                 }

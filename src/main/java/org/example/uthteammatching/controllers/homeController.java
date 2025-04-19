@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -368,6 +369,38 @@ public class homeController {
         projectRepository.delete(project);
         redirectAttributes.addFlashAttribute("success", "Dự án đã bị từ chối và xóa thành công!");
         return "redirect:/project";
+    }
+
+    @PostMapping("/api/projects/{id}/evaluate-and-complete")
+    @ResponseBody
+    @Transactional
+    public Map<String, Object> evaluateAndCompleteProject(@PathVariable Long id, @RequestBody Map<String, Object> evaluationData) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Project project = projectRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Dự án không tồn tại"));
+
+            // Lưu điểm và nhận xét vào Project
+            Double diem = Double.valueOf(evaluationData.get("diem").toString());
+            String nhanXet = evaluationData.get("nhanXet").toString();
+
+            // Chuyển đổi điểm từ thang 0-10 sang Integer (có thể nhân lên nếu cần)
+            project.setDiem((int) Math.round(diem));
+            project.setNhanXet(nhanXet);
+
+            // Cập nhật trạng thái thành "Hoàn thành"
+            project.setTrangThai("Hoàn thành");
+
+            projectRepository.save(project);
+
+            response.put("success", true);
+            response.put("message", "Đánh giá và cập nhật trạng thái dự án thành công!");
+            return response;
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("error", "Lỗi khi đánh giá và cập nhật trạng thái: " + e.getMessage());
+            return response;
+        }
     }
 
     @GetMapping("/search")

@@ -50,7 +50,7 @@
                 <i class="fa fa-book"></i>
                 UTH-TEAM
             </a>
-            
+
             <button class="navbar-toggle" id="navbarToggle">
                 <i class="fas fa-bars"></i>
             </button>
@@ -213,10 +213,24 @@
             <div class="project-section">
                 <h6>Hoàn thành dự án</h6>
                 <div class="d-grid gap-2">
-                    <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#evaluationModal">
-                        <i class="fas fa-check-circle me-2"></i>
-                        Đánh dấu hoàn thành
-                    </button>
+                    <!-- Dự án học thuật: Chỉ hiển thị cho giảng viên hướng dẫn -->
+                    <th:block th:if="${project.loai == 'HOC_THUAT' and project.maGiangVien == currentUser.maSo}">
+                        <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#evaluationModal">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Đánh dấu hoàn thành
+                        </button>
+                    </th:block>
+                    <!-- Dự án bên ngoài: Chỉ hiển thị cho trưởng nhóm -->
+                    <th:block th:if="${project.loai == 'BEN_NGOAI'}">
+                        <th:block th:each="member : ${members}">
+                            <th:block th:if="${member.vaiTro == 'Trưởng nhóm' and member.userMaSo.maSo == currentUser.maSo}">
+                                <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#evaluationModal">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    Đánh dấu hoàn thành
+                                </button>
+                            </th:block>
+                        </th:block>
+                    </th:block>
                 </div>
             </div>
         </div>
@@ -545,13 +559,13 @@
         .modal.show .modal-dialog {
             transform: scale(1);
         }
-        
+
         /* Modal styling */
         .modal-content {
             border-radius: 0.5rem;
             overflow: hidden;
         }
-        
+
         /* Custom form styling */
         .form-control:focus, .form-select:focus {
             box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);

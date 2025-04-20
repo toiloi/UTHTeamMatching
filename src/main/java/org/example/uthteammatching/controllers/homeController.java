@@ -186,7 +186,7 @@ public class homeController {
                 .filter(p -> "Đang thực hiện".equalsIgnoreCase(p.getTrangThai()))
                 .count();
         long doneProjects = projects.stream()
-                .filter(p -> "Đã hoàn thành".equalsIgnoreCase(p.getTrangThai()))
+                .filter(p -> "Hoàn thành".equalsIgnoreCase(p.getTrangThai()))
                 .count();
 
         List<UthUser> giangViens = userRepository.findByRoleName("LECTURE");

@@ -58,6 +58,10 @@
         <div th:replace="master/leftSidebar::leftSidebar"></div>
         <!-- Sidebar End -->
 
+
+
+
+
         <!-- News Content Start -->
         <div class="news-content">
             <div class="container-fluid">
@@ -144,24 +148,26 @@
                                     </div>
 
                                     <!-- Nếu chưa có trong project -->
-                                    <div class="project-join" th:if="${baiVietRoleMap[bv.id] == null}" th:attr="data-project-id=${bv.getProjectMaSo().getMaProject()}, data-post-id=${bv.getId()}">
+                                    <div class="project-join" th:if="${baiVietRoleMap[bv.id] == null}" th:attr="data-project-id=${bv.getProjectMaSo().getMaProject()}, data-post-id=${bv.getId()}, data-project-type=${bv.getProjectMaSo().getLoai()}">
                                         <button type="button" class="btn btn-primary" onclick="joinProject(this)">
                                             <i class="fas fa-user-plus me-1"></i> Tham gia ngay
                                         </button>
                                     </div>
 
-                                    <!-- Nếu đang chờ duyệt -->
+                                    <!-- Nếu đang chờ duyệt hoặc đã tham gia -->
                                     <div th:each="tv : ${bv.projectMaSo.thanhVienProjects}">
-                                        <div th:if="${tv.userMaSo.getMaSo() == currentUser.getMaSo() and tv.getVaiTro() == 'PENDING'}" class="project-join">
-                                            <button class="btn btn-warning" disabled>
-                                                <i class="fas fa-clock me-1"></i> Đang chờ duyệt
-                                            </button>
-                                        </div>
-                                        <!-- Nếu đã tham gia -->
-                                        <div th:if="${tv.userMaSo.getMaSo() == currentUser.getMaSo() and tv.getVaiTro() != 'PENDING'}" class="project-join">
-                                            <button class="btn btn-secondary" disabled>
-                                                <i class="fas fa-check me-1"></i> Đã tham gia
-                                            </button>
+                                        <div th:if="${tv.userMaSo.getMaSo() == currentUser.getMaSo()}" class="project-join">
+                                            <!-- Hiển thị trạng thái dựa trên loại dự án -->
+                                            <div th:if="${bv.projectMaSo.getLoai().toString() == 'HOC_THUAT' and tv.getVaiTro() == 'PENDING'}">
+                                                <button class="btn btn-warning" disabled>
+                                                    <i class="fas fa-clock me-1"></i> Đang chờ duyệt
+                                                </button>
+                                            </div>
+                                            <div th:if="${bv.projectMaSo.getLoai().toString() == 'BEN_NGOAI' or tv.getVaiTro() != 'PENDING'}">
+                                                <button class="btn btn-secondary" disabled>
+                                                    <i class="fas fa-check me-1"></i> Đã tham gia
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -216,24 +222,26 @@
                                         </div>
 
                                         <!-- Nếu chưa có trong project -->
-                                        <div class="project-join" th:if="${baiVietRoleMap[bv.id] == null}" th:attr="data-project-id=${bv.getProjectMaSo().getMaProject()}, data-post-id=${bv.getId()}">
+                                        <div class="project-join" th:if="${baiVietRoleMap[bv.id] == null}" th:attr="data-project-id=${bv.getProjectMaSo().getMaProject()}, data-post-id=${bv.getId()}, data-project-type=${bv.getProjectMaSo().getLoai()}">
                                             <button type="button" class="btn btn-primary" onclick="joinProject(this)">
                                                 <i class="fas fa-user-plus me-1"></i> Tham gia ngay
                                             </button>
                                         </div>
 
-                                        <!-- Nếu đang chờ duyệt -->
+                                        <!-- Nếu đang chờ duyệt hoặc đã tham gia -->
                                         <div th:each="tv : ${bv.projectMaSo.thanhVienProjects}">
-                                            <div th:if="${tv.userMaSo.getMaSo() == currentUser.getMaSo() and tv.getVaiTro() == 'PENDING'}" class="project-join">
-                                                <button class="btn btn-warning" disabled>
-                                                    <i class="fas fa-clock me-1"></i> Đang chờ duyệt
-                                                </button>
-                                            </div>
-                                            <!-- Nếu đã tham gia -->
-                                            <div th:if="${tv.userMaSo.getMaSo() == currentUser.getMaSo() and tv.getVaiTro() != 'PENDING'}" class="project-join">
-                                                <button class="btn btn-secondary" disabled>
-                                                    <i class="fas fa-check me-1"></i> Đã tham gia
-                                                </button>
+                                            <div th:if="${tv.userMaSo.getMaSo() == currentUser.getMaSo()}" class="project-join">
+                                                <!-- Hiển thị trạng thái dựa trên loại dự án -->
+                                                <div th:if="${bv.projectMaSo.getLoai().toString() == 'HOC_THUAT' and tv.getVaiTro() == 'PENDING'}">
+                                                    <button class="btn btn-warning" disabled>
+                                                        <i class="fas fa-clock me-1"></i> Đang chờ duyệt
+                                                    </button>
+                                                </div>
+                                                <div th:if="${bv.projectMaSo.getLoai().toString() == 'BEN_NGOAI' or tv.getVaiTro() != 'PENDING'}">
+                                                    <button class="btn btn-secondary" disabled>
+                                                        <i class="fas fa-check me-1"></i> Đã tham gia
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -519,4 +527,3 @@
 </body>
 
 </html>
-```

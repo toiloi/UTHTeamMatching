@@ -7,8 +7,10 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -18,8 +20,13 @@ public class NhiemVu {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "deadline", nullable = false)
-    private Instant deadline;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date ngayBatDau;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date ngayKetThuc;
 
     @Nationalized
     @Lob

@@ -1,4 +1,5 @@
 package org.example.uthteammatching;
+import org.example.uthteammatching.models.ProjectType;
 import org.example.uthteammatching.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -194,14 +195,15 @@ public class    DataLocal implements CommandLineRunner {
             KeyHolder project1Key = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(
-                        "INSERT INTO project (mo_ta, ngay_bat_dau, ngay_ket_thuc, ngay_tao, ten_project, trang_thai) " +
-                                "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?)",
+                        "INSERT INTO project (mo_ta, ngay_bat_dau, ngay_ket_thuc, ngay_tao, ten_project, trang_thai, loai) " +
+                                "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, "Xây dựng hệ thống quản lý sinh viên");
                 ps.setDate(2, Date.valueOf("2025-04-01"));
                 ps.setDate(3, Date.valueOf("2025-5-01"));
                 ps.setString(4, "Dự án quản lý sinh viên");
                 ps.setString(5, "Đang thực hiện");
+                ps.setString(6, String.valueOf(ProjectType.BEN_NGOAI));
                 return ps;
             }, project1Key);
             Long projectId1 = project1Key.getKey().longValue();
@@ -210,14 +212,15 @@ public class    DataLocal implements CommandLineRunner {
             KeyHolder project2Key = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(
-                        "INSERT INTO project (mo_ta, ngay_bat_dau, ngay_ket_thuc, ngay_tao, ten_project, trang_thai) " +
-                                "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?)",
+                        "INSERT INTO project (mo_ta, ngay_bat_dau, ngay_ket_thuc, ngay_tao, ten_project, trang_thai, loai) " +
+                                "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, "Hệ thống thu phí");
                 ps.setDate(2, Date.valueOf("2025-04-9"));
                 ps.setDate(3, Date.valueOf("2025-4-28"));
                 ps.setString(4, "Dự án thu phí tự động");
                 ps.setString(5, "Đang thực hiện");
+                ps.setString(6, String.valueOf(ProjectType.BEN_NGOAI));
                 return ps;
             }, project2Key);
             Long projectId2 = project2Key.getKey().longValue();
@@ -226,14 +229,15 @@ public class    DataLocal implements CommandLineRunner {
             KeyHolder project3Key = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(
-                        "INSERT INTO project (mo_ta, ngay_bat_dau, ngay_ket_thuc, ngay_tao, ten_project, trang_thai) " +
-                                "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?)",
+                        "INSERT INTO project (mo_ta, ngay_bat_dau, ngay_ket_thuc, ngay_tao, ten_project, trang_thai, loai) " +
+                                "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, "Xây dựng hệ thống chăm sóc khách hàng");
                 ps.setDate(2, Date.valueOf("2025-04-01"));
                 ps.setDate(3, Date.valueOf("2025-4-25"));
                 ps.setString(4, "Dự án chăm sóc khách hàng");
                 ps.setString(5, "Đã hoàn thành");
+                ps.setString(6, String.valueOf(ProjectType.BEN_NGOAI));
                 return ps;
             }, project3Key);
             Long projectId3 = project3Key.getKey().longValue();

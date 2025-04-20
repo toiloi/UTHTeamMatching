@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h2>Danh sách nhiệm vụ trong dự án</h2>
+
+<ul>
+    <li th:each="nv : ${nhiemVus}">
+        <strong th:text="${nv.noiDung}"></strong> -
+        <span th:text="${#dates.format(nv.ngayBatDau, 'dd/MM/yyyy')}"></span> đến
+        <span th:text="${#dates.format(nv.ngayKetThuc, 'dd/MM/yyyy')}"></span>
+        <span th:text="${nv.tinhTrang ? '✅ Hoàn thành' : '🔄 Đang thực hiện'}"></span>
+    </li>
+</ul>
+
+<!-- Chỉ hiện form nếu là LEADER -->
+<div th:if="${isLeader}">
+    <h3>Giao nhiệm vụ mới</h3>
+    <form th:action="@{/nhiemvu/giao}" method="post" th:object="${nhiemVu}">
+        <input type="hidden" th:field="*{projectMaSo}" th:value="${projectId}">
+
+        <label>Nội dung:</label><br>
+        <textarea th:field="*{noiDung}" required></textarea><br>
+
+        <label>Ngày bắt đầu:</label>
+        <input type="date" th:field="*{ngayBatDau}" required><br>
+
+        <label>Ngày kết thúc:</label>
+        <input type="date" th:field="*{ngayKetThuc}" required><br>
+
+        <label>Trạng thái:</label>
+        <input type="checkbox" th:field="*{tinhTrang}"> Đã hoàn thành<br>
+
+        <label>Chọn thành viên:</label>
+        <select th:field="*{thanhvienProject}" required>
+            <option th:each="tv : ${listThanhVien}" th:value="${tv}" th:text="${tv.getUserMaSo().getTen()}"></option>
+        </select><br><br>
+
+        <button type="submit">Giao nhiệm vụ</button>
+    </form>
+</div>
+
+</body>
+</html>

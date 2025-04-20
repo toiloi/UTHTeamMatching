@@ -62,8 +62,8 @@
                                     <tr>
                                         <th>Mã số</th>
                                         <th>Họ tên</th>
-                                        <th>Email</th>
                                         <th>Số điện thoại</th>
+                                        <th>Email</th>
                                         <th>Chuyên ngành</th>
                                         <th>Trạng thái</th>
                                         <th>Vai trò</th>
@@ -73,9 +73,12 @@
                                 <tbody id="usersList">
                                     <tr th:each="user : ${users}">
                                         <td th:text="${user.maSo}"></td>
-                                        <td th:text="${user.ho + ' ' + user.ten}"></td>
-                                        <td th:text="${user.email}"></td>
+                                        <td>
+                                            <span th:text="${user.ho}" />
+                                            <span th:text="${user.ten}" />
+                                        </td>
                                         <td th:text="${user.sdt}"></td>
+                                        <td th:text="${user.email}"></td>
                                         <td th:text="${user.chuyenNganh}"></td>
                                         <td>
                                             <span th:if="${user.enabled}" class="badge bg-success">

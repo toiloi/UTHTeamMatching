@@ -185,24 +185,6 @@
                                     </div>
                                     <div class="form-text text-muted">Hỗ trợ các định dạng: PDF, Word, Excel</div>
                                 </div>
-                                <div class="mb-4">
-                                    <label for="fileName" class="form-label fw-bold">
-                                        <i class="fas fa-tag me-2 text-warning"></i>Tên tài liệu
-                                    </label>
-                                    <input type="text" class="form-control" id="fileName" placeholder="Nhập tên tài liệu..." required>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="fileType" class="form-label fw-bold">
-                                        <i class="fas fa-file-alt me-2 text-info"></i>Loại tài liệu
-                                    </label>
-                                    <select class="form-select" id="fileType" required>
-                                        <option value="">Chọn loại tài liệu...</option>
-                                        <option value="PDF">PDF</option>
-                                        <option value="Word">Word</option>
-                                        <option value="Excel">Excel</option>
-                                        <option value="Other">Khác</option>
-                                    </select>
-                                </div>
                             </form>
                         </div>
                         <div class="modal-footer border-0 pt-0">
@@ -221,14 +203,14 @@
                 <h6>Hoàn thành dự án</h6>
                 <div class="d-grid gap-2">
                     <!-- Dự án học thuật: Chỉ hiển thị cho giảng viên hướng dẫn -->
-                    <th:block th:if="${project.loai == 'HOC_THUAT' and project.maGiangVien == currentUser.maSo}">
+                    <th:block th:if="${project != null and project.getLoai().toString() == 'HOC_THUAT' and project.getMaGiangVien() != null and currentUser != null and currentUser.getMaSo() != null and project.getMaGiangVien() == currentUser.getMaSo()}">
                         <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#evaluationModal">
                             <i class="fas fa-check-circle me-2"></i>
                             Đánh dấu hoàn thành
                         </button>
                     </th:block>
                     <!-- Dự án bên ngoài: Chỉ hiển thị cho trưởng nhóm -->
-                    <th:block th:if="${project.loai == 'BEN_NGOAI'}">
+                    <th:block th:if="${project.getLoai().toString() == 'BEN_NGOAI'}">
                         <th:block th:each="member : ${members}">
                             <th:block th:if="${member.vaiTro == 'Trưởng nhóm' and member.userMaSo.maSo == currentUser.maSo}">
                                 <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#evaluationModal">
@@ -500,8 +482,9 @@
         function submitEvaluation() {
             const score = document.getElementById('projectScore').value;
             const feedback = document.getElementById('projectFeedback').value;
-            const projectId = groupId; // Using the groupId from chat context
+            const projectId = groupId; // groupId đã được định nghĩa trước đó, chứa project.getMaProject()
 
+            // Kiểm tra dữ liệu đầu vào
             if (!score || !feedback) {
                 alert('Vui lòng điền đầy đủ thông tin đánh giá!');
                 return;
@@ -512,42 +495,46 @@
                 return;
             }
 
-            // Create evaluation object
-            const evaluation = {
-                projectId: projectId,
-                score: parseFloat(score),
-                feedback: feedback
+            // Tạo đối tượng dữ liệu phù hợp với endpoint
+            const evaluationData = {
+                diem: parseFloat(score), // Đổi key từ "score" thành "diem"
+                nhanXet: feedback // Đổi key từ "feedback" thành "nhanXet"
             };
 
-            // Send evaluation to server
-            fetch('/api/projects/evaluate', {
+            // Gửi yêu cầu đến endpoint
+            fetch(`/api/projects/${projectId}/evaluate-and-complete`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(evaluation)
+                body: JSON.stringify(evaluationData)
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Lỗi khi gửi đánh giá');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Close the modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
-                modal.hide();
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi khi gửi đánh giá');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Đóng modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
+                    modal.hide();
 
-                // Show success message
-                alert('Đã lưu đánh giá thành công!');
-
-                // Optionally refresh the page or update UI
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại!');
-            });
+                    // Kiểm tra phản hồi từ server
+                    if (data.success) {
+                        // Hiển thị thông báo thành công từ server
+                        alert(data.message || 'Đã lưu đánh giá và hoàn thành dự án thành công!');
+                        // Làm mới trang để cập nhật trạng thái
+                        location.reload();
+                    } else {
+                        // Hiển thị thông báo lỗi từ server
+                        alert(data.error || 'Có lỗi xảy ra khi gửi đánh giá.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại!');
+                });
         }
     </script>
 
@@ -747,20 +734,28 @@
     <script>
         function uploadFile() {
             const fileInput = document.getElementById('fileInput');
-            const fileName = document.getElementById('fileName').value;
-            const fileType = document.getElementById('fileType').value;
             const projectId = groupId; // Using the existing groupId
 
-            if (!fileInput.files[0] || !fileName || !fileType) {
-                alert('Vui lòng điền đầy đủ thông tin!');
+            // Kiểm tra dữ liệu đầu vào
+            if (!fileInput.files[0]) {
+                alert('Vui lòng chọn một tài liệu để tải lên!');
+                return;
+            }
+
+            if (projectId === 'default') {
+                alert('Không thể xác định ID dự án. Vui lòng thử lại!');
                 return;
             }
 
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
-            formData.append('fileName', fileName);
-            formData.append('fileType', fileType);
-            formData.append('projectId', projectId);
+
+            // Log dữ liệu gửi đi để debug
+            console.log('Uploading file with data:');
+            console.log('Project ID:', projectId);
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
 
             // Show loading state
             const uploadButton = document.querySelector('#uploadFileModal .btn-info');
@@ -768,68 +763,43 @@
             uploadButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang tải lên...';
             uploadButton.disabled = true;
 
-            fetch('/api/projects/files/upload', {
+            // Cập nhật URL để bao gồm projectId trong đường dẫn
+            fetch(`/api/projects/${projectId}/files/upload`, {
                 method: 'POST',
                 body: formData
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Lỗi khi tải lên tài liệu');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Close the modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('uploadFileModal'));
-                modal.hide();
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi khi tải lên tài liệu: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Đóng modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('uploadFileModal'));
+                    modal.hide();
 
-                // Show success message
-                alert('Đã tải lên tài liệu thành công!');
-
-                // Refresh the page to show new file
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi tải lên tài liệu. Vui lòng thử lại!');
-            })
-            .finally(() => {
-                // Reset button state
-                uploadButton.innerHTML = originalText;
-                uploadButton.disabled = false;
-            });
+                    // Kiểm tra phản hồi từ server
+                    if (data.success) {
+                        // Hiển thị thông báo thành công từ server
+                        alert(data.message || 'Đã tải lên tài liệu thành công!');
+                        // Làm mới trang để hiển thị tài liệu mới
+                        location.reload();
+                    } else {
+                        // Hiển thị thông báo lỗi từ server
+                        alert(data.error || 'Có lỗi xảy ra khi tải lên tài liệu.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi tải lên tài liệu. Vui lòng thử lại!');
+                })
+                .finally(() => {
+                    // Reset button state
+                    uploadButton.innerHTML = originalText;
+                    uploadButton.disabled = false;
+                });
         }
-
-        // Auto-fill file name from selected file
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const fileName = document.getElementById('fileName');
-            if (e.target.files[0] && !fileName.value) {
-                fileName.value = e.target.files[0].name.split('.')[0];
-            }
-        });
-
-        // Auto-detect file type from selected file
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const fileType = document.getElementById('fileType');
-            if (e.target.files[0]) {
-                const extension = e.target.files[0].name.split('.').pop().toLowerCase();
-                switch(extension) {
-                    case 'pdf':
-                        fileType.value = 'PDF';
-                        break;
-                    case 'doc':
-                    case 'docx':
-                        fileType.value = 'Word';
-                        break;
-                    case 'xls':
-                    case 'xlsx':
-                        fileType.value = 'Excel';
-                        break;
-                    default:
-                        fileType.value = 'Other';
-                }
-            }
-        });
     </script>
 
 </body>

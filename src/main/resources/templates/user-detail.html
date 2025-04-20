@@ -55,8 +55,8 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="section-title mb-0">
                 <th:block th:with="userRole=${student.userRoles.size() > 0 ? student.userRoles.iterator().next().role.ten : 'USER'}">
-                    <span th:if="${userRole == 'USER'}">Thông tin sinh viên</span>
-                    <span th:if="${userRole == 'LECTURE'}">Thông tin giảng viên</span>
+                    <span th:if="${userRole == 'USER' and student.userRoles.size() == 1}">Thông tin sinh viên</span>
+                    <span th:if="${userRole == 'LECTURE' or (userRole == 'USER' and student.userRoles.size() > 1)}">Thông tin giảng viên</span>
                     <span th:if="${userRole == 'ADMIN'}">Thông tin admin</span>
                 </th:block>
             </h2>
@@ -68,7 +68,7 @@
                     <i class="fas fa-key"></i> Đổi mật khẩu
                 </button>
                 <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#lecturerRequestModal" 
-                    th:if="${student.userRoles.size() > 0 and student.userRoles.iterator().next().role.ten != 'LECTURE'}">
+                    th:if="${student.userRoles.size() > 0 and student.userRoles.iterator().next().role.ten == 'USER' and student.userRoles.size() == 1}">
                     <i class="fas fa-chalkboard-teacher"></i> Xin làm giảng viên
                 </button>
             </div>

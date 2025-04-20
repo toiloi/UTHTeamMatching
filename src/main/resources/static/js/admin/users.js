@@ -54,24 +54,33 @@ function renderUsers(users) {
         usersList.append(`
             <tr>
                 <td>${user.maSo}</td>
-                <td>${user.ho || ''}</td>
-                <td>${user.ten || ''}</td>
-                <td>${user.email || ''}</td>
+                <td>${user.ho || ''} ${user.ten || ''}</td>
                 <td>${user.sdt || ''}</td>
+                <td>${user.email || ''}</td>
                 <td>${user.chuyenNganh || ''}</td>
                 <td>
                     <span class="badge ${user.enabled ? 'bg-success' : 'bg-danger'}">
+                        <i class="fas fa-${user.enabled ? 'check' : 'times'}-circle me-1"></i>
                         ${user.enabled ? 'Hoạt động' : 'Khóa'}
                     </span>
                 </td>
-                <td>${roleNames}</td>
                 <td>
-                    <button class="btn btn-sm btn-primary" onclick="editUser(${user.maSo})">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.maSo})">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    ${user.userRoles ? Array.from(user.userRoles).map(ur => 
+                        `<div class="badge bg-info me-1">
+                            <i class="fas fa-user-tag me-1"></i>
+                            ${ur.role.ten}
+                        </div>`
+                    ).join('') : ''}
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-primary" onclick="editUser(${user.maSo})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.maSo})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
                 </td>
             </tr>
         `);

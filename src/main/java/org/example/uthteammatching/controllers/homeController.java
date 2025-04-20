@@ -1108,15 +1108,6 @@ public class homeController {
 
             // Kiểm tra ChatGroup
             ChatGroup chatGroup = chatGroupRepository.findById(groupId).orElse(null);
-            if (chatGroup == null) {
-                System.out.println("ChatGroup not found for groupId: " + groupId + ", creating new one");
-                chatGroup = new ChatGroup();
-                chatGroup.setGroupName(project.getTenProject());
-                chatGroup.setGroupId(project.getMaProject());
-                chatGroup.addMember(currentUser);
-                chatGroup = chatGroupRepository.save(chatGroup);
-                System.out.println("Created new ChatGroup with groupId: " + groupId);
-            }
 
             // Kiểm tra xem user đã trong nhóm chat chưa
             if (chatGroup.getMembers() != null && chatGroup.getMembers().contains(currentUser)) {
@@ -1171,7 +1162,6 @@ public class homeController {
         }
         return response;
     }
-
 
     @PostMapping("/project/reject-invite")
     public String rejectChatInvite(@RequestParam("notificationId") Long notificationId, RedirectAttributes redirectAttributes) {

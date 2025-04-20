@@ -33,6 +33,8 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     private NotificationType type;
 
+    private Long groupId;
+
     public Long getGroupId() {
         return groupId;
     }
@@ -41,7 +43,7 @@ public class Notification {
         this.groupId = groupId;
     }
 
-    private Long groupId;
+
 
 
     public Notification(String message, UthUser userId, UthUser userFrom, NotificationType type) {

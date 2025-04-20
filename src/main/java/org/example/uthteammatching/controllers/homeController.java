@@ -187,7 +187,7 @@ public class homeController {
                 .filter(p -> "Đang thực hiện".equalsIgnoreCase(p.getTrangThai()))
                 .count();
         long doneProjects = projects.stream()
-                .filter(p -> "Đã hoàn thành".equalsIgnoreCase(p.getTrangThai()))
+                .filter(p -> "Hoàn thành".equalsIgnoreCase(p.getTrangThai()))
                 .count();
 
         List<UthUser> giangViens = userRepository.findByRoleName("LECTURE");
@@ -370,38 +370,6 @@ public class homeController {
         projectRepository.delete(project);
         redirectAttributes.addFlashAttribute("success", "Dự án đã bị từ chối và xóa thành công!");
         return "redirect:/project";
-    }
-
-    @PostMapping("/api/projects/{id}/evaluate-and-complete")
-    @ResponseBody
-    @Transactional
-    public Map<String, Object> evaluateAndCompleteProject(@PathVariable Long id, @RequestBody Map<String, Object> evaluationData) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            Project project = projectRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Dự án không tồn tại"));
-
-            // Lưu điểm và nhận xét vào Project
-            Double diem = Double.valueOf(evaluationData.get("diem").toString());
-            String nhanXet = evaluationData.get("nhanXet").toString();
-
-            // Chuyển đổi điểm từ thang 0-10 sang Integer (có thể nhân lên nếu cần)
-            project.setDiem((int) Math.round(diem));
-            project.setNhanXet(nhanXet);
-
-            // Cập nhật trạng thái thành "Hoàn thành"
-            project.setTrangThai("Hoàn thành");
-
-            projectRepository.save(project);
-
-            response.put("success", true);
-            response.put("message", "Đánh giá và cập nhật trạng thái dự án thành công!");
-            return response;
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("error", "Lỗi khi đánh giá và cập nhật trạng thái: " + e.getMessage());
-            return response;
-        }
     }
 
     @GetMapping("/search")
@@ -1277,4 +1245,127 @@ public class homeController {
                 .collect(Collectors.toList());
     }
 
+    @PostMapping("/api/projects/{id}/files/upload")
+    @ResponseBody
+    public Map<String, Object> uploadFiles(
+            @PathVariable("id") Long projectId,
+            @RequestParam("file") MultipartFile file) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            // Tìm project theo projectId
+            Project project = projectRepository.findById(projectId)
+                    .orElseThrow(() -> new IllegalArgumentException("Dự án không tồn tại"));
+
+            // Xử lý file upload
+            if (file != null && !file.isEmpty()) {
+                // Lưu file vào hệ thống và lấy đường dẫn
+                String duongDan = fileStorageService.saveFile(file);
+                String fileName = file.getOriginalFilename();
+                String loaiTaiLieu = fileStorageService.determineFileType(fileName);
+
+                // Tạo đối tượng TaiLieu và liên kết với Project
+                TaiLieu taiLieu = new TaiLieu(fileName, duongDan, loaiTaiLieu, project);
+                project.addTaiLieu(taiLieu);
+
+                // Lưu lại project
+                projectRepository.save(project);
+
+                response.put("success", true);
+                response.put("message", "Tài liệu đã được tải lên thành công!");
+                return response;
+            } else {
+                response.put("success", false);
+                response.put("error", "Vui lòng chọn một file để tải lên!");
+                return response;
+            }
+        } catch (IllegalArgumentException e) {
+            response.put("success", false);
+            response.put("error", e.getMessage());
+            return response;
+        } catch (IOException e) {
+            response.put("success", false);
+            response.put("error", "Lỗi khi tải tệp: " + e.getMessage());
+            return response;
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("error", "Có lỗi xảy ra khi tải lên tài liệu: " + e.getMessage());
+            return response;
+        }
+    }
+
+    @PostMapping("/post/create")
+    public String createPost(
+            @RequestParam("noiDung") String noiDung,
+            @RequestParam("projectId") Long projectId,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+        
+        UthUser currentUser = addCurrentUserToModel(model);
+        if (currentUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Vui lòng đăng nhập để tạo bài viết");
+            return "redirect:/";
+        }
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Dự án không tồn tại"));
+
+        // Kiểm tra xem người dùng có trong dự án không
+        boolean isMember = project.getThanhVienProjects().stream()
+                .anyMatch(tv -> tv.getUserMaSo().getMaSo().equals(currentUser.getMaSo()));
+        
+        if (!isMember) {
+            redirectAttributes.addFlashAttribute("error", "Bạn cần tham gia dự án để tạo bài viết");
+            return "redirect:/";
+        }
+
+        try {
+            articleService.createArticle(noiDung, currentUser, project);
+            redirectAttributes.addFlashAttribute("success", "Bài viết đã được tạo thành công");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Có lỗi xảy ra khi tạo bài viết");
+        }
+
+        return "redirect:/";
+    }
+
+    @PostMapping("/post/delete")
+    @ResponseBody
+    public Map<String, Object> deletePost(@RequestParam("articleId") Long articleId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            UthUser currentUser = addCurrentUserToModel(new ConcurrentModel());
+            if (currentUser == null) {
+                response.put("success", false);
+                response.put("error", "Vui lòng đăng nhập để xóa bài viết");
+                return response;
+            }
+
+            BaiViet article = articleService.getAllArticles().stream()
+                    .filter(a -> a.getId().equals(articleId))
+                    .findFirst()
+                    .orElse(null);
+
+            if (article == null) {
+                response.put("success", false);
+                response.put("error", "Bài viết không tồn tại");
+                return response;
+            }
+
+            // Kiểm tra xem người dùng có quyền xóa bài viết không
+            if (!article.getUserMaSo().getMaSo().equals(currentUser.getMaSo())) {
+                response.put("success", false);
+                response.put("error", "Bạn không có quyền xóa bài viết này");
+                return response;
+            }
+
+            articleService.deleteArticle(articleId);
+            response.put("success", true);
+            response.put("message", "Bài viết đã được xóa thành công");
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("error", "Có lỗi xảy ra khi xóa bài viết");
+        }
+        return response;
+    }
 }

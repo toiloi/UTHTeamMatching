@@ -16,6 +16,7 @@ public interface UserRepository extends JpaRepository<UthUser, Long> {
     List<UthUser> findByHoContainingOrTenContainingOrEmailContaining(String ho, String ten, String email);
     Optional<UthUser> findByUsername(String username);
     UthUser findBySdt(String sdt);
+    Optional<UthUser> findById(Long id);
     Optional<UthUser> findFirstBySdt(String sdt);
     boolean existsBySdt(String sdt);
     @Query("SELECT u FROM UthUser u JOIN u.userRoles ur JOIN ur.role r WHERE r.ten = :roleName")

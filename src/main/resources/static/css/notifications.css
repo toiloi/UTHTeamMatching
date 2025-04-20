@@ -56,4 +56,307 @@
 
 .btn-close-white:hover {
     opacity: 1;
+}
+
+/* Right Sidebar Styles */
+.right-sidebar {
+    background: #fff;
+    border-left: 1px solid #e9ecef;
+    height: 100vh;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.sidebar-section {
+    margin-bottom: 2rem;
+}
+
+.sidebar-section:last-child {
+    margin-bottom: 0;
+}
+
+/* Friends Section */
+.friends-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.friends-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: #1F2937;
+}
+
+.search-container {
+    margin-bottom: 1rem;
+}
+
+.search-friends {
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.search-friends:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.friends-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.friend-item-wrapper {
+    transition: all 0.3s ease;
+}
+
+.friend-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #1F2937;
+    transition: all 0.3s ease;
+}
+
+.friend-item:hover {
+    background-color: #f8f9fa;
+    transform: translateX(5px);
+}
+
+.friend-avatar-wrapper {
+    position: relative;
+    margin-right: 1rem;
+}
+
+.friend-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.online-status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #28a745;
+    border: 2px solid #fff;
+}
+
+.friend-info {
+    flex: 1;
+}
+
+.friend-name {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.friend-status {
+    font-size: 0.75rem;
+}
+
+.no-friends {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #6c757d;
+}
+
+/* Projects Section */
+.projects-header {
+    margin-bottom: 1rem;
+}
+
+.projects-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: #1F2937;
+}
+
+.projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.project-item-wrapper {
+    transition: all 0.3s ease;
+}
+
+.project-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #1F2937;
+    transition: all 0.3s ease;
+}
+
+.project-item:hover {
+    background-color: #f8f9fa;
+    transform: translateX(5px);
+}
+
+.project-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: #0d6efd;
+}
+
+.project-info {
+    flex: 1;
+}
+
+.project-name {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.project-status .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.no-projects {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #6c757d;
+}
+
+/* Friend Request Modal */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.modal-header {
+    border-bottom: none;
+    padding: 1.5rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.nav-tabs {
+    border-bottom: 2px solid #e9ecef;
+    margin-bottom: 1.5rem;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    color: #6c757d;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    color: #0d6efd;
+    border: none;
+}
+
+.nav-tabs .nav-link.active {
+    color: #0d6efd;
+    border: none;
+    border-bottom: 2px solid #0d6efd;
+    margin-bottom: -2px;
+}
+
+.search-form {
+    margin-bottom: 1.5rem;
+}
+
+.search-results {
+    min-height: 200px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #6c757d;
+}
+
+.request-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.request-item {
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.request-item:hover {
+    background-color: #f8f9fa;
+}
+
+.request-avatar-wrapper {
+    position: relative;
+}
+
+.request-avatar {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+.request-name {
+    font-weight: 500;
+    color: #1F2937;
+}
+
+.request-message {
+    font-size: 0.875rem;
+}
+
+.request-actions {
+    margin-left: 1rem;
+}
+
+.request-actions .btn {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .right-sidebar {
+        position: fixed;
+        right: -100%;
+        top: 0;
+        width: 100%;
+        z-index: 1040;
+        transition: right 0.3s ease;
+    }
+
+    .right-sidebar.show {
+        right: 0;
+    }
 } 

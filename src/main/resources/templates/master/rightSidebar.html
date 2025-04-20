@@ -1,42 +1,71 @@
 <div th:fragment="rightSidebar" class="right-sidebar">
-    <div class="friends-header">
-        <h3>Bạn bè</h3>
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#friendRequestModal">
-            <i class="fas fa-plus"></i>
-        </button>
-    </div>
-    <input type="text" class="search-friends" placeholder="Tìm kiếm bạn bè...">
-    <div class="friends-list">
-        <!-- Lặp qua danh sách bạn bè đã lọc -->
-        <div th:each="friend : ${friendUsers}">
-            <!-- Hiển thị avatar của bạn bè -->
-            <a th:href="@{'/chatFriend/' + ${friend.maSo}}">
-                <div class="friend-item">
-                    <img th:src="${friend.avatar != null} ? ${friend.avatar} : '/img/avatars/NULL.jpg'" class="friend-avatar">
-                    <div class="friend-info">
-                        <!-- Hiển thị tên bạn bè -->
-                        <div class="friend-name" th:text="${friend.ho+ ' ' + friend.ten}"></div>
-                    </div>
-                </div>
-            </a>
+    <!-- Friends Section -->
+    <div class="sidebar-section">
+        <div class="friends-header">
+            <h3><i class="fas fa-user-friends me-2"></i>Bạn bè</h3>
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#friendRequestModal">
+                <i class="fas fa-plus"></i>
+            </button>
         </div>
-        <!-- Thông báo nếu không có bạn bè -->
-        <div th:if="${#lists.isEmpty(friendUsers)}" class="friend-item">
-            <div class="friend-info">
-                <div class="friend-name">Chưa có bạn bè nào</div>
+        <div class="search-container">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input type="text" class="form-control search-friends" placeholder="Tìm kiếm bạn bè...">
             </div>
         </div>
-
-<!--        List chat theo dự án-->
-        <div th:each="project: ${projects}">
-            <th:block th:if="${project.trangThai == 'Đang thực hiện'}">
-                <a th:href="@{'/project/' + ${project.maProject}}">
-                    <div th:text="${project.getTenProject()}"></div>
+        <div class="friends-list">
+            <div th:each="friend : ${friendUsers}" class="friend-item-wrapper">
+                <a th:href="@{'/chatFriend/' + ${friend.maSo}}" class="friend-item">
+                    <div class="friend-avatar-wrapper">
+                        <img th:src="${friend.avatar != null} ? ${friend.avatar} : '/img/avatars/NULL.jpg'" 
+                             class="friend-avatar" alt="Friend Avatar">
+                        <span class="online-status"></span>
+                    </div>
+                    <div class="friend-info">
+                        <div class="friend-name" th:text="${friend.ho + ' ' + friend.ten}"></div>
+                        <div class="friend-status text-muted">Đang hoạt động</div>
+                    </div>
                 </a>
-            </th:block>
+            </div>
+            <div th:if="${#lists.isEmpty(friendUsers)}" class="no-friends">
+                <i class="fas fa-user-friends fa-2x mb-2"></i>
+                <p>Chưa có bạn bè nào</p>
+                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#friendRequestModal">
+                    <i class="fas fa-user-plus me-1"></i>Thêm bạn bè
+                </button>
+            </div>
         </div>
+    </div>
 
-
+    <!-- Projects Section -->
+    <div class="sidebar-section">
+        <div class="projects-header">
+            <h3><i class="fas fa-project-diagram me-2"></i>Dự án đang thực hiện</h3>
+        </div>
+        <div class="projects-list">
+            <div th:each="project: ${projects}" class="project-item-wrapper">
+                <th:block th:if="${project.trangThai == 'Đang thực hiện'}">
+                    <a th:href="@{'/project/' + ${project.maProject}}" class="project-item">
+                        <div class="project-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <div class="project-info">
+                            <div class="project-name" th:text="${project.getTenProject()}"></div>
+                            <div class="project-status">
+                                <span class="badge bg-primary" th:text="${project.trangThai}"></span>
+                            </div>
+                        </div>
+                    </a>
+                </th:block>
+            </div>
+            <div th:if="${#lists.isEmpty(projects)}" class="no-projects">
+                <i class="fas fa-project-diagram fa-2x mb-2"></i>
+                <p>Chưa có dự án nào</p>
+                <a th:href="@{/project}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-plus me-1"></i>Tạo dự án
+                </a>
+            </div>
+        </div>
     </div>
 
     <!-- Friend Request Modal -->
@@ -44,58 +73,69 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="friendRequestModalLabel">Tìm kiếm bạn bè</h5>
+                    <h5 class="modal-title" id="friendRequestModalLabel">
+                        <i class="fas fa-user-plus me-2"></i>Tìm kiếm bạn bè
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Tab Navigation -->
                     <ul class="nav nav-tabs mb-3" id="friendTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button" role="tab">Tìm kiếm</button>
+                            <button class="nav-link active" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button" role="tab">
+                                <i class="fas fa-search me-1"></i>Tìm kiếm
+                            </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="requests-tab" data-bs-toggle="tab" data-bs-target="#requests" type="button" role="tab">Lời mời kết bạn</button>
+                            <button class="nav-link" id="requests-tab" data-bs-toggle="tab" data-bs-target="#requests" type="button" role="tab">
+                                <i class="fas fa-user-clock me-1"></i>Lời mời kết bạn
+                                <span th:if="${friendRequestNotifications != null && !#lists.isEmpty(friendRequestNotifications)}" 
+                                      class="badge bg-danger ms-1" th:text="${#lists.size(friendRequestNotifications)}"></span>
+                            </button>
                         </li>
                     </ul>
 
-                    <!-- Tab Content -->
                     <div class="tab-content" id="friendTabsContent">
-                        <!-- Search Tab -->
                         <div class="tab-pane fade show active" id="search" role="tabpanel">
-                            <form id="searchFriendForm" class="d-flex mb-3 search-form">
-                                <div class="input-group">
+                            <form id="searchFriendForm" class="search-form">
+                                <div class="input-group mb-3">
                                     <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                    <input type="text" name="phone" id="searchPhone" class="form-control" placeholder="Nhập số điện thoại hoặc tên người dùng">
-                                    <button type="submit" class="btn btn-primary search-btn">
-                                        <i class="fas fa-search me-1"></i> Tìm kiếm
+                                    <input type="text" name="phone" id="searchPhone" class="form-control" 
+                                           placeholder="Nhập số điện thoại hoặc tên người dùng">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-search me-1"></i>Tìm kiếm
                                     </button>
                                 </div>
                             </form>
-                            
                             <div id="searchResults" class="search-results">
-                                <!-- Kết quả tìm kiếm sẽ được hiển thị ở đây -->
+                                <div class="empty-state">
+                                    <i class="fas fa-search fa-2x mb-2"></i>
+                                    <p>Kết quả tìm kiếm sẽ hiển thị ở đây</p>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Friend Requests Tab -->
                         <div class="tab-pane fade" id="requests" role="tabpanel">
                             <div th:if="${friendRequestNotifications != null && !#lists.isEmpty(friendRequestNotifications)}">
                                 <div class="list-group request-list">
                                     <div th:each="notification : ${friendRequestNotifications}" class="list-group-item request-item">
                                         <div class="d-flex align-items-center">
-                                            <img th:src="${notification.userFrom.avatar != null} ? ${notification.userFrom.avatar} : '/img/avatars/NULL.jpg'"
-                                                 class="rounded-circle me-3 request-avatar" style="width: 40px; height: 40px;">
-                                            <div class="flex-grow-1">
+                                            <div class="request-avatar-wrapper">
+                                                <img th:src="${notification.userFrom.avatar != null} ? ${notification.userFrom.avatar} : '/img/avatars/NULL.jpg'"
+                                                     class="rounded-circle request-avatar">
+                                                <span class="online-status"></span>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
                                                 <h6 class="mb-1 request-name" th:text="${notification.userFrom.ho + ' ' + notification.userFrom.ten}"></h6>
                                                 <small class="text-muted request-message" th:text="${notification.message}"></small>
                                             </div>
                                             <div class="btn-group request-actions">
-                                                <button th:onclick="'acceptFriendRequest(this, \'' + ${notification.id} + '\')'" class="btn btn-success btn-sm accept-btn">
+                                                <button th:onclick="'acceptFriendRequest(this, \'' + ${notification.id} + '\')'" 
+                                                        class="btn btn-success btn-sm accept-btn" title="Chấp nhận">
                                                     <i class="fas fa-check"></i>
                                                 </button>
                                                 <form action="/ketban/reject-friend" method="post" class="d-inline">
                                                     <input type="hidden" name="notificationId" th:value="${notification.id}">
-                                                    <button type="submit" class="btn btn-danger btn-sm reject-btn">
+                                                    <button type="submit" class="btn btn-danger btn-sm reject-btn" title="Từ chối">
                                                         <i class="fas fa-times"></i>
                                                     </button>
                                                 </form>
@@ -104,8 +144,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div th:if="${friendRequestNotifications == null || #lists.isEmpty(friendRequestNotifications)}" class="text-center py-3 empty-requests">
-                                <p class="text-muted">Không có lời mời kết bạn nào</p>
+                            <div th:if="${friendRequestNotifications == null || #lists.isEmpty(friendRequestNotifications)}" class="empty-state">
+                                <i class="fas fa-user-clock fa-2x mb-2"></i>
+                                <p>Không có lời mời kết bạn nào</p>
                             </div>
                         </div>
                     </div>

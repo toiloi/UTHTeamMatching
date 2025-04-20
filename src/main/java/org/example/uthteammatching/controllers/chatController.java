@@ -1,29 +1,26 @@
 package org.example.uthteammatching.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.example.uthteammatching.dto.FriendDTO;
 import org.example.uthteammatching.models.*;
 import org.example.uthteammatching.repositories.*;
+import org.example.uthteammatching.services.ChatMessageService;
+import org.example.uthteammatching.services.ListFriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -43,8 +40,16 @@ public class chatController {
     private ChatMessageRepository chatMessageRepository;
     @Autowired
     private ProjectRepository projectRepository;
+
     @Autowired
     private ThanhvienProjectRepository thanhvienProjectRepository;
+
+    @Autowired
+    private ListFriendService listFriendService;
+
+    @Autowired
+    private ChatMessageService chatMessageService;
+
 
 
     private UthUser addCurrentUserToModel(Model model) {
@@ -79,6 +84,9 @@ public class chatController {
     }
 
 
+
+
+
     @GetMapping("/getMessages")
     @ResponseBody
     public List<ChatMessage> getMessages(@RequestParam Long senderId, @RequestParam Long receiverId) {
@@ -110,13 +118,29 @@ public class chatController {
         UthUser currentUser = addCurrentUserToModel(model);
         addFriendUsersToModel(model, currentUser);
         model.addAttribute("currentUser", currentUser);
-
         Optional<UthUser> friend = userRepository.findById(friendId);
+        List<FriendDTO> friendDTOs = new ArrayList<>();
+        List<UthUser> listFriend = listFriendService.getFriendsOfUser(currentUser);
+        for(UthUser u : listFriend) {
+            FriendDTO friendDTO = new FriendDTO();
+            friendDTO.setHo(u.getHo());
+            friendDTO.setTen(u.getTen());
+            friendDTO.setAvatar(u.getAvatar());
+            ChatMessage lastMsg = chatMessageService.getLastMessageBetween(currentUser.getMaSo(), u.getMaSo());
+            friendDTO.setLastMessage(lastMsg != null ? lastMsg : new ChatMessage());
+            friendDTOs.add(friendDTO);
+        }
+        model.addAttribute("listFriend", friendDTOs);
 
         if(friend.isPresent()) {
             UthUser friendUser = friend.get();
             model.addAttribute("friend", friendUser);
         }
+
+        // Add projects to model
+        List<Project> projects = projectRepository.findAll();
+        model.addAttribute("projects", projects);
+
         return "chat";
     }
 
@@ -133,6 +157,37 @@ public class chatController {
         return "project-details";
     }
 
+    @PostMapping("/api/projects/{id}/evaluate-and-complete")
+    @ResponseBody
+    @Transactional
+    public Map<String, Object> evaluateAndCompleteProject(@PathVariable Long id, @RequestBody Map<String, Object> evaluationData) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Project project = projectRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Dự án không tồn tại"));
+
+            // Lưu điểm và nhận xét vào Project
+            Double diem = Double.valueOf(evaluationData.get("diem").toString());
+            String nhanXet = evaluationData.get("nhanXet").toString();
+
+            // Chuyển đổi điểm từ thang 0-10 sang Integer (có thể nhân lên nếu cần)
+            project.setDiem((int) Math.round(diem));
+            project.setNhanXet(nhanXet);
+
+            // Cập nhật trạng thái thành "Hoàn thành"
+            project.setTrangThai("Hoàn thành");
+
+            projectRepository.save(project);
+
+            response.put("success", true);
+            response.put("message", "Đánh giá và cập nhật trạng thái dự án thành công!");
+            return response;
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("error", "Lỗi khi đánh giá và cập nhật trạng thái: " + e.getMessage());
+            return response;
+        }
+    }
 
 
 
@@ -165,7 +220,5 @@ public class chatController {
             );
         }
     }
-
-
 
 }

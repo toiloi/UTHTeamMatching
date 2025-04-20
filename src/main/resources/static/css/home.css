@@ -1,0 +1,328 @@
+/* Home Page Styles */
+.news-content {
+    padding: 2rem 0;
+}
+
+/* Search Container */
+.search-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+}
+
+.search-container:hover {
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.search-wrapper {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.search-form {
+    position: relative;
+}
+
+.search-form .input-group {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.search-form .input-group-text {
+    background: #f8f9fa;
+    border: none;
+    padding: 0.75rem 1rem;
+    color: #6c757d;
+}
+
+.search-form .search-input {
+    border: none;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-form .search-input:focus {
+    box-shadow: none;
+    border-color: #dee2e6;
+}
+
+.search-form .search-button {
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #06B6D4 0%, #0EA5E9 100%);
+    border: none;
+}
+
+.search-form .search-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(6,182,212,0.3);
+}
+
+/* News Posts */
+.news-post {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.news-post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.news-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.news-user-info {
+    margin-left: 1rem;
+}
+
+.news-user-info a {
+    font-weight: 600;
+    color: #1F2937;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.news-user-info a:hover {
+    color: #06B6D4;
+}
+
+.news-time {
+    display: block;
+    font-size: 0.875rem;
+    color: #6B7280;
+}
+
+.news-content {
+    margin-bottom: 1.5rem;
+}
+
+.news-content p {
+    color: #4B5563;
+    line-height: 1.6;
+}
+
+/* Project Section */
+.news-project {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.news-project-title {
+    margin-bottom: 0.75rem;
+}
+
+.news-project-title a {
+    font-weight: 600;
+    color: #1F2937;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.news-project-title a:hover {
+    color: #06B6D4;
+}
+
+.news-project-desc {
+    color: #6B7280;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.news-participants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.participant-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.participant-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.project-join button {
+    width: 100%;
+    padding: 0.75rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.project-join button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Create Post Button */
+.create-post-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.create-post-button button {
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #06B6D4 0%, #0EA5E9 100%);
+    border: none;
+}
+
+.create-post-button button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(6,182,212,0.3);
+}
+
+/* Search Results Section */
+.search-results-section {
+    margin-top: 2rem;
+}
+
+.search-results-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+}
+
+.search-results-title {
+    color: #1F2937;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.search-keyword {
+    color: #06B6D4;
+    font-weight: 700;
+}
+
+.no-results-message {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.no-results-message i {
+    font-size: 3rem;
+    color: #6B7280;
+    margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .news-content {
+        padding: 1rem 0;
+    }
+    
+    .search-container {
+        padding: 1rem;
+        margin: 0 1rem 1.5rem;
+    }
+    
+    .news-post {
+        padding: 1rem;
+        margin: 0 1rem 1.5rem;
+    }
+    
+    .create-post-button {
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    .create-post-button button {
+        padding: 0.75rem 1.25rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.news-post {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Status Badges */
+.project-status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.badge-primary {
+    background: linear-gradient(135deg, #06B6D4 0%, #0EA5E9 100%);
+    color: white;
+}
+
+.badge-warning {
+    background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+    color: white;
+}
+
+.badge-success {
+    background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+    color: white;
+}
+
+/* News Actions */
+.news-actions {
+    margin-left: auto;
+    padding-right: 10px;
+}
+
+.news-actions .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.news-actions .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+} 

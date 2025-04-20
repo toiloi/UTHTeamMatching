@@ -65,6 +65,7 @@
                 <li class="nav-item">
                     <a href="/ketban" class="nav-link">Kết bạn</a>
                 </li>
+
                 <li class="nav-item">
                     <a href="/notification" class="nav-link">
                         <i class="fas fa-bell"></i>
@@ -127,12 +128,10 @@
                         <div class="member-info">
                             <h6 th:text="${member.userMaSo.ho + ' ' + member.userMaSo.ten}"></h6>
                             <small th:text="${member.vaiTro}"></small>
-
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <div class="project-section">
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -160,14 +159,14 @@
             <!-- Upload File Modal -->
             <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content border-0 shadow">
-                        <div class="modal-header bg-info text-white">
+                    <div class="modal-content">
+                        <div class="modal-header">
                             <h5 class="modal-title" id="uploadFileModalLabel">
                                 <i class="fas fa-file-upload me-2"></i>Thêm tài liệu mới
                             </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body p-4">
+                        <div class="modal-body">
                             <form id="uploadFileForm" enctype="multipart/form-data">
                                 <div class="mb-4">
                                     <label for="fileInput" class="form-label fw-bold">
@@ -178,27 +177,9 @@
                                     </div>
                                     <div class="form-text text-muted">Hỗ trợ các định dạng: PDF, Word, Excel</div>
                                 </div>
-                                <div class="mb-4">
-                                    <label for="fileName" class="form-label fw-bold">
-                                        <i class="fas fa-tag me-2 text-warning"></i>Tên tài liệu
-                                    </label>
-                                    <input type="text" class="form-control" id="fileName" placeholder="Nhập tên tài liệu..." required>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="fileType" class="form-label fw-bold">
-                                        <i class="fas fa-file-alt me-2 text-info"></i>Loại tài liệu
-                                    </label>
-                                    <select class="form-select" id="fileType" required>
-                                        <option value="">Chọn loại tài liệu...</option>
-                                        <option value="PDF">PDF</option>
-                                        <option value="Word">Word</option>
-                                        <option value="Excel">Excel</option>
-                                        <option value="Other">Khác</option>
-                                    </select>
-                                </div>
                             </form>
                         </div>
-                        <div class="modal-footer border-0 pt-0">
+                        <div class="modal-footer">
                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                 <i class="fas fa-times me-2"></i>Hủy
                             </button>
@@ -214,14 +195,14 @@
                 <h6>Hoàn thành dự án</h6>
                 <div class="d-grid gap-2">
                     <!-- Dự án học thuật: Chỉ hiển thị cho giảng viên hướng dẫn -->
-                    <th:block th:if="${project.loai == 'HOC_THUAT' and project.maGiangVien == currentUser.maSo}">
+                    <th:block th:if="${project != null and project.getLoai().toString() == 'HOC_THUAT' and project.getMaGiangVien() != null and currentUser != null and currentUser.getMaSo() != null and project.getMaGiangVien() == currentUser.getMaSo()}">
                         <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#evaluationModal">
                             <i class="fas fa-check-circle me-2"></i>
                             Đánh dấu hoàn thành
                         </button>
                     </th:block>
                     <!-- Dự án bên ngoài: Chỉ hiển thị cho trưởng nhóm -->
-                    <th:block th:if="${project.loai == 'BEN_NGOAI'}">
+                    <th:block th:if="${project.getLoai().toString() == 'BEN_NGOAI'}">
                         <th:block th:each="member : ${members}">
                             <th:block th:if="${member.vaiTro == 'Trưởng nhóm' and member.userMaSo.maSo == currentUser.maSo}">
                                 <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#evaluationModal">
@@ -235,17 +216,17 @@
             </div>
         </div>
 
-        <!-- Evaluation Modal - Enhanced -->
+        <!-- Evaluation Modal -->
         <div class="modal fade" id="evaluationModal" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow">
-                    <div class="modal-header bg-primary text-white">
+                <div class="modal-content">
+                    <div class="modal-header">
                         <h5 class="modal-title" id="evaluationModalLabel">
                             <i class="fas fa-clipboard-check me-2"></i>Đánh giá dự án
                         </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body p-4">
+                    <div class="modal-body">
                         <form id="evaluationForm">
                             <div class="mb-4">
                                 <label for="projectScore" class="form-label fw-bold">
@@ -268,7 +249,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer border-0 pt-0">
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-dismiss="modal">
                             <i class="fas fa-times me-2"></i>Hủy
                         </button>
@@ -281,7 +262,6 @@
         </div>
 
         <!-- Chat Container -->
-
         <div class="chat-container">
             <div class="chat-header">
                 <div class="chat-header-info">
@@ -290,13 +270,13 @@
                         <h6 th:text="${project.tenProject}"></h6>
                     </div>
                 </div>
-                <!-- Add Member Button -->
                 <div class="chat-header-actions">
-                    <button class="btn btn-primary rounded-circle" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMemberModal">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
             </div>
+<<<<<<< HEAD
                 <!-- Add Member Modal - Enhanced -->
                 <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -322,31 +302,58 @@
                                             </button>
                                         </div>
                                         <div class="form-text text-muted">Tìm kiếm theo tên hoặc số điện thoại của thành viên</div>
+=======
+
+            <!-- Add Member Modal -->
+            <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addMemberModalLabel">
+                                <i class="fas fa-user-plus me-2"></i>Mời thành viên vào nhóm chat
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addMemberForm">
+                                <div class="mb-4">
+                                    <label for="memberSearch" class="form-label fw-bold">
+                                        <i class="fas fa-users me-2 text-primary"></i>Tìm kiếm thành viên
+                                    </label>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
+                                        <input type="text" class="form-control" id="memberSearch" placeholder="Nhập tên hoặc số điện thoại...">
+                                        <button class="btn btn-primary" type="button" onclick="searchMembers()">
+                                            Tìm
+                                        </button>
+>>>>>>> 3892d91151296aec30d88ca09048d43eec45dce0
                                     </div>
-                                    <div class="mb-4">
-                                        <label class="form-label fw-bold">
-                                            <i class="fas fa-list me-2 text-info"></i>Kết quả tìm kiếm
-                                        </label>
-                                        <div id="searchResults" class="list-group shadow-sm rounded" style="max-height: 200px; overflow-y: auto; border: 1px solid rgba(0,0,0,.125);">
-                                            <div class="list-group-item text-center text-muted py-3">
-                                                <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
-                                                <p class="mb-0">Kết quả tìm kiếm sẽ hiển thị ở đây</p>
-                                            </div>
+                                    <div class="form-text text-muted">Tìm kiếm theo tên hoặc số điện thoại của thành viên</div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-list me-2 text-info"></i>Kết quả tìm kiếm
+                                    </label>
+                                    <div id="searchResults" class="list-group shadow-sm rounded" style="max-height: 200px; overflow-y: auto; border: 1px solid rgba(0,0,0,.125);">
+                                        <div class="list-group-item text-center text-muted py-3">
+                                            <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
+                                            <p class="mb-0">Kết quả tìm kiếm sẽ hiển thị ở đây</p>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer border-0 pt-0">
-                                <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-dismiss="modal">
-                                    <i class="fas fa-times me-2"></i>Hủy
-                                </button>
-                                <button type="button" class="btn btn-success btn-lg px-4" onclick="inviteMember()">
-                                    <i class="fas fa-paper-plane me-2"></i>Gửi lời mời
-                                </button>
-                            </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-2"></i>Hủy
+                            </button>
+                            <button type="button" class="btn btn-success btn-lg px-4" onclick="inviteMember()">
+                                <i class="fas fa-paper-plane me-2"></i>Gửi lời mời
+                            </button>
                         </div>
                     </div>
                 </div>
+            </div>
 
             <div class="chat-messages" id="chat-box">
                 <!-- Tin nhắn sẽ được WebSocket đẩy vào đây -->
@@ -361,7 +368,6 @@
                     </button>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -374,10 +380,15 @@
     <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="/js/main.js"></script>
 
-    <script th:inline="javascript">
+    <!-- SockJS -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 
-    const currentUserId = /*[[${currentUser.getMaSo()}]]*/ 'default';
-    const groupId = /*[[${project.getMaProject()}]]*/ 'default';
+    <!-- STOMP over SockJS -->
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+    <script th:inline="javascript">
+        const currentUserId = /*[[${currentUser.getMaSo()}]]*/ 'default';
+        const groupId = /*[[${project.getMaProject()}]]*/ 'default';
 
         let stompClient = null;
         let isConnected = false;
@@ -392,7 +403,6 @@
 
                 console.log("✅ WebSocket connected:", frame);
 
-                // Lắng nghe kênh theo group
                 stompClient.subscribe(`/topic/messages.group-${groupId}`, function (messageOutput) {
                     const msg = JSON.parse(messageOutput.body);
                     displayMessage(msg);
@@ -414,7 +424,6 @@
             document.getElementById('messageInput').value = '';
         }
 
-
         function displayMessage(msg) {
             const time = msg.timestamp ? new Date(msg.timestamp) : new Date();
             const formattedTime = time.toLocaleTimeString('vi-VN', {
@@ -422,8 +431,6 @@
             });
 
             const chatBox = document.getElementById("chat-box");
-
-            // Xác định kiểu tin nhắn: của bạn hay người khác
             const isOwnMessage = msg.senderId === currentUserId;
 
             const messageDiv = document.createElement("div");
@@ -461,8 +468,6 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-
-
         function loadMessages() {
             fetch(`/getMessagesGroup?groupId=${groupId}`)
                 .then(response => response.json())
@@ -472,29 +477,21 @@
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-            // Disable nút gửi lúc đầu
             document.getElementById("sendGroupButton").disabled = true;
-
-            // Load tin nhắn từ database
             loadMessages();
-
-            // Kết nối WebSocket
             connectWebSocket(currentUserId);
 
-            // Gắn sự kiện gửi khi bấm nút gửi
             document.getElementById("sendGroupButton").addEventListener("click", function () {
                 sendMessage(currentUserId, groupId);
             });
         });
-
     </script>
 
-    <!-- Add this before the SockJS scripts -->
     <script>
         function submitEvaluation() {
             const score = document.getElementById('projectScore').value;
             const feedback = document.getElementById('projectFeedback').value;
-            const projectId = groupId; // Using the groupId from chat context
+            const projectId = groupId;
 
             if (!score || !feedback) {
                 alert('Vui lòng điền đầy đủ thông tin đánh giá!');
@@ -506,73 +503,41 @@
                 return;
             }
 
-            // Create evaluation object
-            const evaluation = {
-                projectId: projectId,
-                score: parseFloat(score),
-                feedback: feedback
+            const evaluationData = {
+                diem: parseFloat(score),
+                nhanXet: feedback
             };
 
-            // Send evaluation to server
-            fetch('/api/projects/evaluate', {
+            fetch(`/api/projects/${projectId}/evaluate-and-complete`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(evaluation)
+                body: JSON.stringify(evaluationData)
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Lỗi khi gửi đánh giá');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Close the modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
-                modal.hide();
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi khi gửi đánh giá');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
+                    modal.hide();
 
-                // Show success message
-                alert('Đã lưu đánh giá thành công!');
-
-                // Optionally refresh the page or update UI
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại!');
-            });
+                    if (data.success) {
+                        alert(data.message || 'Đã lưu đánh giá và hoàn thành dự án thành công!');
+                        location.reload();
+                    } else {
+                        alert(data.error || 'Có lỗi xảy ra khi gửi đánh giá.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại!');
+                });
         }
     </script>
-
-    <!-- SockJS -->
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-
-    <!-- STOMP over SockJS -->
-    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
-
-    <!-- Enhanced Modal Animations and Styling -->
-    <style>
-        .modal.fade .modal-dialog {
-            transform: scale(0.8);
-            transition: transform 0.3s ease-in-out;
-        }
-        .modal.show .modal-dialog {
-            transform: scale(1);
-        }
-
-        /* Modal styling */
-        .modal-content {
-            border-radius: 0.5rem;
-            overflow: hidden;
-        }
-
-        /* Custom form styling */
-        .form-control:focus, .form-select:focus {
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-            border-color: #86b7fe;
-        }
-    </style>
 
     <script>
         let selectedUserId = null;
@@ -584,11 +549,19 @@
             if (!searchTerm.trim()) {
                 const resultsDiv = document.getElementById('searchResults');
                 resultsDiv.innerHTML = `
+<<<<<<< HEAD
                 <div class="list-group-item text-center text-muted py-3">
                     <i class="fas fa-exclamation-circle fa-2x mb-2 opacity-50"></i>
                     <p class="mb-0">Vui lòng nhập tên hoặc số điện thoại</p>
                 </div>
             `;
+=======
+                    <div class="list-group-item text-center text-muted py-3">
+                        <i class="fas fa-exclamation-circle fa-2x mb-2 opacity-50"></i>
+                        <p class="mb-0">Vui lòng nhập tên hoặc số điện thoại</p>
+                    </div>
+                `;
+>>>>>>> 3892d91151296aec30d88ca09048d43eec45dce0
                 return;
             }
 
@@ -600,11 +573,19 @@
 
                     if (users.length === 0) {
                         resultsDiv.innerHTML = `
+<<<<<<< HEAD
                         <div class="list-group-item text-center text-muted py-3">
                             <i class="fas fa-exclamation-circle fa-2x mb-2 opacity-50"></i>
                             <p class="mb-0">Không tìm thấy thành viên nào</p>
                         </div>
                     `;
+=======
+                            <div class="list-group-item text-center text-muted py-3">
+                                <i class="fas fa-exclamation-circle fa-2x mb-2 opacity-50"></i>
+                                <p class="mb-0">Không tìm thấy thành viên nào</p>
+                            </div>
+                        `;
+>>>>>>> 3892d91151296aec30d88ca09048d43eec45dce0
                         return;
                     }
 
@@ -612,6 +593,7 @@
                         const item = document.createElement('a');
                         item.className = 'list-group-item list-group-item-action';
                         item.innerHTML = `
+<<<<<<< HEAD
                         <div class="d-flex align-items-center">
                             <img src="${user.avatar || '/img/avatars/NULL.jpg'}" class="rounded-circle me-2" style="width: 32px; height: 32px;">
                             <div>
@@ -620,6 +602,16 @@
                             </div>
                         </div>
                     `;
+=======
+                            <div class="d-flex align-items-center">
+                                <img src="${user.avatar || '/img/avatars/NULL.jpg'}" class="rounded-circle me-2" style="width: 32px; height: 32px;">
+                                <div>
+                                    <div class="fw-bold">${user.ho} ${user.ten}</div>
+                                    <small class="text-muted">SĐT: ${user.sdt || 'N/A'}</small>
+                                </div>
+                            </div>
+                        `;
+>>>>>>> 3892d91151296aec30d88ca09048d43eec45dce0
                         item.onclick = () => selectUser(user.maSo, item);
                         resultsDiv.appendChild(item);
                     });
@@ -634,6 +626,10 @@
             document.querySelectorAll('#searchResults .list-group-item').forEach(item => {
                 item.classList.remove('selected');
             });
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3892d91151296aec30d88ca09048d43eec45dce0
             element.classList.add('selected');
             selectedUserId = userId;
         }
@@ -645,6 +641,7 @@
             }
 
             const projectId = groupId;
+<<<<<<< HEAD
             console.log('Sending invite - userId:', selectedUserId, 'groupId:', projectId);
 
             if (!projectId || isNaN(projectId)) {
@@ -653,6 +650,10 @@
             }
 
             fetch('/project/invite', { // Đổi từ /chat/invite thành /project/invite
+=======
+
+            fetch('/chat/invite', {
+>>>>>>> 3892d91151296aec30d88ca09048d43eec45dce0
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -662,22 +663,31 @@
                     groupId: projectId
                 })
             })
+<<<<<<< HEAD
                 .then(response => {
                     console.log('Response status:', response.status);
                     return response.json();
                 })
                 .then(data => {
                     console.log('Invite response:', data);
+=======
+                .then(response => response.json())
+                .then(data => {
+>>>>>>> 3892d91151296aec30d88ca09048d43eec45dce0
                     if (data.success) {
                         const modal = bootstrap.Modal.getInstance(document.getElementById('addMemberModal'));
                         modal.hide();
                         alert(data.message || 'Đã gửi lời mời thành công!');
                     } else {
+<<<<<<< HEAD
                         console.error('Invite error from server:', data.error);
+=======
+>>>>>>> 3892d91151296aec30d88ca09048d43eec45dce0
                         alert(data.error || 'Có lỗi xảy ra khi gửi lời mời');
                     }
                 })
                 .catch(error => {
+<<<<<<< HEAD
                     console.error('Error sending invite:', error);
                     alert('Có lỗi xảy ra khi gửi lời mời. Vui lòng thử lại!');
                 });
@@ -690,93 +700,72 @@
         document.getElementById('navbarToggle').addEventListener('click', function() {
             document.getElementById('navbarMenu').classList.toggle('show');
         });
+=======
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi gửi lời mời. Vui lòng thử lại!');
+                });
+        }
+>>>>>>> 3892d91151296aec30d88ca09048d43eec45dce0
     </script>
 
     <script>
         function uploadFile() {
             const fileInput = document.getElementById('fileInput');
-            const fileName = document.getElementById('fileName').value;
-            const fileType = document.getElementById('fileType').value;
-            const projectId = groupId; // Using the existing groupId
+            const projectId = groupId;
 
-            if (!fileInput.files[0] || !fileName || !fileType) {
-                alert('Vui lòng điền đầy đủ thông tin!');
+            if (!fileInput.files[0]) {
+                alert('Vui lòng chọn một tài liệu để tải lên!');
+                return;
+            }
+
+            if (projectId === 'default') {
+                alert('Không thể xác định ID dự án. Vui lòng thử lại!');
                 return;
             }
 
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
-            formData.append('fileName', fileName);
-            formData.append('fileType', fileType);
-            formData.append('projectId', projectId);
 
-            // Show loading state
             const uploadButton = document.querySelector('#uploadFileModal .btn-info');
             const originalText = uploadButton.innerHTML;
             uploadButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang tải lên...';
             uploadButton.disabled = true;
 
-            fetch('/api/projects/files/upload', {
+            fetch(`/api/projects/${projectId}/files/upload`, {
                 method: 'POST',
                 body: formData
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Lỗi khi tải lên tài liệu');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Close the modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('uploadFileModal'));
-                modal.hide();
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi khi tải lên tài liệu: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('uploadFileModal'));
+                    modal.hide();
 
-                // Show success message
-                alert('Đã tải lên tài liệu thành công!');
-
-                // Refresh the page to show new file
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi tải lên tài liệu. Vui lòng thử lại!');
-            })
-            .finally(() => {
-                // Reset button state
-                uploadButton.innerHTML = originalText;
-                uploadButton.disabled = false;
-            });
+                    if (data.success) {
+                        alert(data.message || 'Đã tải lên tài liệu thành công!');
+                        location.reload();
+                    } else {
+                        alert(data.error || 'Có lỗi xảy ra khi tải lên tài liệu.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi tải lên tài liệu. Vui lòng thử lại!');
+                })
+                .finally(() => {
+                    uploadButton.innerHTML = originalText;
+                    uploadButton.disabled = false;
+                });
         }
+    </script>
 
-        // Auto-fill file name from selected file
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const fileName = document.getElementById('fileName');
-            if (e.target.files[0] && !fileName.value) {
-                fileName.value = e.target.files[0].name.split('.')[0];
-            }
-        });
-
-        // Auto-detect file type from selected file
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const fileType = document.getElementById('fileType');
-            if (e.target.files[0]) {
-                const extension = e.target.files[0].name.split('.').pop().toLowerCase();
-                switch(extension) {
-                    case 'pdf':
-                        fileType.value = 'PDF';
-                        break;
-                    case 'doc':
-                    case 'docx':
-                        fileType.value = 'Word';
-                        break;
-                    case 'xls':
-                    case 'xlsx':
-                        fileType.value = 'Excel';
-                        break;
-                    default:
-                        fileType.value = 'Other';
-                }
-            }
+    <script>
+        document.getElementById('navbarToggle').addEventListener('click', function() {
+            document.getElementById('navbarMenu').classList.toggle('show');
         });
     </script>
 

@@ -15,4 +15,5 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
             "ORDER BY m.id ASC")
     List<ChatMessage> findConversation(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId);
     List<ChatMessage> findByGroupId(Long groupId);
+
 }

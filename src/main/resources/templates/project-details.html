@@ -178,24 +178,6 @@
                                     </div>
                                     <div class="form-text text-muted">Hỗ trợ các định dạng: PDF, Word, Excel</div>
                                 </div>
-                                <div class="mb-4">
-                                    <label for="fileName" class="form-label fw-bold">
-                                        <i class="fas fa-tag me-2 text-warning"></i>Tên tài liệu
-                                    </label>
-                                    <input type="text" class="form-control" id="fileName" placeholder="Nhập tên tài liệu..." required>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="fileType" class="form-label fw-bold">
-                                        <i class="fas fa-file-alt me-2 text-info"></i>Loại tài liệu
-                                    </label>
-                                    <select class="form-select" id="fileType" required>
-                                        <option value="">Chọn loại tài liệu...</option>
-                                        <option value="PDF">PDF</option>
-                                        <option value="Word">Word</option>
-                                        <option value="Excel">Excel</option>
-                                        <option value="Other">Khác</option>
-                                    </select>
-                                </div>
                             </form>
                         </div>
                         <div class="modal-footer border-0 pt-0">
@@ -745,20 +727,28 @@
     <script>
         function uploadFile() {
             const fileInput = document.getElementById('fileInput');
-            const fileName = document.getElementById('fileName').value;
-            const fileType = document.getElementById('fileType').value;
             const projectId = groupId; // Using the existing groupId
 
-            if (!fileInput.files[0] || !fileName || !fileType) {
-                alert('Vui lòng điền đầy đủ thông tin!');
+            // Kiểm tra dữ liệu đầu vào
+            if (!fileInput.files[0]) {
+                alert('Vui lòng chọn một tài liệu để tải lên!');
+                return;
+            }
+
+            if (projectId === 'default') {
+                alert('Không thể xác định ID dự án. Vui lòng thử lại!');
                 return;
             }
 
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
-            formData.append('fileName', fileName);
-            formData.append('fileType', fileType);
-            formData.append('projectId', projectId);
+
+            // Log dữ liệu gửi đi để debug
+            console.log('Uploading file with data:');
+            console.log('Project ID:', projectId);
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
 
             // Show loading state
             const uploadButton = document.querySelector('#uploadFileModal .btn-info');
@@ -766,68 +756,43 @@
             uploadButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang tải lên...';
             uploadButton.disabled = true;
 
-            fetch('/api/projects/files/upload', {
+            // Cập nhật URL để bao gồm projectId trong đường dẫn
+            fetch(`/api/projects/${projectId}/files/upload`, {
                 method: 'POST',
                 body: formData
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Lỗi khi tải lên tài liệu');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Close the modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('uploadFileModal'));
-                modal.hide();
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi khi tải lên tài liệu: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Đóng modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('uploadFileModal'));
+                    modal.hide();
 
-                // Show success message
-                alert('Đã tải lên tài liệu thành công!');
-
-                // Refresh the page to show new file
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi tải lên tài liệu. Vui lòng thử lại!');
-            })
-            .finally(() => {
-                // Reset button state
-                uploadButton.innerHTML = originalText;
-                uploadButton.disabled = false;
-            });
+                    // Kiểm tra phản hồi từ server
+                    if (data.success) {
+                        // Hiển thị thông báo thành công từ server
+                        alert(data.message || 'Đã tải lên tài liệu thành công!');
+                        // Làm mới trang để hiển thị tài liệu mới
+                        location.reload();
+                    } else {
+                        // Hiển thị thông báo lỗi từ server
+                        alert(data.error || 'Có lỗi xảy ra khi tải lên tài liệu.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi tải lên tài liệu. Vui lòng thử lại!');
+                })
+                .finally(() => {
+                    // Reset button state
+                    uploadButton.innerHTML = originalText;
+                    uploadButton.disabled = false;
+                });
         }
-
-        // Auto-fill file name from selected file
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const fileName = document.getElementById('fileName');
-            if (e.target.files[0] && !fileName.value) {
-                fileName.value = e.target.files[0].name.split('.')[0];
-            }
-        });
-
-        // Auto-detect file type from selected file
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const fileType = document.getElementById('fileType');
-            if (e.target.files[0]) {
-                const extension = e.target.files[0].name.split('.').pop().toLowerCase();
-                switch(extension) {
-                    case 'pdf':
-                        fileType.value = 'PDF';
-                        break;
-                    case 'doc':
-                    case 'docx':
-                        fileType.value = 'Word';
-                        break;
-                    case 'xls':
-                    case 'xlsx':
-                        fileType.value = 'Excel';
-                        break;
-                    default:
-                        fileType.value = 'Other';
-                }
-            }
-        });
     </script>
 
 </body>

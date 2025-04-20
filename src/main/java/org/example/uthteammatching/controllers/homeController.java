@@ -1147,4 +1147,52 @@ public class homeController {
                 .collect(Collectors.toList());
     }
 
+    @PostMapping("/api/projects/{id}/files/upload")
+    @ResponseBody
+    public Map<String, Object> uploadFiles(
+            @PathVariable("id") Long projectId,
+            @RequestParam("file") MultipartFile file) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            // Tìm project theo projectId
+            Project project = projectRepository.findById(projectId)
+                    .orElseThrow(() -> new IllegalArgumentException("Dự án không tồn tại"));
+
+            // Xử lý file upload
+            if (file != null && !file.isEmpty()) {
+                // Lưu file vào hệ thống và lấy đường dẫn
+                String duongDan = fileStorageService.saveFile(file);
+                String fileName = file.getOriginalFilename();
+                String loaiTaiLieu = fileStorageService.determineFileType(fileName);
+
+                // Tạo đối tượng TaiLieu và liên kết với Project
+                TaiLieu taiLieu = new TaiLieu(fileName, duongDan, loaiTaiLieu, project);
+                project.addTaiLieu(taiLieu);
+
+                // Lưu lại project
+                projectRepository.save(project);
+
+                response.put("success", true);
+                response.put("message", "Tài liệu đã được tải lên thành công!");
+                return response;
+            } else {
+                response.put("success", false);
+                response.put("error", "Vui lòng chọn một file để tải lên!");
+                return response;
+            }
+        } catch (IllegalArgumentException e) {
+            response.put("success", false);
+            response.put("error", e.getMessage());
+            return response;
+        } catch (IOException e) {
+            response.put("success", false);
+            response.put("error", "Lỗi khi tải tệp: " + e.getMessage());
+            return response;
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("error", "Có lỗi xảy ra khi tải lên tài liệu: " + e.getMessage());
+            return response;
+        }
+    }
 }

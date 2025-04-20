@@ -112,6 +112,11 @@ public class chatController {
             UthUser friendUser = friend.get();
             model.addAttribute("friend", friendUser);
         }
+
+        // Add projects to model
+        List<Project> projects = projectRepository.findAll();
+        model.addAttribute("projects", projects);
+
         return "chat";
     }
 

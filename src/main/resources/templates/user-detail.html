@@ -36,7 +36,7 @@
 <!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>
 
-<div class="container">
+<div class="container py-5">
     <!-- Success Message -->
     <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
         <i class="fas fa-check-circle me-2"></i>
@@ -53,7 +53,7 @@
 
     <div class="profile-section">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="section-title mb-0">
+            <h2 class="section-title">
                 <th:block th:with="userRole=${student.userRoles.size() > 0 ? student.userRoles.iterator().next().role.ten : 'USER'}">
                     <span th:if="${userRole == 'USER' and student.userRoles.size() == 1}">Thông tin sinh viên</span>
                     <span th:if="${userRole == 'LECTURE' or (userRole == 'USER' and student.userRoles.size() > 1)}">Thông tin giảng viên</span>
@@ -61,15 +61,15 @@
                 </th:block>
             </h2>
             <div class="action-buttons" th:if="${currentUser.maSo == student.maSo}">
-                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                    <i class="fas fa-edit"></i> Chỉnh sửa thông tin
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                    <i class="fas fa-edit me-2"></i>Chỉnh sửa thông tin
                 </button>
-                <button class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
-                    <i class="fas fa-key"></i> Đổi mật khẩu
+                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                    <i class="fas fa-key me-2"></i>Đổi mật khẩu
                 </button>
                 <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#lecturerRequestModal" 
                     th:if="${student.userRoles.size() > 0 and student.userRoles.iterator().next().role.ten == 'USER' and student.userRoles.size() == 1}">
-                    <i class="fas fa-chalkboard-teacher"></i> Xin làm giảng viên
+                    <i class="fas fa-chalkboard-teacher me-2"></i>Xin làm giảng viên
                 </button>
             </div>
         </div>
@@ -78,149 +78,191 @@
                 <img th:src="${student.avatar != null ? student.avatar : '/img/avatars/NULL.jpg'}" alt="Ảnh đại diện" class="profile-image mb-3">
             </div>
             <div class="col-md-9">
-                <div class="row mb-2">
+                <div class="row">
                     <div class="col-md-6">
-                        <p><span class="info-label">Mã số:</span> <span th:text="${student.maSo}"></span></p>
-                        <p><span class="info-label">Họ:</span> <span th:text="${student.ho}"></span></p>
-                        <p><span class="info-label">Tên:</span> <span th:text="${student.ten}"></span></p>
-                        <p><span class="info-label">Giới tính:</span> <span th:text="${student.gioiTinh}"></span></p>
-                        <p><span class="info-label">Chuyên ngành:</span> <span th:text="${student.chuyenNganh}"></span></p>
+                        <div class="mb-3">
+                            <span class="info-label">Mã số:</span>
+                            <span th:text="${student.maSo}" class="text-dark"></span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="info-label">Họ:</span>
+                            <span th:text="${student.ho}" class="text-dark"></span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="info-label">Tên:</span>
+                            <span th:text="${student.ten}" class="text-dark"></span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="info-label">Giới tính:</span>
+                            <span th:text="${student.gioiTinh}" class="text-dark"></span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="info-label">Chuyên ngành:</span>
+                            <span th:text="${student.chuyenNganh}" class="text-dark"></span>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <p><span class="info-label">Email:</span> <span th:text="${student.email}"></span></p>
-                        <p><span class="info-label">Số điện thoại:</span> <span th:text="${student.sdt}"></span></p>
-                        <p>
+                        <div class="mb-3">
+                            <span class="info-label">Email:</span>
+                            <span th:text="${student.email}" class="text-dark"></span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="info-label">Số điện thoại:</span>
+                            <span th:text="${student.sdt}" class="text-dark"></span>
+                        </div>
+                        <div class="mb-3">
                             <span class="info-label">Tên đăng nhập:</span>
-                            <span th:if="${currentUser.maSo == student.maSo}" th:text="${student.username}"></span>
-                            <span th:unless="${currentUser.maSo == student.maSo}">********</span>
-                        </span></p>
+                            <span th:if="${currentUser.maSo == student.maSo}" 
+                                  th:text="${student.username}" 
+                                  class="text-dark"></span>
+                            <span th:unless="${currentUser.maSo == student.maSo}" 
+                                  class="text-muted">********</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Roles Section -->
-</div>
-
-<!-- Edit Profile Modal -->
-<div class="modal fade" id="editProfileModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Chỉnh sửa thông tin</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editProfileForm" th:action="@{/user-detail/{id}(id=${student.maSo})}" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="maSo" th:value="${student.maSo}">
-                    <div class="mb-3">
-                        <label class="form-label">Họ</label>
-                        <input type="text" class="form-control" name="ho" th:value="${student.ho}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Tên</label>
-                        <input type="text" class="form-control" name="ten" th:value="${student.ten}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" th:value="${student.email}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Số điện thoại</label>
-                        <input type="tel" class="form-control" name="sdt" th:value="${student.sdt}">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Giới tính</label>
-                        <select class="form-select" name="gioiTinh">
-                            <option value="Nam" th:selected="${student.gioiTinh == 'Nam'}">Nam</option>
-                            <option value="Nữ" th:selected="${student.gioiTinh == 'Nữ'}">Nữ</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Chuyên ngành</label>
-                        <input type="text" class="form-control" name="chuyenNganh" th:value="${student.chuyenNganh}">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Ảnh đại diện</label>
-                        <input type="file" class="form-control" name="avatarFile" accept="image/*">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="submit" form="editProfileForm" class="btn btn-primary">Lưu thay đổi</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Change Password Modal -->
-<div class="modal fade" id="changePasswordModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Đổi mật khẩu</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="changePasswordForm" th:action="@{/user/change-password}" method="POST" onsubmit="return validatePasswordForm()">
-                    <input type="hidden" name="maSo" th:value="${student.maSo}">
-                    <div class="mb-3">
-                        <label class="form-label">Mật khẩu hiện tại</label>
-                        <input type="password" class="form-control" name="currentPassword" id="currentPassword" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Mật khẩu mới</label>
-                        <input type="password" class="form-control" name="newPassword" id="newPassword" required>
-                        <small class="form-text text-muted">Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ hoa, chữ thường và số</small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Xác nhận mật khẩu mới</label>
-                        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" required>
-                    </div>
-                    <div id="passwordError" class="alert alert-danger d-none"></div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="submit" form="changePasswordForm" class="btn btn-primary">Đổi mật khẩu</button>
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-user-edit me-2"></i>Chỉnh sửa thông tin
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm" th:action="@{/user-detail/{id}(id=${student.maSo})}" 
+                          method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="maSo" th:value="${student.maSo}">
+                        <div class="mb-3">
+                            <label class="form-label">Họ</label>
+                            <input type="text" class="form-control" name="ho" th:value="${student.ho}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tên</label>
+                            <input type="text" class="form-control" name="ten" th:value="${student.ten}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" th:value="${student.email}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="tel" class="form-control" name="sdt" th:value="${student.sdt}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Giới tính</label>
+                            <select class="form-select" name="gioiTinh">
+                                <option value="Nam" th:selected="${student.gioiTinh == 'Nam'}">Nam</option>
+                                <option value="Nữ" th:selected="${student.gioiTinh == 'Nữ'}">Nữ</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Chuyên ngành</label>
+                            <input type="text" class="form-control" name="chuyenNganh" th:value="${student.chuyenNganh}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ảnh đại diện</label>
+                            <input type="file" class="form-control" name="avatarFile" accept="image/*">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Hủy
+                    </button>
+                    <button type="submit" form="editProfileForm" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Lưu thay đổi
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Lecturer Request Modal -->
-<div class="modal fade" id="lecturerRequestModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Đơn xin làm giảng viên</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <!-- Change Password Modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-key me-2"></i>Đổi mật khẩu
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="changePasswordForm" th:action="@{/user/change-password}" 
+                          method="POST" onsubmit="return validatePasswordForm()">
+                        <input type="hidden" name="maSo" th:value="${student.maSo}">
+                        <div class="mb-3">
+                            <label class="form-label">Mật khẩu hiện tại</label>
+                            <input type="password" class="form-control" name="currentPassword" id="currentPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mật khẩu mới</label>
+                            <input type="password" class="form-control" name="newPassword" id="newPassword" required>
+                            <small class="form-text text-muted">Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ hoa, chữ thường và số</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Xác nhận mật khẩu mới</label>
+                            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" required>
+                        </div>
+                        <div id="passwordError" class="alert alert-danger d-none"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Hủy
+                    </button>
+                    <button type="submit" form="changePasswordForm" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Đổi mật khẩu
+                    </button>
+                </div>
             </div>
-            <div class="modal-body">
-                <form id="lecturerRequestForm" th:action="@{/user/request-lecturer}" method="POST">
-                    <input type="hidden" name="maSo" th:value="${student.maSo}">
-                    <div class="mb-3">
-                        <label class="form-label">Chuyên môn</label>
-                        <input type="text" class="form-control" name="expertise" required>
-                        <small class="form-text text-muted">Vui lòng nhập lĩnh vực chuyên môn của bạn</small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Kinh nghiệm giảng dạy</label>
-                        <textarea class="form-control" name="experience" rows="3" required></textarea>
-                        <small class="form-text text-muted">Mô tả kinh nghiệm giảng dạy của bạn</small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Lý do xin làm giảng viên</label>
-                        <textarea class="form-control" name="reason" rows="3" required></textarea>
-                        <small class="form-text text-muted">Giải thích lý do bạn muốn trở thành giảng viên</small>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="submit" form="lecturerRequestForm" class="btn btn-primary">Gửi đơn</button>
+        </div>
+    </div>
+
+    <!-- Lecturer Request Modal -->
+    <div class="modal fade" id="lecturerRequestModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-chalkboard-teacher me-2"></i>Đơn xin làm giảng viên
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="lecturerRequestForm" th:action="@{/user/request-lecturer}" method="POST">
+                        <input type="hidden" name="maSo" th:value="${student.maSo}">
+                        <div class="mb-3">
+                            <label class="form-label">Chuyên môn</label>
+                            <input type="text" class="form-control" name="expertise" required>
+                            <small class="form-text text-muted">Vui lòng nhập lĩnh vực chuyên môn của bạn</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Kinh nghiệm giảng dạy</label>
+                            <textarea class="form-control" name="experience" rows="3" required></textarea>
+                            <small class="form-text text-muted">Mô tả kinh nghiệm giảng dạy của bạn</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Lý do xin làm giảng viên</label>
+                            <textarea class="form-control" name="reason" rows="3" required></textarea>
+                            <small class="form-text text-muted">Giải thích lý do bạn muốn trở thành giảng viên</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Hủy
+                    </button>
+                    <button type="submit" form="lecturerRequestForm" class="btn btn-primary">
+                        <i class="fas fa-paper-plane me-2"></i>Gửi đơn
+                    </button>
+                </div>
             </div>
         </div>
     </div>

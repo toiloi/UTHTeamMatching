@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
@@ -32,6 +31,9 @@
     <link th:href="@{/css/style.css}" rel="stylesheet">
     <!-- Search Stylesheet -->
     <link th:href="@{/css/search.css}" rel="stylesheet">
+
+    <!-- Project Page Stylesheet -->
+    <link th:href="@{/css/project.css}" rel="stylesheet">
 
     <style>
         .project-content { padding: 2rem 0; }
@@ -124,58 +126,100 @@
             border: none;
         }
         .project-details-modal .modal-header {
-            border-bottom: none;
-            padding: 1.5rem;
-            background-color: #f8f9fa;
-        }
-        .project-details-modal .modal-body { padding: 1.5rem; }
-        .project-details-modal .modal-footer {
-            border-top: none;
+            background: linear-gradient(135deg, #06B6D4 0%, #0EA5E9 100%);
+            color: white;
+            border-radius: 12px 12px 0 0;
             padding: 1.5rem;
         }
-        .project-details-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .project-details-modal .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .project-details-modal .btn-close {
+            color: white;
+            opacity: 1;
+        }
+        .project-details-modal .project-status-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        .project-details-modal .project-details-content {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
             margin-bottom: 1.5rem;
         }
-        .project-details-content { margin-bottom: 2rem; }
-        .project-details-section { margin-bottom: 1.5rem; }
+        .project-details-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
         .project-details-section h6 {
-            color: #495057;
-            margin-bottom: 0.5rem;
+            color: #1F2937;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
         }
         .project-details-section p {
-            color: #6c757d;
+            color: #4B5563;
+            line-height: 1.6;
             margin-bottom: 0;
-        }
-        .project-timeline {
-            position: relative;
-            padding-left: 2rem;
-        }
-        .project-timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background-color: #e9ecef;
         }
         .timeline-item {
             position: relative;
-            padding-bottom: 1.5rem;
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        .timeline-item:last-child {
+            margin-bottom: 0;
         }
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -2rem;
+            left: 0;
             top: 0.5rem;
-            width: 1rem;
-            height: 1rem;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background-color: #0d6efd;
-            border: 2px solid #fff;
+            background-color: #06B6D4;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #06B6D4;
+        }
+        .timeline-item h6 {
+            font-size: 0.9rem;
+            color: #6B7280;
+            margin-bottom: 0.25rem;
+        }
+        .timeline-item p {
+            font-weight: 500;
+            color: #1F2937;
+        }
+        .member-count {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .member-count i {
+            font-size: 1.2rem;
+            color: #06B6D4;
+        }
+        .member-count p {
+            font-size: 1rem;
+            color: #1F2937;
+            font-weight: 500;
+        }
+        .member-count-value {
+            background-color: #06B6D4;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-weight: 600;
         }
         .project-members {
             display: flex;
@@ -299,25 +343,25 @@
                         <!-- Project Feed -->
                         <div class="project-feed">
                             <!-- Create Project -->
-                            <div class="card create-project-card mb-4">
-                                <div class="card-body p-4">
-                                    <div class="d-flex mb-3">
+                            <div class="card create-project-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
                                         <img th:src="${currentUser.avatar != null ? currentUser.avatar : '/img/avatars/NULL.jpg'}" class="avatar me-3" alt="User Avatar">
                                         <div class="flex-grow-1">
-                                            <textarea id="thoughtInput" class="form-control" rows="3" placeholder="Bạn đang nghĩ gì?"></textarea>
+                                            <textarea id="thoughtInput" class="form-control" rows="2" placeholder="Bạn đang nghĩ gì về một dự án mới?"></textarea>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createProjectModal">
                                                 <i class="fas fa-image me-2"></i>Ảnh
                                             </button>
                                             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createProjectModal">
                                                 <i class="fas fa-file me-2"></i>Tài liệu
                                             </button>
                                         </div>
-                                        <button class="btn btn-primary btn-create-project" data-bs-toggle="modal" data-bs-target="#createProjectModal">
-                                            <i class="fas fa-plus me-2"></i>Tạo dự án
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                                            <i class="fas fa-plus me-2"></i>Tạo dự án mới
                                         </button>
                                     </div>
                                 </div>
@@ -325,44 +369,43 @@
 
                             <!-- Project List -->
                             <div class="project-list">
-                                <!-- Project Item -->
-                                <div th:each="project : ${projects}">
-                                    <div class="card project-card">
-                                        <div class="card-body p-4">
-                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <h5 th:text="${project.getTenProject()}" class="card-title mb-0"></h5>
-                                                <span th:text="${project.getTrangThai()}" class="project-status-badge bg-primary"></span>
+                                <div th:each="project : ${projects}" class="project-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="card-title" th:text="${project.getTenProject()}"></h5>
+                                            <span class="project-status-badge" th:text="${project.getTrangThai()}"></span>
+                                        </div>
+                                        <p class="project-description" th:text="${project.getMoTa()}"></p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div th:each="tv, iterStat : ${project.thanhVienProjects}" th:if="${iterStat.index < 3}">
+                                                    <img th:src="${tv.getUserMaSo().avatar != null ? tv.getUserMaSo().avatar : '/img/avatars/NULL.jpg'}" 
+                                                         class="avatar" th:title="${tv.getUserMaSo().getHo() + ' ' + tv.getUserMaSo().getTen()}">
+                                                </div>
+                                                <span th:if="${#lists.size(project.thanhVienProjects) > 3}" 
+                                                      class="ms-2 text-muted">
+                                                    +[[${#lists.size(project.thanhVienProjects) - 3}]] khác
+                                                </span>
                                             </div>
-                                            <p th:text="${project.getMoTa()}" class="project-description mb-3"></p>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div th:each="tv : ${project.thanhVienProjects}">
-                                                    <div class="d-flex align-items-center">
-                                                        <img th:src="${tv.getUserMaSo().avatar != null ? tv.getUserMaSo().avatar : '/img/avatars/NULL.jpg'}" class="avatar me-2">
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex align-items-center">
-                                                    <!-- Debug log -->
-                                                    <div th:text="'Debug: maProject=' + ${project.maProject} + ', maGiangVien=' + ${project.maGiangVien} + ', currentUser=' + ${currentUser.maSo}" style="display: none;"></div>
-                                                    <th:block th:if="${project.trangThai == 'Đang chờ duyệt' and project.maGiangVien == currentUser.maSo}">
-                                                        <form th:action="@{/project/{id}/approve(id=${project.maProject})}" method="post" class="d-inline">
-                                                            <th:block th:if="${_csrf != null}">
-                                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                                            </th:block>
-                                                            <button type="submit" class="btn btn-success btn-sm me-2">
-                                                                <i class="fas fa-check me-1"></i>Duyệt
-                                                            </button>
-                                                        </form>
-                                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                                                th:attr="data-project-id=${project.maProject}" data-bs-target="#rejectProjectModal">
-                                                            <i class="fas fa-times me-1"></i>Từ chối
+                                            <div class="d-flex align-items-center gap-2">
+                                                <th:block th:if="${project.trangThai == 'Đang chờ duyệt' and project.maGiangVien == currentUser.maSo}">
+                                                    <form th:action="@{/project/{id}/approve(id=${project.maProject})}" method="post" class="d-inline">
+                                                        <button type="submit" class="btn btn-success">
+                                                            <i class="fas fa-check me-2"></i>Duyệt
                                                         </button>
-                                                    </th:block>
-                                                    <th:block th:if="${project.trangThai != 'Đang chờ duyệt' and project.trangThai != 'Hoàn thành'}">
-                                                        <a th:href="@{/project/{id}(id=${project.getMaProject()})}" class="btn btn-outline-primary btn-sm">
-                                                            <i class="fas fa-eye me-2"></i>Xem chi tiết
-                                                        </a>
-                                                    </th:block>
-                                                </div>
+                                                    </form>
+                                                    <button class="btn btn-danger" data-bs-toggle="modal"
+                                                            th:attr="data-project-id=${project.maProject}" 
+                                                            data-bs-target="#rejectProjectModal">
+                                                        <i class="fas fa-times me-2"></i>Từ chối
+                                                    </button>
+                                                </th:block>
+                                                <th:block th:if="${project.trangThai != 'Đang chờ duyệt' and project.trangThai != 'Hoàn thành'}">
+                                                    <a th:href="@{/project/{id}(id=${project.getMaProject()})}" 
+                                                       class="btn btn-primary">
+                                                        <i class="fas fa-eye me-2"></i>Xem chi tiết
+                                                    </a>
+                                                </th:block>
                                             </div>
                                         </div>
                                     </div>
@@ -373,33 +416,21 @@
 
                     <!-- Project Sidebar -->
                     <div class="col-lg-4">
-                        <!-- Project Stats -->
-                        <div class="card stats-card mb-4">
-                            <div class="card-header bg-white border-0 py-3">
-                                <h5 class="mb-0">Thống kê dự án</h5>
+                        <div class="stats-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-pie me-2"></i>Thống kê dự án</h5>
                             </div>
-                            <div class="card-body p-0">
-                                <div class="stats-item d-flex justify-content-between align-items-center p-3">
-                                    <div>
-                                        <h6 class="mb-0">Tổng số dự án</h6>
-                                        <small class="text-muted">Tất cả dự án</small>
-                                    </div>
-                                    <span th:text="${totalProjects}" class="badge bg-primary rounded-pill px-3 py-2"></span>
-                                </div>
-                                <div class="stats-item d-flex justify-content-between align-items-center p-3">
-                                    <div>
-                                        <h6 class="mb-0">Đang thực hiện</h6>
-                                        <small class="text-muted">Dự án đang hoạt động</small>
-                                    </div>
-                                    <span th:text="${doingProjects}" class="badge bg-warning rounded-pill px-3 py-2"></span>
-                                </div>
-                                <div class="stats-item d-flex justify-content-between align-items-center p-3">
-                                    <div>
-                                        <h6 class="mb-0">Hoàn thành</h6>
-                                        <small class="text-muted">Dự án đã hoàn thành</small>
-                                    </div>
-                                    <span th:text="${doneProjects}" class="badge bg-success rounded-pill px-3 py-2"></span>
-                                </div>
+                            <div class="stats-item">
+                                <h6>Tổng số dự án</h6>
+                                <span class="badge bg-primary" th:text="${totalProjects}"></span>
+                            </div>
+                            <div class="stats-item">
+                                <h6>Đang thực hiện</h6>
+                                <span class="badge bg-warning" th:text="${doingProjects}"></span>
+                            </div>
+                            <div class="stats-item">
+                                <h6>Hoàn thành</h6>
+                                <span class="badge bg-success" th:text="${doneProjects}"></span>
                             </div>
                         </div>
                     </div>
@@ -533,50 +564,34 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="project-details-header">
+                <div class="d-flex justify-content-between align-items-center w-100">
                     <h5 class="modal-title" id="projectDetailsModalLabel">Dự án</h5>
-                    <span class="badge bg-primary project-status-badge" th:text="${project?.trangThai}">Trạng thái</span>
+                    <span class="project-status-badge">Trạng thái</span>
                 </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="project-details-content">
                     <div class="project-details-section">
-                        <h6>Mô tả dự án</h6>
-                        <p th:text="${project?.moTa}">Mô tả chi tiết về dự án và các mục tiêu cần đạt được.</p>
+                        <h6><i class="fas fa-info-circle me-2"></i>Mô tả dự án</h6>
+                        <p class="project-description">Mô tả chi tiết về dự án và các mục tiêu cần đạt được.</p>
                     </div>
                     <div class="project-details-section">
-                        <h6>Thời gian thực hiện</h6>
-                        <div class="project-timeline">
-                            <div class="timeline-item">
-                                <h6 class="mb-1">Bắt đầu</h6>
-                                <p class="mb-0" th:text="${#temporals.format(project?.ngayBatDau, 'dd/MM/yyyy')}"></p>
-                            </div>
-                            <div class="timeline-item">
-                                <h6 class="mb-1">Dự kiến kết thúc</h6>
-                                <p class="mb-0" th:text="${#temporals.format(project?.ngayKetThuc, 'dd/MM/yyyy')}"></p>
-                            </div>
+                        <h6><i class="fas fa-calendar-alt me-2"></i>Thời gian thực hiện</h6>
+                        <div class="timeline-item">
+                            <h6>Bắt đầu</h6>
+                            <p class="mb-0 start-date"></p>
+                        </div>
+                        <div class="timeline-item">
+                            <h6>Dự kiến kết thúc</h6>
+                            <p class="mb-0 end-date"></p>
                         </div>
                     </div>
                     <div class="project-details-section">
-                        <h6>Thành viên dự án</h6>
-                        <div class="project-members">
-                            <div class="member-item" th:each="tv : ${project?.thanhVienProjects}">
-                                <img th:src="${tv.userMaSo.avatar != null ? tv.userMaSo.avatar : '/img/avatars/NULL.jpg'}" alt="Member">
-                                <div>
-                                    <h6 class="mb-0" th:text="${tv.userMaSo.ho + ' ' + tv.userMaSo.ten}"></h6>
-                                    <small class="text-muted" th:text="${tv.vaiTro}"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-details-section">
-                        <h6>Tài liệu đính kèm</h6>
-                        <div class="project-files">
-                            <a th:each="taiLieu : ${project?.taiLieus}" th:href="@{'/Uploads/TaiLieu/' + ${taiLieu.duongDan}}" class="file-item">
-                                <i th:class="${taiLieu.loai == 'PDF' ? 'fas fa-file-pdf' : taiLieu.loai == 'WORD' ? 'fas fa-file-word' : 'fas fa-file-excel'}"></i>
-                                <span th:text="${taiLieu.ten}"></span>
-                            </a>
+                        <h6><i class="fas fa-users me-2"></i>Thành viên dự án</h6>
+                        <div class="member-count">
+                            <i class="fas fa-user-friends"></i>
+                            <p class="mb-0">Số lượng thành viên: <span class="member-count-value">0</span></p>
                         </div>
                     </div>
                 </div>
@@ -681,10 +696,31 @@
             form.action = `/project/${projectId}/reject`;
         });
 
-        // Add click handlers for project cards
+        // Handle project card click to show details
         document.querySelectorAll('.project-card').forEach(card => {
             card.addEventListener('click', function(e) {
                 if (!e.target.closest('button') && !e.target.closest('a')) {
+                    const projectId = this.getAttribute('data-project-id');
+                    const projectTitle = this.querySelector('.card-title').textContent;
+                    const projectStatus = this.querySelector('.project-status-badge').textContent;
+                    const projectDesc = this.querySelector('.project-description').textContent;
+                    const startDate = this.getAttribute('data-start-date');
+                    const endDate = this.getAttribute('data-end-date');
+                    const memberCount = this.getAttribute('data-member-count');
+                    
+                    // Update modal content
+                    document.getElementById('projectDetailsModalLabel').textContent = projectTitle;
+                    document.querySelector('#projectDetailsModal .project-status-badge').textContent = projectStatus;
+                    document.querySelector('#projectDetailsModal .project-description').textContent = projectDesc;
+                    
+                    // Update dates
+                    document.querySelector('#projectDetailsModal .start-date').textContent = startDate;
+                    document.querySelector('#projectDetailsModal .end-date').textContent = endDate;
+                    
+                    // Update member count
+                    document.querySelector('#projectDetailsModal .member-count-value').textContent = memberCount;
+                    
+                    // Show modal
                     const modal = new bootstrap.Modal(document.getElementById('projectDetailsModal'));
                     modal.show();
                 }

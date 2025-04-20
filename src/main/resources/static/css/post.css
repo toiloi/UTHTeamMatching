@@ -1,0 +1,16 @@
+.create-post-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.news-actions {
+    margin-left: auto;
+    padding-right: 10px;
+}
+
+.news-actions .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+} 

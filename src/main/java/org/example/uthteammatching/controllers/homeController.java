@@ -1195,4 +1195,79 @@ public class homeController {
             return response;
         }
     }
+
+    @PostMapping("/post/create")
+    public String createPost(
+            @RequestParam("noiDung") String noiDung,
+            @RequestParam("projectId") Long projectId,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+        
+        UthUser currentUser = addCurrentUserToModel(model);
+        if (currentUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Vui lòng đăng nhập để tạo bài viết");
+            return "redirect:/";
+        }
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Dự án không tồn tại"));
+
+        // Kiểm tra xem người dùng có trong dự án không
+        boolean isMember = project.getThanhVienProjects().stream()
+                .anyMatch(tv -> tv.getUserMaSo().getMaSo().equals(currentUser.getMaSo()));
+        
+        if (!isMember) {
+            redirectAttributes.addFlashAttribute("error", "Bạn cần tham gia dự án để tạo bài viết");
+            return "redirect:/";
+        }
+
+        try {
+            articleService.createArticle(noiDung, currentUser, project);
+            redirectAttributes.addFlashAttribute("success", "Bài viết đã được tạo thành công");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Có lỗi xảy ra khi tạo bài viết");
+        }
+
+        return "redirect:/";
+    }
+
+    @PostMapping("/post/delete")
+    @ResponseBody
+    public Map<String, Object> deletePost(@RequestParam("articleId") Long articleId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            UthUser currentUser = addCurrentUserToModel(new ConcurrentModel());
+            if (currentUser == null) {
+                response.put("success", false);
+                response.put("error", "Vui lòng đăng nhập để xóa bài viết");
+                return response;
+            }
+
+            BaiViet article = articleService.getAllArticles().stream()
+                    .filter(a -> a.getId().equals(articleId))
+                    .findFirst()
+                    .orElse(null);
+
+            if (article == null) {
+                response.put("success", false);
+                response.put("error", "Bài viết không tồn tại");
+                return response;
+            }
+
+            // Kiểm tra xem người dùng có quyền xóa bài viết không
+            if (!article.getUserMaSo().getMaSo().equals(currentUser.getMaSo())) {
+                response.put("success", false);
+                response.put("error", "Bạn không có quyền xóa bài viết này");
+                return response;
+            }
+
+            articleService.deleteArticle(articleId);
+            response.put("success", true);
+            response.put("message", "Bài viết đã được xóa thành công");
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("error", "Có lỗi xảy ra khi xóa bài viết");
+        }
+        return response;
+    }
 }

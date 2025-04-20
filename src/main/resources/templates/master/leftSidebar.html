@@ -1,29 +1,33 @@
+<!-- Left Sidebar -->
 <div th:fragment="leftSidebar" class="sidebar">
     <div class="left">
-        <img th:src="${currentUser.avatar != null} ? ${currentUser.avatar} : '/img/avatars/NULL.jpg'" alt="User Avatar">
+        <img th:src="${currentUser.avatar != null ? currentUser.avatar : '/img/avatars/NULL.jpg'}" 
+             alt="User Avatar" class="user-avatar">
         <span class="user-name" th:text="${currentUser.ho + ' ' + currentUser.ten}"></span>
     </div>
     <div class="right">
         <h1>UTH-TEAM</h1>
         <nav class="buttons">
-            <a th:href="@{/}" class="nav-link">
+            <a th:href="@{/}" class="nav-link" th:classappend="${activeMenu == 'home' ? 'active' : ''}">
                 <i class="fas fa-home"></i>
                 <span>Bảng tin</span>
             </a>
-            <a th:href="@{/project}" class="nav-link">
+            <a th:href="@{/project}" class="nav-link" th:classappend="${activeMenu == 'project' ? 'active' : ''}">
                 <i class="fas fa-book"></i>
                 <span>Dự án</span>
             </a>
-            <a th:href="@{/notifications}" class="nav-link">
-                <i class="fas fa-users"></i>
+            <a th:href="@{/notification}" class="nav-link" th:classappend="${activeMenu == 'notification' ? 'active' : ''}">
+                <i class="fas fa-bell"></i>
                 <span>Thông báo</span>
             </a>
         </nav>
         <nav class="buttons">
-            <a th:href="@{/logout}" class="nav-link">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Đăng xuất</span>
-            </a>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="nav-link logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Đăng xuất</span>
+                </button>
+            </form>
         </nav>
     </div>
 </div>

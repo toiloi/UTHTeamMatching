@@ -30,26 +30,7 @@ public class    DataLocal implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        if(!userRepository.existsByUsername("bang123")) {
-
-            KeyHolder userKey = new GeneratedKeyHolder();
-            jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(
-                        "INSERT INTO uth_user (chuyen_nganh, email, enabled, gioi_tinh, ho, pass, sdt, ten, username) " +
-                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                        Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, "Công nghệ phần mềm");
-                ps.setString(2, "admin@example.com");
-                ps.setBoolean(3, true);
-                ps.setString(4, "Nam");
-                ps.setString(5, "Admin");
-                ps.setString(6, passwordEncoder.encode("123")); // Mã hoá
-                ps.setString(7, "0123456433");
-                ps.setString(8, "Admin");
-                ps.setString(9, "admin123");
-                return ps;
-            }, userKey);
-            Long userId = userKey.getKey().longValue();
+        if(!userRepository.existsByUsername("admin123")) {
 
             KeyHolder adminRoleKey = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
@@ -69,8 +50,38 @@ public class    DataLocal implements CommandLineRunner {
                 return ps;
             }, userRoleKey);
 
+            KeyHolder gvRoleKey = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(
+                        "INSERT INTO role (ten) VALUES (?)",
+                        Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, "LECTURE");
+                return ps;
+            }, gvRoleKey);
+
             Long roleIdUser = userRoleKey.getKey().longValue();
             Long roleIdAdmin = adminRoleKey.getKey().longValue();
+            Long roleIdGv = gvRoleKey.getKey().longValue();
+
+
+            KeyHolder userKey = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(
+                        "INSERT INTO uth_user (chuyen_nganh, email, enabled, gioi_tinh, ho, pass, sdt, ten, username) " +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, "Công nghệ phần mềm");
+                ps.setString(2, "admin@example.com");
+                ps.setBoolean(3, true);
+                ps.setString(4, "Nam");
+                ps.setString(5, "Admin");
+                ps.setString(6, passwordEncoder.encode("123")); // Mã hoá
+                ps.setString(7, "0123456433");
+                ps.setString(8, "Admin");
+                ps.setString(9, "admin123");
+                return ps;
+            }, userKey);
+            Long userId = userKey.getKey().longValue();
             jdbcTemplate.update("INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)", userId, roleIdAdmin);
 
 
@@ -78,8 +89,8 @@ public class    DataLocal implements CommandLineRunner {
             KeyHolder user1Key = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(
-                        "INSERT INTO uth_user (chuyen_nganh, email, enabled, gioi_tinh, ho, pass, sdt, ten, username) " +
-                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO uth_user (chuyen_nganh, email, enabled, gioi_tinh, ho, pass, sdt, ten, username, avatar) " +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, "Công nghệ phần mềm");
                 ps.setString(2, "bang@example.com");
@@ -90,6 +101,7 @@ public class    DataLocal implements CommandLineRunner {
                 ps.setString(7, "0123429789");
                 ps.setString(8, "Bằng");
                 ps.setString(9, "bang123");
+                ps.setString(10, "/img/avatars/1744609252130_user1.jpg");
                 return ps;
             }, user1Key);
             Long userId1 = user1Key.getKey().longValue();
@@ -100,8 +112,8 @@ public class    DataLocal implements CommandLineRunner {
             KeyHolder user2Key = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(
-                        "INSERT INTO uth_user (chuyen_nganh, email, enabled, gioi_tinh, ho, pass, sdt, ten, username) " +
-                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO uth_user (chuyen_nganh, email, enabled, gioi_tinh, ho, pass, sdt, ten, username, avatar) " +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, "An toàn thông tin");
                 ps.setString(2, "phi@example.com");
@@ -112,6 +124,7 @@ public class    DataLocal implements CommandLineRunner {
                 ps.setString(7, "0585456789");
                 ps.setString(8, "Phi");
                 ps.setString(9, "phi123");
+                ps.setString(10, "/img/avatars/1745154277727_user2.jpg");
                 return ps;
             }, user2Key);
             Long userId2 = user2Key.getKey().longValue();
@@ -123,8 +136,8 @@ public class    DataLocal implements CommandLineRunner {
             KeyHolder user3Key = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(
-                        "INSERT INTO uth_user (chuyen_nganh, email, enabled, gioi_tinh, ho, pass, sdt, ten, username) " +
-                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO uth_user (chuyen_nganh, email, enabled, gioi_tinh, ho, pass, sdt, ten, username, avatar) " +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, "Hệ thống thông tin");
                 ps.setString(2, "toai@example.com");
@@ -135,6 +148,7 @@ public class    DataLocal implements CommandLineRunner {
                 ps.setString(7, "0181536789");
                 ps.setString(8, "Toại");
                 ps.setString(9, "toai123");
+                ps.setString(10, "/img/avatars/1744618978327_user3.jpg");
                 return ps;
             }, user3Key);
             Long userId3 = user3Key.getKey().longValue();
@@ -142,33 +156,12 @@ public class    DataLocal implements CommandLineRunner {
 
 
 
+
             KeyHolder user4Key = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(
-                        "INSERT INTO uth_user (chuyen_nganh, email, enabled, gioi_tinh, ho, pass, sdt, ten, username) " +
-                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                        Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, "Công nghệ phần mềm");
-                ps.setString(2, "thuc@example.com");
-                ps.setBoolean(3, true);
-                ps.setString(4, "Nam");
-                ps.setString(5, "Tài");
-                ps.setString(6, passwordEncoder.encode("123")); // Mã hoá
-                ps.setString(7, "0123456789");
-                ps.setString(8, "Thức");
-                ps.setString(9, "thuc123");
-                return ps;
-            }, user4Key);
-            Long userId4 = user4Key.getKey().longValue();
-            jdbcTemplate.update("INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)", userId4, roleIdUser);
-
-
-
-            KeyHolder user5Key = new GeneratedKeyHolder();
-            jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(
-                        "INSERT INTO uth_user (chuyen_nganh, email, enabled, gioi_tinh, ho, pass, sdt, ten, username) " +
-                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO uth_user (chuyen_nganh, email, enabled, gioi_tinh, ho, pass, sdt, ten, username, avatar) " +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, "Lập trình web");
                 ps.setString(2, "tho@example.com");
@@ -179,31 +172,61 @@ public class    DataLocal implements CommandLineRunner {
                 ps.setString(7, "0937256789");
                 ps.setString(8, "Thọ");
                 ps.setString(9, "tho123");
+                ps.setString(10, "/img/avatars/1744608670490_user4.jpg");
                 return ps;
-            }, user5Key);
-            Long userId5 = user5Key.getKey().longValue();
-            jdbcTemplate.update("INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)", userId5, roleIdUser);
+            }, user4Key);
+            Long userId4 = user4Key.getKey().longValue();
+            jdbcTemplate.update("INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)", userId4, roleIdUser);
+
+
+
+            KeyHolder gvKey = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(
+                        "INSERT INTO uth_user (chuyen_nganh, email, enabled, gioi_tinh, ho, pass, sdt, ten, username) " +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, "Lập trình java");
+                ps.setString(2, "chien@example.com");
+                ps.setBoolean(3, true);
+                ps.setString(4, "Nam");
+                ps.setString(5, "Văn");
+                ps.setString(6, passwordEncoder.encode("123")); // Mã hoá
+                ps.setString(7, "0937294789");
+                ps.setString(8, "Chiến");
+                ps.setString(9, "chien123");
+                return ps;
+            }, gvKey);
+            Long gvId = gvKey.getKey().longValue();
+            jdbcTemplate.update("INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)", gvId, roleIdGv);
+
 
             jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId1, userId2);
             jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId1, userId3);
-            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId1, userId5);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId1, userId4);
             jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId2, userId3);
-            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId2, userId5);
-            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId3, userId5);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId2, userId4);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", userId3, userId4);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", gvId, userId1);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", gvId, userId2);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", gvId, userId3);
+            jdbcTemplate.update("INSERT INTO list_friend(user_id_1, user_id_2) values (?, ?)", gvId, userId4);
+
 
             // 2. Insert Projects và lấy ID
             KeyHolder project1Key = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(
-                        "INSERT INTO project (mo_ta, ngay_bat_dau, ngay_ket_thuc, ngay_tao, ten_project, trang_thai, loai) " +
-                                "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)",
+                        "INSERT INTO project (mo_ta, ngay_bat_dau, ngay_ket_thuc, ngay_tao, ten_project, trang_thai, loai, ma_giang_vien) " +
+                                "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, "Xây dựng hệ thống quản lý sinh viên");
-                ps.setDate(2, Date.valueOf("2025-04-01"));
-                ps.setDate(3, Date.valueOf("2025-5-01"));
-                ps.setString(4, "Dự án quản lý sinh viên");
+                ps.setString(1, "Dự án UTH Team Matching làm một trang web với công nghệ java spring boot giúp tạo một môi trường để sinh viên trao đổi, tìm kiếm thành viên cho các dự án");
+                ps.setDate(2, Date.valueOf("2025-03-01"));
+                ps.setDate(3, Date.valueOf("2025-05-01"));
+                ps.setString(4, "Dự án UTH Team Matching");
                 ps.setString(5, "Đang thực hiện");
-                ps.setString(6, String.valueOf(ProjectType.BEN_NGOAI));
+                ps.setString(6, String.valueOf(ProjectType.HOC_THUAT));
+                ps.setLong(7, gvId);
                 return ps;
             }, project1Key);
             Long projectId1 = project1Key.getKey().longValue();
@@ -215,10 +238,10 @@ public class    DataLocal implements CommandLineRunner {
                         "INSERT INTO project (mo_ta, ngay_bat_dau, ngay_ket_thuc, ngay_tao, ten_project, trang_thai, loai) " +
                                 "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, "Hệ thống thu phí");
+                ps.setString(1, "Xây dựng một trang web giúp khách hàng đặt lịch để kiểm tra sức khoẻ, chăm sóc cho thú cưng");
                 ps.setDate(2, Date.valueOf("2025-04-9"));
                 ps.setDate(3, Date.valueOf("2025-4-28"));
-                ps.setString(4, "Dự án thu phí tự động");
+                ps.setString(4, "Dự án chăm sóc thú cưng");
                 ps.setString(5, "Đang thực hiện");
                 ps.setString(6, String.valueOf(ProjectType.BEN_NGOAI));
                 return ps;
@@ -232,10 +255,10 @@ public class    DataLocal implements CommandLineRunner {
                         "INSERT INTO project (mo_ta, ngay_bat_dau, ngay_ket_thuc, ngay_tao, ten_project, trang_thai, loai) " +
                                 "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, "Xây dựng hệ thống chăm sóc khách hàng");
+                ps.setString(1, "Xây dựng hệ thống đặt phòng trực tuyến để khách hàng có thể checkin và thanh toán trực tiếp, giúp tiết kiệm thời gian đặt phòng khi du lịch");
                 ps.setDate(2, Date.valueOf("2025-04-01"));
                 ps.setDate(3, Date.valueOf("2025-4-25"));
-                ps.setString(4, "Dự án chăm sóc khách hàng");
+                ps.setString(4, "Dự án đặt phòng khách sạn");
                 ps.setString(5, "Đã hoàn thành");
                 ps.setString(6, String.valueOf(ProjectType.BEN_NGOAI));
                 return ps;
@@ -243,26 +266,26 @@ public class    DataLocal implements CommandLineRunner {
             Long projectId3 = project3Key.getKey().longValue();
 
             jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
-                    project1Key.getKey().longValue(), "Dự án quản lý sinh viên");
+                    project1Key.getKey().longValue(), "Dự án UTH Team Matching");
 
             jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
-                    project2Key.getKey().longValue(), "Dự án thu phí tự động");
+                    project2Key.getKey().longValue(), "Dự án chăm sóc thú cưng");
 
             jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
-                    project3Key.getKey().longValue(), "Dự án chăm sóc khách hàng");
+                    project3Key.getKey().longValue(), "Dự án đặt phòng khách sạn");
 
 
             // 3. Insert BaiViet dùng ID thật
             jdbcTemplate.update("INSERT INTO bai_viet (noi_dung, ngay_dang, user_ma_so, project_ma_so) VALUES (?, CURRENT_TIMESTAMP, ?, ?)",
-                    "Nội dung bài viết 1: Cập nhật tiến độ dự án quản lý sinh viên", userId1, projectId1);
+                    "Nội dung bài viết 1: Chia sẻ dự án UTH Team Matching của nhóm", userId1, projectId1);
 
 
             jdbcTemplate.update("INSERT INTO bai_viet (noi_dung, ngay_dang, user_ma_so, project_ma_so) VALUES (?, CURRENT_TIMESTAMP, ?, ?)",
-                    "Nội dung bài viết 2: Tìm người làm phụ dựa án thu phí tự động", userId2, projectId2);
+                    "Nội dung bài viết 2: Tìm người làm phụ dự án chăm sóc thú cưng", userId2, projectId2);
 
 
             jdbcTemplate.update("INSERT INTO bai_viet (noi_dung, ngay_dang, user_ma_so, project_ma_so) VALUES (?, CURRENT_TIMESTAMP, ?, ?)",
-                    "Nội dung bài viết 3: Cập nhật tiến độ dự chăm sóc khách hàng", userId3, projectId3);
+                    "Nội dung bài viết 3: Tìm kiếm thành viên tham gia làm dự án đặt phòng khách sạn", userId3, projectId3);
 
 
             jdbcTemplate.update(
@@ -277,9 +300,6 @@ public class    DataLocal implements CommandLineRunner {
             jdbcTemplate.update(
                     "INSERT INTO thanhvien_project (user_ma_so, project_ma_so, vai_tro) VALUES (?, ?, ?)",
                     userId4, projectId1, "Thành viên");
-            jdbcTemplate.update(
-                    "INSERT INTO thanhvien_project (user_ma_so, project_ma_so, vai_tro) VALUES (?, ?, ?)",
-                    userId5, projectId1, "Thành viên");
 
             jdbcTemplate.update(
                     "INSERT INTO thanhvien_project (user_ma_so, project_ma_so, vai_tro) VALUES (?, ?, ?)",

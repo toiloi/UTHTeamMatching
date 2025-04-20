@@ -14,12 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -67,8 +69,6 @@ public class homeController {
     @Autowired
     private FileStorageService fileStorageService;
 
-    @Autowired
-    private NhiemVuRepository nhiemVuRepository;
 
     @Autowired
     private LecturerRequestRepository lecturerRequestRepository;
@@ -1195,48 +1195,5 @@ public class homeController {
             return response;
         }
     }
-
-    @GetMapping("/nhiemvu/project/{projectId}")
-    public String hienThiNhiemVuTheoProject(@PathVariable Long projectId,
-                                            Model model) {
-        // Lấy user hiện tại
-        UthUser currentUser = addCurrentUserToModel(model);
-        addFriendUsersToModel(model, currentUser);
-
-        // Kiểm tra xem user hiện tại có phải là LEADER của project không
-        ThanhvienProject thanhVien = thanhvienProjectRepository.findByUserMaSo_MaSoAndProjectMaSo_MaProject(currentUser.getMaSo(), projectId);
-
-        boolean isLeader = thanhVien!=null && thanhVien.getVaiTro().equals("LEADER");
-
-        // Danh sách nhiệm vụ của project
-        List<NhiemVu> nhiemVus = nhiemVuRepository.findByProjectMaSo_MaProject(projectId);
-
-        model.addAttribute("nhiemVus", nhiemVus);
-        model.addAttribute("isLeader", isLeader);
-
-        // Nếu là LEADER thì thêm form giao nhiệm vụ
-        if (isLeader) {
-            model.addAttribute("nhiemVu", new NhiemVu());
-            model.addAttribute("listThanhVien", thanhvienProjectRepository.findByProjectMaSo_MaProject(projectId));
-        }
-
-        return "nhiemvu";
-    }
-
-
-    @PostMapping("/nhiemvu/giao")
-    public String giaoNhiemvu(@ModelAttribute NhiemVu nhiemVuForm){
-        ThanhvienProject thanhVien = thanhvienProjectRepository.findByUserMaSoAndProjectMaSo(nhiemVuForm.getThanhvienProject().getUserMaSo(), nhiemVuForm.getProjectMaSo());
-        NhiemVu nhiemVu = new NhiemVu();
-        nhiemVu.setNoiDung(nhiemVuForm.getNoiDung());
-        nhiemVu.setNgayBatDau(nhiemVuForm.getNgayBatDau());
-        nhiemVu.setNgayKetThuc(nhiemVuForm.getNgayKetThuc());
-        nhiemVu.setTinhTrang(false);
-        nhiemVu.setThanhvienProject(thanhVien);
-        nhiemVu.setProjectMaSo(nhiemVuForm.getProjectMaSo());
-        nhiemVuRepository.save(nhiemVu);
-        return "redirect:/nhiemvu/project/{projectId}";
-    }
-
 
 }

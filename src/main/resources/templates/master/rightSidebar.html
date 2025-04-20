@@ -28,14 +28,67 @@
         </div>
 
 <!--        List chat theo dự án-->
+<style>
+
+    .avatar-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        width: 40px;
+        height: 40px;
+        gap: 2px;
+        box-sizing: border-box;
+    }
+
+    .grid-avatar {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+
+
+    .grid-avatar.more {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ccc;
+        font-size: 12px;
+        font-weight: bold;
+        color: #333;
+    }
+
+</style>
+
         <div th:each="project: ${projects}">
-            <th:block th:if="${project.trangThai == 'Đang thực hiện'}">
-                <a th:href="@{'/project/' + ${project.maProject}}">
-                    <div th:text="${project.getTenProject()}"></div>
+            <th:block th:if="${project.getTrangThai() == 'Đang thực hiện'}">
+                <a th:href="@{'/project/' + ${project.getMaProject()}}">
+                    <div class="friend-item">
+                        <!-- ✅ Avatar thành viên -->
+                        <div class="avatar-grid">
+                            <th:block th:each="member, iterStat : ${project.thanhVienProjects}">
+                                <th:block th:if="${iterStat.index < 3}">
+                                    <img th:src="@{${member.userMaSo.getAvatar()}}" class="grid-avatar">
+                                </th:block>
+                                <th:block th:if="${iterStat.index == 3}">
+                                    <div class="member-avatar more">
+                                        <span th:text="'+' + ${project.thanhVienProjects.size()-3}"></span>
+                                    </div>
+                                </th:block>
+                                <th:block th:if="${iterStat.index > 3}">
+                                    <th:block th:remove="all"></th:block>
+                                </th:block>
+                            </th:block>
+                        </div>
+
+                        <div class="friend-info">
+                            <div class="friend-name" th:text="${project.getTenProject()}"></div>
+                        </div>
+                    </div>
                 </a>
             </th:block>
         </div>
-
 
     </div>
 

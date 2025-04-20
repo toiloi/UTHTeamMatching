@@ -67,12 +67,6 @@
                 </li>
 
                 <li class="nav-item">
-                    <a th:href="@{'/nhiemvu/project/'+${projectId}}">
-                    Nhiệm vụ
-                    </a>
-                </li>
-
-                <li class="nav-item">
                     <a href="/notification" class="nav-link">
                         <i class="fas fa-bell"></i>
                         <span class="badge bg-danger" th:if="${notificationCount > 0}" th:text="${notificationCount}"></span>

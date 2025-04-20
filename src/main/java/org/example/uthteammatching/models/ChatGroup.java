@@ -8,21 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "chat_groups")
 @Getter
 @Setter
 public class ChatGroup {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "group_id")
+    private Long groupId; // Dùng groupId làm khóa chính
 
-    @Column(columnDefinition = "NVARCHAR(500)")
+    @Column(name = "group_name", columnDefinition = "NVARCHAR(500)")
     private String groupName;
 
-    // Mã định danh duy nhất cho nhóm (để gom các thành viên cùng 1 nhóm)
-    private Long groupId;
-
     @ManyToMany
+    @JoinTable(
+            name = "chat_group_members",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private List<UthUser> members = new ArrayList<>();
 
     public void addMember(UthUser user) {
@@ -31,9 +34,11 @@ public class ChatGroup {
         }
     }
 
-    // Optional: Phương thức xóa thành viên
     public void removeMember(UthUser user) {
         members.remove(user);
     }
 
+    public String getTenProject() {
+        return groupName;
+    }
 }

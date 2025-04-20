@@ -314,6 +314,7 @@
                                             <i class="fas fa-users me-2 text-primary"></i>Tìm kiếm thành viên
                                         </label>
                                         <div class="input-group input-group-lg">
+
                                             <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
                                             <input type="text" class="form-control" id="memberSearch" placeholder="Nhập tên hoặc số điện thoại...">
                                             <button class="btn btn-primary" type="button" onclick="searchMembers()">
@@ -583,11 +584,11 @@
             if (!searchTerm.trim()) {
                 const resultsDiv = document.getElementById('searchResults');
                 resultsDiv.innerHTML = `
-            <div class="list-group-item text-center text-muted py-3">
-                <i class="fas fa-exclamation-circle fa-2x mb-2 opacity-50"></i>
-                <p class="mb-0">Vui lòng nhập tên hoặc số điện thoại</p>
-            </div>
-        `;
+                <div class="list-group-item text-center text-muted py-3">
+                    <i class="fas fa-exclamation-circle fa-2x mb-2 opacity-50"></i>
+                    <p class="mb-0">Vui lòng nhập tên hoặc số điện thoại</p>
+                </div>
+            `;
                 return;
             }
 
@@ -599,11 +600,11 @@
 
                     if (users.length === 0) {
                         resultsDiv.innerHTML = `
-                    <div class="list-group-item text-center text-muted py-3">
-                        <i class="fas fa-exclamation-circle fa-2x mb-2 opacity-50"></i>
-                        <p class="mb-0">Không tìm thấy thành viên nào</p>
-                    </div>
-                `;
+                        <div class="list-group-item text-center text-muted py-3">
+                            <i class="fas fa-exclamation-circle fa-2x mb-2 opacity-50"></i>
+                            <p class="mb-0">Không tìm thấy thành viên nào</p>
+                        </div>
+                    `;
                         return;
                     }
 
@@ -611,31 +612,28 @@
                         const item = document.createElement('a');
                         item.className = 'list-group-item list-group-item-action';
                         item.innerHTML = `
-                    <div class="d-flex align-items-center">
-                        <img src="${user.avatar || '/img/avatars/NULL.jpg'}" class="rounded-circle me-2" style="width: 32px; height: 32px;">
-                        <div>
-                            <div class="fw-bold">${user.ho} ${user.ten}</div>
-                            <small class="text-muted">SĐT: ${user.sdt || 'N/A'}</small>
+                        <div class="d-flex align-items-center">
+                            <img src="${user.avatar || '/img/avatars/NULL.jpg'}" class="rounded-circle me-2" style="width: 32px; height: 32px;">
+                            <div>
+                                <div class="fw-bold">${user.ho} ${user.ten}</div>
+                                <small class="text-muted">SĐT: ${user.sdt || 'N/A'}</small>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
                         item.onclick = () => selectUser(user.maSo, item);
                         resultsDiv.appendChild(item);
                     });
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error('Error searching members:', error);
                     alert('Có lỗi xảy ra khi tìm kiếm thành viên');
                 });
         }
 
         function selectUser(userId, element) {
-            // Remove selection from all items
             document.querySelectorAll('#searchResults .list-group-item').forEach(item => {
                 item.classList.remove('selected');
             });
-
-            // Add selection to clicked item
             element.classList.add('selected');
             selectedUserId = userId;
         }
@@ -646,60 +644,15 @@
                 return;
             }
 
-            const projectId = groupId; // Using the existing groupId
+            const projectId = groupId;
+            console.log('Sending invite - userId:', selectedUserId, 'groupId:', projectId);
 
-            // Call API to send invite
-            fetch('/chat/invite', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: selectedUserId,
-                    groupId: projectId
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Close the modal
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('addMemberModal'));
-                        modal.hide();
-
-                        // Show success message
-                        alert(data.message || 'Đã gửi lời mời thành công!');
-                    } else {
-                        alert(data.error || 'Có lỗi xảy ra khi gửi lời mời');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Có lỗi xảy ra khi gửi lời mời. Vui lòng thử lại!');
-                });
-        }
-        }
-
-        function selectUser(userId, element) {
-            // Remove selection from all items
-            document.querySelectorAll('#searchResults .list-group-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-
-            // Add selection to clicked item
-            element.classList.add('selected');
-            selectedUserId = userId;
-        }
-
-        function inviteMember() {
-            if (!selectedUserId) {
-                alert('Vui lòng chọn thành viên để mời');
+            if (!projectId || isNaN(projectId)) {
+                alert('Không thể gửi lời mời: Nhóm chat không hợp lệ');
                 return;
             }
 
-            const projectId = groupId; // Using the existing groupId
-
-            // Call API to send invite
-            fetch('/chat/invite', {
+            fetch('/project/invite', { // Đổi từ /chat/invite thành /project/invite
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -709,21 +662,23 @@
                     groupId: projectId
                 })
             })
-                .then(response => response.json())
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    return response.json();
+                })
                 .then(data => {
+                    console.log('Invite response:', data);
                     if (data.success) {
-                        // Close the modal
                         const modal = bootstrap.Modal.getInstance(document.getElementById('addMemberModal'));
                         modal.hide();
-
-                        // Show success message
                         alert(data.message || 'Đã gửi lời mời thành công!');
                     } else {
+                        console.error('Invite error from server:', data.error);
                         alert(data.error || 'Có lỗi xảy ra khi gửi lời mời');
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error('Error sending invite:', error);
                     alert('Có lỗi xảy ra khi gửi lời mời. Vui lòng thử lại!');
                 });
         }

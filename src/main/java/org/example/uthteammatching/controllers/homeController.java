@@ -1,6 +1,7 @@
 package org.example.uthteammatching.controllers;
 
 
+import org.example.uthteammatching.dto.InviteRequest;
 import org.example.uthteammatching.models.*;
 import org.example.uthteammatching.repositories.*;
 import org.example.uthteammatching.services.ArticleService;
@@ -1024,21 +1025,37 @@ public class homeController {
 
 
 
-    @PostMapping("/chat/invite")
+
+    @PostMapping("/project/invite")
     @ResponseBody
-    public Map<String, Object> inviteToGroupChat(
-            @RequestParam("userId") Long userId,
-            @RequestParam("groupId") Long groupId) {
+    @Transactional
+    public Map<String, Object> inviteToGroupChat(@RequestBody InviteRequest request) {
         Map<String, Object> response = new HashMap<>();
         try {
+            Long userId = request.getUserId();
+            Long groupId = request.getGroupId();
+            System.out.println("Received invite request - userId: " + userId + ", groupId: " + groupId);
+
             UthUser currentUser = addCurrentUserToModel(new ConcurrentModel());
             UthUser targetUser = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("User not found"));
-            ChatGroup chatGroup = chatGroupRepository.findById(groupId)
-                    .orElseThrow(() -> new IllegalArgumentException("Chat group not found"));
 
-            // Kiểm tra xem user đã trong group chưa
-            if (chatGroup.getMembers().contains(targetUser)) {
+            // Kiểm tra ChatGroup
+            ChatGroup chatGroup = chatGroupRepository.findById(groupId).orElse(null);
+            if (chatGroup == null) {
+                System.out.println("ChatGroup not found for groupId: " + groupId + ", attempting to create new one");
+                Project project = projectRepository.findById(groupId)
+                        .orElseThrow(() -> new IllegalArgumentException("Project not found with ID: " + groupId));
+                chatGroup = new ChatGroup();
+                chatGroup.setGroupName(project.getTenProject());
+                chatGroup.setGroupId(project.getMaProject());
+                chatGroup.addMember(currentUser);
+                chatGroup = chatGroupRepository.save(chatGroup);
+                System.out.println("Created new ChatGroup with groupId: " + groupId);
+            }
+
+            // Kiểm tra xem user đã trong nhóm chưa
+            if (chatGroup.getMembers() != null && chatGroup.getMembers().contains(targetUser)) {
                 response.put("success", false);
                 response.put("error", "Người dùng đã là thành viên của nhóm chat");
                 return response;
@@ -1074,16 +1091,31 @@ public class homeController {
         return response;
     }
 
-    @PostMapping("/chat/accept-invite")
+
+    @PostMapping("/project/accept-invite")
     @ResponseBody
+    @Transactional
     public Map<String, Object> acceptChatInvite(@RequestParam("notificationId") Long notificationId) {
         Map<String, Object> response = new HashMap<>();
         try {
             UthUser currentUser = addCurrentUserToModel(new ConcurrentModel());
-            Notification notification = notificationRepository.findById(notificationId)
-                    .orElseThrow(() -> new IllegalArgumentException("Notification not found"));
+            if (currentUser == null) {
+                response.put("success", false);
+                response.put("error", "Không thể xác định người dùng hiện tại");
+                return response;
+            }
 
-            if (!notification.getUser().equals(currentUser)) {
+            Notification notification = notificationRepository.findById(notificationId)
+                    .orElseThrow(() -> new IllegalArgumentException("Thông báo không tồn tại với ID: " + notificationId));
+
+            UthUser targetUser = notification.getUser();
+            if (targetUser == null) {
+                response.put("success", false);
+                response.put("error", "Không tìm thấy người dùng liên quan đến thông báo này");
+                return response;
+            }
+
+            if (!targetUser.equals(currentUser)) {
                 response.put("success", false);
                 response.put("error", "Bạn không có quyền chấp nhận lời mời này");
                 return response;
@@ -1096,17 +1128,54 @@ public class homeController {
             }
 
             Long groupId = notification.getGroupId();
-            ChatGroup chatGroup = chatGroupRepository.findById(groupId)
-                    .orElseThrow(() -> new IllegalArgumentException("Chat group not found"));
+            if (groupId == null) {
+                response.put("success", false);
+                response.put("error", "Thông báo không chứa thông tin nhóm chat");
+                return response;
+            }
 
-            // Kiểm tra xem user đã trong group chưa
-            if (chatGroup.getMembers().contains(currentUser)) {
+            // Kiểm tra Project
+            Project project = projectRepository.findById(groupId)
+                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + groupId));
+
+            // Kiểm tra ChatGroup
+            ChatGroup chatGroup = chatGroupRepository.findById(groupId).orElse(null);
+            if (chatGroup == null) {
+                System.out.println("ChatGroup not found for groupId: " + groupId + ", creating new one");
+                chatGroup = new ChatGroup();
+                chatGroup.setGroupName(project.getTenProject());
+                chatGroup.setGroupId(project.getMaProject());
+                chatGroup.addMember(currentUser);
+                chatGroup = chatGroupRepository.save(chatGroup);
+                System.out.println("Created new ChatGroup with groupId: " + groupId);
+            }
+
+            // Kiểm tra xem user đã trong nhóm chat chưa
+            if (chatGroup.getMembers() != null && chatGroup.getMembers().contains(currentUser)) {
                 response.put("success", false);
                 response.put("error", "Bạn đã là thành viên của nhóm chat này");
                 return response;
             }
 
-            // Thêm user vào group chat
+            // Kiểm tra xem user đã trong dự án chưa
+            ThanhvienProject existingMember = thanhvienProjectRepository
+                    .findByUserMaSo_MaSoAndProjectMaSo_MaProject(currentUser.getMaSo(), groupId);
+            if (existingMember != null) {
+                response.put("success", false);
+                response.put("error", "Bạn đã là thành viên của dự án này");
+                return response;
+            }
+
+            // Thêm vào thanhvien_project
+            ThanhvienProject tv = new ThanhvienProject();
+            ThanhvienProjectId tvId = new ThanhvienProjectId(currentUser.getMaSo(), groupId);
+            tv.setId(tvId);
+            tv.setUserMaSo(currentUser);
+            tv.setProjectMaSo(project);
+            tv.setVaiTro("Thành viên");
+            thanhvienProjectRepository.save(tv);
+
+            // Thêm vào chat_group_members
             chatGroup.addMember(currentUser);
             chatGroupRepository.save(chatGroup);
 
@@ -1117,28 +1186,44 @@ public class homeController {
             notificationRepository.save(new Notification(
                     "Bạn đã chấp nhận lời mời tham gia nhóm chat " + chatGroup.getGroupName(),
                     currentUser, null, NotificationType.NOTIFICATION));
-            notificationRepository.save(new Notification(
-                    currentUser.getHo() + " " + currentUser.getTen() + " đã chấp nhận lời mời tham gia nhóm chat " + chatGroup.getGroupName(),
-                    notification.getUserFrom(), null, NotificationType.NOTIFICATION));
+            UthUser userFrom = notification.getUserFrom();
+            if (userFrom != null) {
+                notificationRepository.save(new Notification(
+                        currentUser.getHo() + " " + currentUser.getTen() + " đã chấp nhận lời mời tham gia nhóm chat " + chatGroup.getGroupName(),
+                        userFrom, null, NotificationType.NOTIFICATION));
+            }
 
             response.put("success", true);
-            response.put("message", "Đã tham gia nhóm chat thành công");
+            response.put("message", "Đã tham gia dự án và nhóm chat thành công");
         } catch (Exception e) {
             e.printStackTrace();
             response.put("success", false);
             response.put("error", "Đã xảy ra lỗi khi chấp nhận lời mời: " + e.getMessage());
+            return response; // Trả về HTTP 200 với JSON lỗi thay vì ném lỗi 500
         }
         return response;
     }
 
-    @PostMapping("/chat/reject-invite")
+
+    @PostMapping("/project/reject-invite")
     public String rejectChatInvite(@RequestParam("notificationId") Long notificationId, RedirectAttributes redirectAttributes) {
         try {
             UthUser currentUser = addCurrentUserToModel(new ConcurrentModel());
-            Notification notification = notificationRepository.findById(notificationId)
-                    .orElseThrow(() -> new IllegalArgumentException("Notification not found"));
+            if (currentUser == null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Không thể xác định người dùng hiện tại");
+                return "redirect:/notification";
+            }
 
-            if (!notification.getUser().equals(currentUser)) {
+            Notification notification = notificationRepository.findById(notificationId)
+                    .orElseThrow(() -> new IllegalArgumentException("Thông báo không tồn tại với ID: " + notificationId));
+
+            UthUser targetUser = notification.getUser();
+            if (targetUser == null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy người dùng liên quan đến thông báo này");
+                return "redirect:/notification";
+            }
+
+            if (!targetUser.equals(currentUser)) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Bạn không có quyền từ chối lời mời này");
                 return "redirect:/notification";
             }
@@ -1148,16 +1233,29 @@ public class homeController {
                 return "redirect:/notification";
             }
 
+            Long groupId = notification.getGroupId();
+            if (groupId == null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Thông báo không chứa thông tin nhóm chat");
+                return "redirect:/notification";
+            }
+
+            // Lấy ChatGroup để lấy tên nhóm
+            ChatGroup chatGroup = chatGroupRepository.findById(groupId).orElse(null);
+            String groupName = (chatGroup != null) ? chatGroup.getGroupName() : "Dự án không xác định";
+
             // Xóa thông báo
             notificationRepository.delete(notification);
 
             // Tạo thông báo cho cả hai
             notificationRepository.save(new Notification(
-                    "Bạn đã từ chối lời mời tham gia nhóm chat " + chatGroupRepository.findById(notification.getGroupId()).get().getGroupName(),
+                    "Bạn đã từ chối lời mời tham gia nhóm chat " + groupName,
                     currentUser, null, NotificationType.NOTIFICATION));
-            notificationRepository.save(new Notification(
-                    currentUser.getHo() + " " + currentUser.getTen() + " đã từ chối lời mời tham gia nhóm chat",
-                    notification.getUserFrom(), null, NotificationType.NOTIFICATION));
+            UthUser userFrom = notification.getUserFrom();
+            if (userFrom != null) {
+                notificationRepository.save(new Notification(
+                        currentUser.getHo() + " " + currentUser.getTen() + " đã từ chối lời mời tham gia nhóm chat " + groupName,
+                        userFrom, null, NotificationType.NOTIFICATION));
+            }
 
             redirectAttributes.addFlashAttribute("successMessage", "Đã từ chối lời mời thành công");
         } catch (Exception e) {

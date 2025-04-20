@@ -15,6 +15,14 @@ import java.util.List;
 @Entity
 public class Project {
 
+    public Long getMaProject() {
+        return maProject;
+    }
+
+    public void setMaProject(Long maProject) {
+        this.maProject = maProject;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long maProject;

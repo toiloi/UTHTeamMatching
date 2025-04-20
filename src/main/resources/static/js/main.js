@@ -112,7 +112,27 @@
         const contentWrapper = document.querySelector('.content-wrapper');
         const navbar = document.querySelector('.navbar');
         const toggleBtn = document.getElementById('toggle-sidebar');
-        
+        // Kiểm tra toggleBtn có tồn tại không
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                contentWrapper.classList.toggle('sidebar-collapsed');
+                navbar.classList.toggle('sidebar-collapsed');
+
+                // Force recalculation of layout
+                setTimeout(() => {
+                    window.dispatchEvent(new Event('resize'));
+                }, 300);
+            });
+        } else {
+            console.warn('Toggle button with ID "toggle-sidebar" not found');
+        }
+
+        // Kiểm tra các phần tử khác
+        if (!sidebar || !contentWrapper || !navbar) {
+            console.warn('One or more required elements (.sidebar, .content-wrapper, .navbar) not found');
+            return;
+        }
         // Toggle sidebar on button click
         toggleBtn.addEventListener('click', function() {
             sidebar.classList.toggle('collapsed');

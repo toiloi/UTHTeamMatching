@@ -513,7 +513,7 @@ public class homeController {
         addFriendUsersToModel(model, currentUser);
         List<Project> joinRequests = new ArrayList<>();
         for (ThanhvienProject tv : currentUser.getThanhVienProjects()) {
-            if ("LEADER".equals(tv.getVaiTro())) {
+            if ("Trưởng nhóm".equals(tv.getVaiTro())) {
                 Project project = tv.getProjectMaSo();
                 boolean hasPendingMember = project.getThanhVienProjects().stream()
                         .anyMatch(member -> "PENDING".equals(member.getVaiTro()));

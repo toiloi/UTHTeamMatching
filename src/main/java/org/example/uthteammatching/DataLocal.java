@@ -24,6 +24,7 @@ public class    DataLocal implements CommandLineRunner {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -290,7 +291,7 @@ public class    DataLocal implements CommandLineRunner {
 
             jdbcTemplate.update(
                     "INSERT INTO thanhvien_project (user_ma_so, project_ma_so, vai_tro) VALUES (?, ?, ?)",
-                    userId1, projectId1, "LEADER");
+                    userId1, projectId1, "Trưởng nhóm");
             jdbcTemplate.update(
                     "INSERT INTO thanhvien_project (user_ma_so, project_ma_so, vai_tro) VALUES (?, ?, ?)",
                     userId2, projectId1, "Thành viên");
@@ -303,11 +304,15 @@ public class    DataLocal implements CommandLineRunner {
 
             jdbcTemplate.update(
                     "INSERT INTO thanhvien_project (user_ma_so, project_ma_so, vai_tro) VALUES (?, ?, ?)",
-                    userId2, projectId2, "LEADER");
+                    gvId, projectId1, "Giảng viên hướng dẫn");
 
             jdbcTemplate.update(
                     "INSERT INTO thanhvien_project (user_ma_so, project_ma_so, vai_tro) VALUES (?, ?, ?)",
-                    userId3, projectId3, "LEADER");
+                    userId2, projectId2, "Trưởng nhóm");
+
+            jdbcTemplate.update(
+                    "INSERT INTO thanhvien_project (user_ma_so, project_ma_so, vai_tro) VALUES (?, ?, ?)",
+                    userId3, projectId3, "Trưởng nhóm");
 
 
         }

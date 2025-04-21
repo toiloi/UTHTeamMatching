@@ -259,19 +259,19 @@ public class    DataLocal implements CommandLineRunner {
                 ps.setDate(2, Date.valueOf("2025-04-01"));
                 ps.setDate(3, Date.valueOf("2025-4-25"));
                 ps.setString(4, "Dự án đặt phòng khách sạn");
-                ps.setString(5, "Đã hoàn thành");
+                ps.setString(5, "Hoàn thành");
                 ps.setString(6, String.valueOf(ProjectType.BEN_NGOAI));
                 return ps;
             }, project3Key);
             Long projectId3 = project3Key.getKey().longValue();
 
-            jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
+            jdbcTemplate.update("INSERT INTO chat_groups(group_id, group_name) VALUES (?, ?)",
                     project1Key.getKey().longValue(), "Dự án UTH Team Matching");
 
-            jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
+            jdbcTemplate.update("INSERT INTO chat_groups(group_id, group_name) VALUES (?, ?)",
                     project2Key.getKey().longValue(), "Dự án chăm sóc thú cưng");
 
-            jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
+            jdbcTemplate.update("INSERT INTO chat_groups(group_id, group_name) VALUES (?, ?)",
                     project3Key.getKey().longValue(), "Dự án đặt phòng khách sạn");
 
 

@@ -63,9 +63,6 @@
                 <a href="/project" class="nav-link active">Dự án</a>
             </li>
             <li class="nav-item">
-                <a href="/ketban" class="nav-link">Kết bạn</a>
-            </li>
-            <li class="nav-item">
                 <a href="/notification" class="nav-link">
                     <i class="fas fa-bell"></i>
                     <span class="badge bg-danger" th:if="${notificationCount > 0}" th:text="${notificationCount}"></span>
@@ -74,8 +71,10 @@
         </ul>
 
         <div class="navbar-actions">
-            <button class="navbar-btn secondary" onclick="location.href='/profile'">
-                <i class="fas fa-user me-2"></i>Hồ sơ
+            <button  class="navbar-btn secondary">
+                <a th:href="@{/user-detail/{id}(id=${currentUser.maSo})}">
+                    <i class="fas fa-user me-2"></i>Hồ sơ
+                </a>
             </button>
             <form th:action="@{/logout}" method="post" class="d-inline">
                 <button type="submit" class="navbar-btn primary">

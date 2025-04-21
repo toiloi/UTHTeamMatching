@@ -259,7 +259,7 @@ public class    DataLocal implements CommandLineRunner {
                 ps.setDate(2, Date.valueOf("2025-04-01"));
                 ps.setDate(3, Date.valueOf("2025-4-25"));
                 ps.setString(4, "Dự án đặt phòng khách sạn");
-                ps.setString(5, "Đã hoàn thành");
+                ps.setString(5, "Hoàn thành");
                 ps.setString(6, String.valueOf(ProjectType.BEN_NGOAI));
                 return ps;
             }, project3Key);

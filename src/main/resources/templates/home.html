@@ -35,6 +35,8 @@
     <link th:href="@{/css/post.css}" rel="stylesheet">
     <!-- Home Page Stylesheet -->
     <link th:href="@{/css/home.css}" rel="stylesheet">
+    <!-- Project Details Stylesheet -->
+    <link th:href="@{/css/project-details.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -299,63 +301,67 @@
 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
 <!-- Project Details Modal -->
-<div class="modal fade" id="projectDetailsModal" tabindex="-1" aria-labelledby="projectDetailsLabel" aria-hidden="true">
+<div class="modal fade project-details-modal" id="projectDetailsModal" tabindex="-1" aria-labelledby="projectDetailsLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="project-details-header">
                     <h5 class="modal-title" id="modalProjectName"></h5>
-                    <span class="badge bg-primary project-status-badge">Đang thực hiện</span>
+                    <span class="badge project-status-badge">Đang thực hiện</span>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Nơi hiển thị thông tin dự án -->
                 <div class="card project-card">
-                    <div class="card-body p-4">
+                    <div class="card-body">
                         <div class="project-details-section">
-                            <h6>Mô tả dự án</h6>
-                            <p class="project-description mb-3" id="modalProjectDesc"></p>
+                            <h6><i class="fas fa-info-circle me-2"></i>Mô tả dự án</h6>
+                            <p class="project-description" id="modalProjectDesc"></p>
                         </div>
 
                         <div class="project-details-section">
-                            <h6>Thời gian thực hiện</h6>
+                            <h6><i class="fas fa-calendar-alt me-2"></i>Thời gian thực hiện</h6>
                             <div class="project-timeline">
                                 <div class="timeline-item">
-                                    <h6 class="mb-1">Bắt đầu</h6>
-                                    <p class="mb-0" id="modalDateStart"></p>
+                                    <h6>Bắt đầu</h6>
+                                    <p id="modalDateStart"></p>
                                 </div>
                                 <div class="timeline-item">
-                                    <h6 class="mb-1">Dự kiến kết thúc</h6>
-                                    <p class="mb-0" id="modalDateEnd"></p>
+                                    <h6>Dự kiến kết thúc</h6>
+                                    <p id="modalDateEnd"></p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="project-details-section">
-                            <h6>Thành viên dự án</h6>
+                            <h6><i class="fas fa-users me-2"></i>Thành viên dự án</h6>
                             <div class="project-members">
                                 <div class="member-item">
-                                    <img src="img/user-1.jpg" alt="Member">
+                                    <img id="modalUserAvatar" th:src="@{/img/avatars/NULL.jpg}" alt="Member">
                                     <div>
-                                        <h6 class="mb-0" id="modalUserName"></h6>
-                                        <small class="text-muted"></small>
+                                        <h6 id="modalUserName"></h6>
+                                        <small>Người tạo dự án</small>
                                     </div>
                                 </div>
+                                <!-- Additional members will be added dynamically -->
                             </div>
                         </div>
 
-                        <div class="project-details-section">
-                            <h6>Tài liệu đính kèm</h6>
+                        <div class="project-details-section" th:if="${#lists.isEmpty(attachedFiles)}">
+                            <h6><i class="fas fa-paperclip me-2"></i>Tài liệu đính kèm</h6>
                             <div class="project-files">
-                                <a href="#" class="file-item">
+                                <div class="file-item">
                                     <i class="fas fa-file-pdf"></i>
-                                    <span>Yêu cầu dự án.pdf</span>
-                                </a>
-                                <a href="#" class="file-item">
+                                    <a th:href="@{/files/yeu-cau-du-an.pdf}" target="_blank">
+                                        <span>Yêu cầu dự án.pdf</span>
+                                    </a>
+                                </div>
+                                <div class="file-item">
                                     <i class="fas fa-file-word"></i>
-                                    <span>Kế hoạch dự án.docx</span>
-                                </a>
+                                    <a th:href="@{/files/ke-hoach-du-an.docx}" target="_blank">
+                                        <span>Kế hoạch dự án.docx</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -431,27 +437,42 @@
 <script>
     document.querySelectorAll('.project-name').forEach(el => {
         el.addEventListener('click', function () {
+            const projectId = this.dataset.projectId;
             const projectName = this.dataset.projectName;
             const desc = this.dataset.projectDesc;
             const name = this.dataset.userName;
-            const dateStart = this.dataset.projectDateStart;
-            const dateEnd = this.dataset.projectDateEnd;
+            const dateStart = formatDate(this.dataset.projectDateStart);
+            const dateEnd = formatDate(this.dataset.projectDateEnd);
 
-            document.getElementById('modalProjectName').innerText = projectName;
-            document.getElementById('modalProjectDesc').innerText = desc;
-            document.getElementById('modalUserName').innerText = name;
-            document.getElementById('modalDateStart').innerText = dateStart;
-            document.getElementById('modalDateEnd').innerText = dateEnd;
+            // Update modal content
+            document.getElementById('modalProjectName').textContent = projectName;
+            document.getElementById('modalProjectDesc').textContent = desc;
+            document.getElementById('modalUserName').textContent = name;
+            document.getElementById('modalDateStart').textContent = dateStart;
+            document.getElementById('modalDateEnd').textContent = dateEnd;
 
+            // Show modal
             const modal = new bootstrap.Modal(document.getElementById('projectDetailsModal'));
             modal.show();
         });
     });
 
+    // Format date function
+    function formatDate(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('vi-VN', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    }
+
     function joinProject(button) {
         const container = button.closest(".project-join");
         const projectId = container.getAttribute("data-project-id");
         const postId = container.getAttribute("data-post-id");
+        const projectType = container.getAttribute("data-project-type");
 
         fetch("/project/join", {
             method: "POST",
@@ -462,14 +483,21 @@
         })
             .then(response => {
                 if (!response.ok) throw new Error("Tham gia thất bại");
-                // Cập nhật UI sau khi tham gia
-                container.innerHTML = `
-                    <div>
+                
+                // Update UI based on project type
+                if (projectType === 'HOC_THUAT') {
+                    container.innerHTML = `
                         <button class="btn btn-warning" disabled>
                             <i class="fas fa-clock me-1"></i> Đang chờ duyệt
                         </button>
-                    </div>
-                `;
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <button class="btn btn-secondary" disabled>
+                            <i class="fas fa-check me-1"></i> Đã tham gia
+                        </button>
+                    `;
+                }
             })
             .catch(err => {
                 console.error(err);

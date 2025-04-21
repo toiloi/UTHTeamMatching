@@ -12,9 +12,10 @@ import java.util.List;
 @Getter
 @Setter
 public class ChatGroup {
-
     @Id
-    @Column(name = "group_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private Long groupId; // Dùng groupId làm khóa chính
 
     @Column(name = "group_name", columnDefinition = "NVARCHAR(500)")

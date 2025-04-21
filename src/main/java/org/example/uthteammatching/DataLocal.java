@@ -265,13 +265,13 @@ public class    DataLocal implements CommandLineRunner {
             }, project3Key);
             Long projectId3 = project3Key.getKey().longValue();
 
-            jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
+            jdbcTemplate.update("INSERT INTO chat_groups(group_id, group_name) VALUES (?, ?)",
                     project1Key.getKey().longValue(), "Dự án UTH Team Matching");
 
-            jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
+            jdbcTemplate.update("INSERT INTO chat_groups(group_id, group_name) VALUES (?, ?)",
                     project2Key.getKey().longValue(), "Dự án chăm sóc thú cưng");
 
-            jdbcTemplate.update("INSERT INTO chat_group(group_id, group_name) VALUES (?, ?)",
+            jdbcTemplate.update("INSERT INTO chat_groups(group_id, group_name) VALUES (?, ?)",
                     project3Key.getKey().longValue(), "Dự án đặt phòng khách sạn");
 
 
